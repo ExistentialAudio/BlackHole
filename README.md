@@ -9,4 +9,5 @@ Black Hole is a modern MacOS virtual audio driver that allows applications to pa
 3. Restart computer or use terminal command "sudo killall coreaudiod"
 
 ## Customization
-In "BlackHole.h" change "NUMBER_OF_CHANNELS" to the desired number of channels.
+1. In "BlackHole.h" change "NUMBER_OF_CHANNELS" to the desired number of channels.
+2. Follow installation instructions
