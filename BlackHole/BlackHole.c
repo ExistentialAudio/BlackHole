@@ -226,7 +226,7 @@ static OSStatus	BlackHole_Initialize(AudioServerPlugInDriverRef inDriver, AudioS
 	//	set the box name directly as a last resort
 	if(gBox_Name == NULL)
 	{
-		gBox_Name = CFSTR("Black Hole Box");
+		gBox_Name = CFSTR("BlackHole Box");
 	}
 	
 	//	calculate the host ticks per frame
