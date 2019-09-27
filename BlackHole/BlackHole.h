@@ -154,7 +154,7 @@ static bool                         gMute_Input_Master_Value            = false;
 static bool                         gMute_Output_Master_Value           = false;
 
 static const UInt32                 kDataSource_NumberItems             = 4;
-#define                             kDataSource_ItemNamePattern         "Black Hole %d"
+#define                             kDataSource_ItemNamePattern         "BlackHole %d"
 static UInt32                       gDataSource_Input_Master_Value      = 0;
 static UInt32                       gDataSource_Output_Master_Value     = 0;
 
