@@ -22,7 +22,7 @@
 		2D7477A91578168D00412279 /* BlackHole.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole.driver; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D7477AC1578168D00412279 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		2D7477EC157823CF00412279 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		2DA8FA1515FEAAB000F04B50 /* ReadMe.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
+		2DA8FA1515FEAAB000F04B50 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2DD7AA9915EC572000C67AE1 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		2DED183A15C357180091BE97 /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -54,7 +54,7 @@
 		2D74779B1578162B00412279 = {
 			isa = PBXGroup;
 			children = (
-				2DA8FA1515FEAAB000F04B50 /* ReadMe.txt */,
+				2DA8FA1515FEAAB000F04B50 /* README.md */,
 				2D616EF015B8C82500D598BD /* BlackHole */,
 				2D7477AB1578168D00412279 /* Frameworks */,
 				2D7477AA1578168D00412279 /* Products */,
