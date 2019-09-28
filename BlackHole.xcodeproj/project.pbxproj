@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0352D3AF233E876F000F93D4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0352D3AE233E876F000F93D4 /* Images.xcassets */; };
+		03FDCADA233F235500101681 /* BlackHole.icns in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCAD9233F235500101681 /* BlackHole.icns */; };
 		2D46CA7B17D6ADCA00049D4A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2D46CA7817D6AD8A00049D4A /* Localizable.strings */; };
 		2D616EF415B8C82500D598BD /* BlackHole.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D616EF215B8C82500D598BD /* BlackHole.c */; };
 		2D7477AD1578168D00412279 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477AC1578168D00412279 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0352D3AE233E876F000F93D4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		03CC4B9422FB96D600876F87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		03FDCAD9233F235500101681 /* BlackHole.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BlackHole.icns; sourceTree = "<group>"; };
 		03FEA4BB233D27770005D277 /* BlackHole.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlackHole.h; sourceTree = "<group>"; };
 		2D616EF115B8C82500D598BD /* BlackHole-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BlackHole-Info.plist"; sourceTree = "<group>"; };
 		2D616EF215B8C82500D598BD /* BlackHole.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BlackHole.c; sourceTree = "<group>"; };
@@ -42,7 +42,7 @@
 		2D616EF015B8C82500D598BD /* BlackHole */ = {
 			isa = PBXGroup;
 			children = (
-				0352D3AE233E876F000F93D4 /* Images.xcassets */,
+				03FDCAD9233F235500101681 /* BlackHole.icns */,
 				2D46CA7817D6AD8A00049D4A /* Localizable.strings */,
 				2D616EF115B8C82500D598BD /* BlackHole-Info.plist */,
 				03FEA4BB233D27770005D277 /* BlackHole.h */,
@@ -131,7 +131,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0352D3AF233E876F000F93D4 /* Images.xcassets in Resources */,
+				03FDCADA233F235500101681 /* BlackHole.icns in Resources */,
 				2D46CA7B17D6ADCA00049D4A /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
