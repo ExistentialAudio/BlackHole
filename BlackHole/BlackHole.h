@@ -153,8 +153,10 @@ static Float32                      gVolume_Output_Master_Value         = 0.0;
 static bool                         gMute_Input_Master_Value            = false;
 static bool                         gMute_Output_Master_Value           = false;
 
-static const UInt32                 kDataSource_NumberItems             = 4;
-#define                             kDataSource_ItemNamePattern         "BlackHole %d"
+//static const UInt32                 kDataSource_NumberItems             = 4;
+//#define                             kDataSource_ItemNamePattern         "BlackHole %d"
+static const UInt32                 kDataSource_NumberItems             = 1;
+#define                             kDataSource_ItemNamePattern         "BlackHole"
 static UInt32                       gDataSource_Input_Master_Value      = 0;
 static UInt32                       gDataSource_Output_Master_Value     = 0;
 
