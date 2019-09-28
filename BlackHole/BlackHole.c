@@ -2215,7 +2215,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 				FailWithAction(inDataSize < sizeof(CFURLRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyDeviceUID for the device");
 				CFBundleRef theBundle = CFBundleGetBundleWithIdentifier(CFSTR(kPlugIn_BundleID));
 				FailWithAction(theBundle == NULL, theAnswer = kAudioHardwareUnspecifiedError, Done, "BlackHole_GetDevicePropertyData: could not get the plug-in bundle for kAudioDevicePropertyIcon");
-				CFURLRef theURL = CFBundleCopyResourceURL(theBundle, CFSTR("DeviceIcon"), NULL, NULL);
+				CFURLRef theURL = CFBundleCopyResourceURL(theBundle, CFSTR("BlackHole.icns"), NULL, NULL);
 				FailWithAction(theURL == NULL, theAnswer = kAudioHardwareUnspecifiedError, Done, "BlackHole_GetDevicePropertyData: could not get the URL for kAudioDevicePropertyIcon");
 				*((CFURLRef*)outData) = theURL;
 				*outDataSize = sizeof(CFURLRef);
@@ -3899,7 +3899,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
 
             // clear the 1st half
             memset(ringBuffer + ringBufferOffset, 0, remainingRingBufferByteSize);
-            // clear the 2md half
+            // clear the 2nd half
             memset(ringBuffer, 0, inIOBufferByteSize - remainingRingBufferByteSize);
         }
     }
