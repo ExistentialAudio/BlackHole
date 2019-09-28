@@ -2,7 +2,7 @@
 //  BlackHole.h
 //  BlackHole
 //
-//  Created by Devin Roth on 2019-09-26.
+//  Copyright (C) 2019 Existential Audio Inc.
 //
 
 #ifndef BlackHole_h
@@ -73,8 +73,7 @@
 #pragma mark BlackHole State
 //==================================================================================================
 
-//    The purpose of the BlackHole is to provide the barest of bare bones implementations to
-//    illustrate the minimal set of things a driver has to do. As such, the driver has the following
+//    The driver has the following
 //    qualities:
 //    - a box
 //    - a device
