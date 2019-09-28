@@ -1,7 +1,7 @@
 /*
      File: BlackHole.c
   
- Copyright (C) 2019 Existential Audio Inc. All Rights Reserved. 
+ Copyright (C) 2019 Existential Audio Inc.
   
 */
 /*==================================================================================================
