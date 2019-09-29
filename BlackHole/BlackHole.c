@@ -3893,6 +3893,8 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     // copy io buffer to internal ring buffer
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
+        // TODO Mix inputs instead of over writing. 
+        
         // calculate the ring buffer offset for the first sample OUTPUT
         ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
         
@@ -3900,19 +3902,23 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
         remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
 
-        if (remainingRingBufferByteSize > inIOBufferByteSize)
+        for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
         {
-            // copy whole buffer if we have space
-            memcpy(ringBuffer + ringBufferOffset, ioMainBuffer, inIOBufferByteSize);
+            Float32* ioSample = ioMainBuffer + sample;
+            Float32* ringSample;
+            
+            if (sample < remainingRingBufferByteSize)
+            {
+                ringSample = (Float32*)(ringBuffer + ringBufferOffset + sample);
+            }
+            else
+            {
+                ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
+            }
+            
+            *ringSample = *ioSample + *ringSample;
         }
-        else
-        {
-            // copy 1st half
-            memcpy(ringBuffer + ringBufferOffset, ioMainBuffer, remainingRingBufferByteSize);
-            // copy 2nd half
-            memcpy(ringBuffer, ioMainBuffer + remainingRingBufferByteSize, inIOBufferByteSize - remainingRingBufferByteSize);
-        }
-
+        
         // clear the io buffer
         memset(ioMainBuffer, 0, inIOBufferByteSize);
     }
