@@ -3900,23 +3900,22 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         
         // calculate the size of the buffer
         inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
-        remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
 
+        // mix the audio
         for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
         {
+            // sample from ioMainBuffer
             Float32* ioSample = ioMainBuffer + sample;
-            Float32* ringSample;
             
-            if (sample < remainingRingBufferByteSize)
-            {
-                ringSample = (Float32*)(ringBuffer + ringBufferOffset + sample);
+            // check if there is anything there before mixing
+            if (*ioSample != 0){
+                
+                // sample from ring buffer
+                Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
+                
+                // mix the two together
+                *ringSample += *ioSample;
             }
-            else
-            {
-                ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
-            }
-            
-            *ringSample = *ioSample + *ringSample;
         }
         
         // clear the io buffer
