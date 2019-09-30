@@ -1,4 +1,4 @@
-# BlackHole Virtual Audio Driver v0.1
+# BlackHole Virtual Audio Driver v0.2
 
 ## Description
 BlackHole is a modern MacOS virtual audio driver that allows applications to pass audio to other applications with zero latency.
