@@ -15,13 +15,13 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 3. Right-click on package and select open
 4. Open and install package
 
-## Build Instructions
+## Build Installation Instructions
 1. Build driver in Xcode
 2. Copy BlackHole.driver to "/Library⁩/Audio⁩/Plug-Ins⁩/HAL"
 3. Restart CoreAudio with terminal command "sudo killall coreaudiod"
 
 ## Customization
 1. In "BlackHole.h" change "NUMBER_OF_CHANNELS" to the desired number of channels.
-2. Follow installation instructions
+2. Follow Build Installation instructions
 
 [Support us on Patreon](https://www.patreon.com/existentialaudio)
