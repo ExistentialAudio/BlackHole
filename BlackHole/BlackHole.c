@@ -3906,16 +3906,12 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         {
             // sample from ioMainBuffer
             Float32* ioSample = ioMainBuffer + sample;
+                
+            // sample from ring buffer
+            Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
             
-            // check if there is anything there before mixing
-            if (*ioSample != 0){
-                
-                // sample from ring buffer
-                Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
-                
-                // mix the two together
-                *ringSample += *ioSample;
-            }
+            // mix the two together
+            *ringSample += *ioSample;
         }
         
         // clear the io buffer
