@@ -16,3 +16,5 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 ## Customization
 1. In "BlackHole.h" change "NUMBER_OF_CHANNELS" to the desired number of channels.
 2. Follow installation instructions
+
+## (Support us on Patreon)[https://www.patreon.com/existentialaudio]
