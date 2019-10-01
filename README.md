@@ -15,6 +15,14 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 3. Right-click on package and select open
 4. Open and install package
 
+## Usage
+### Record System Audio
+1. Open Audio MIDI Setup
+2. Right-click on "BlackHole" and select "Use This Device For Sound Output"
+3. Open DAW and set input device to "BlackHole" 
+4. Set track to input from channel 1-2
+5. Play audio from another application and monitor or record in your DAW.
+
 ## Advanced Installation Instruction
 1. Build driver in Xcode
 2. Copy BlackHole.driver to "/Library⁩/Audio⁩/Plug-Ins⁩/HAL"
