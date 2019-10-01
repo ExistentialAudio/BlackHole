@@ -3858,6 +3858,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     // copy internal ring buffer to io buffer
 	if(inOperationID == kAudioServerPlugInIOOperationReadInput)
 	{
+
         // calculate the ring buffer offset for the first sample INPUT
         ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
         
@@ -3868,8 +3869,15 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         if (remainingRingBufferByteSize > inIOBufferByteSize)
         {
 
-            // copy whole buffer if we have space
-            memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, inIOBufferByteSize);
+            //  check if mute is off
+            if (gMute_Input_Master_Value == false){
+                
+                // copy whole buffer if we have space
+                memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, inIOBufferByteSize);
+            } else {
+                // set output to zeros
+                memset(ioMainBuffer, 0, inIOBufferByteSize);
+            }
 
             // clear the internal ring buffer
             memset(ringBuffer + ringBufferOffset, 0, inIOBufferByteSize);
@@ -3878,10 +3886,17 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         else
         {
 
-            // copy 1st half
-            memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, remainingRingBufferByteSize);
-            // copy 2nd half
-            memcpy(ioMainBuffer + remainingRingBufferByteSize, ringBuffer, inIOBufferByteSize - remainingRingBufferByteSize);
+            //  check if mute is off
+            if (gMute_Input_Master_Value == false){
+                
+                // copy 1st half
+                memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, remainingRingBufferByteSize);
+                // copy 2nd half
+                memcpy(ioMainBuffer + remainingRingBufferByteSize, ringBuffer, inIOBufferByteSize - remainingRingBufferByteSize);
+            } else {
+                // set output to zeros
+                memset(ioMainBuffer, 0, inIOBufferByteSize);
+            }
 
             // clear the 1st half
             memset(ringBuffer + ringBufferOffset, 0, remainingRingBufferByteSize);
@@ -3893,25 +3908,28 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     // copy io buffer to internal ring buffer
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
-        // TODO Mix inputs instead of over writing. 
-        
-        // calculate the ring buffer offset for the first sample OUTPUT
-        ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
-        
-        // calculate the size of the buffer
-        inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
-
-        // mix the audio
-        for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
-        {
-            // sample from ioMainBuffer
-            Float32* ioSample = ioMainBuffer + sample;
-                
-            // sample from ring buffer
-            Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
+        // check if mute is off
+        if (gMute_Output_Master_Value == false) {
             
-            // mix the two together
-            *ringSample += *ioSample;
+            // calculate the ring buffer offset for the first sample OUTPUT
+            ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
+            
+            // calculate the size of the buffer
+            inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
+            
+            // mix the audio
+            for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
+            {
+                //TODO Scale by output volume
+                // sample from ioMainBuffer
+                Float32* ioSample = ioMainBuffer + sample;
+                
+                // sample from ring buffer
+                Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
+                
+                // mix the two together
+                *ringSample += *ioSample;
+            }
         }
         
         // clear the io buffer
