@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.2.1] - 2019-09-30
+### Changed
+- Set deployment target to macOS 10.10 to include Yosemite and Sierra
+
 ## [0.2.0] - 2019-09-29
 ### Added
 - Support for 88.2kHz, 96kHz, 176.4kHz and 192kHz
