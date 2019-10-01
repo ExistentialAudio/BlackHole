@@ -2083,7 +2083,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	This property returns the how close to now the HAL can read and write. For
 			//	this, device, the value is 0 due to the fact that it always vends silence.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertySafetyOffset for the device");
-			*((UInt32*)outData) = 0;
+			*((UInt32*)outData) = LATENCY_FRAME_SIZE;
 			*outDataSize = sizeof(UInt32);
 			break;
 
@@ -2525,7 +2525,7 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
 		case kAudioStreamPropertyLatency:
 			//	This property returns any additonal presentation latency the stream has.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetStreamPropertyData: not enough space for the return value of kAudioStreamPropertyStartingChannel for the stream");
-			*((UInt32*)outData) = 0;
+			*((UInt32*)outData) = LATENCY_FRAME_SIZE;
 			*outDataSize = sizeof(UInt32);
 			break;
 

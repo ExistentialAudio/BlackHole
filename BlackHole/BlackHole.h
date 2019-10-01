@@ -156,6 +156,7 @@ static const UInt32                 kDataSource_NumberItems             = 1;
 static UInt32                       gDataSource_Input_Master_Value      = 0;
 static UInt32                       gDataSource_Output_Master_Value     = 0;
 
+#define                             LATENCY_FRAME_SIZE                  0
 #define                             NUMBER_OF_CHANNELS                  16
 #define                             BITS_PER_CHANNEL                    32
 #define                             BYTES_PER_CHANNEL                   (BITS_PER_CHANNEL / 8)
