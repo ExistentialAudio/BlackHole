@@ -3514,7 +3514,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 						{
 							gVolume_Input_Master_Value = theNewVolume;
 							*outNumberPropertiesChanged = 2;
-							outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
+							outChangedAddresses[0].mSelector = gVolume_Output_Master_Value;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
 							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
 							outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
@@ -3920,9 +3920,12 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             // mix the audio
             for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
             {
-                //TODO Scale by output volume
                 // sample from ioMainBuffer
                 Float32* ioSample = ioMainBuffer + sample;
+                
+                // set output volume
+                *ioSample *= gVolume_Output_Master_Value;
+                
                 
                 // sample from ring buffer
                 Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
