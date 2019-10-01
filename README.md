@@ -23,6 +23,12 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 4. Set track to input from channel 1-2
 5. Play audio from another application and monitor or record in your DAW.
 
+### Send Audio from Standalone Virtual Instrument
+1. Set output driver to "BlackHole" in VI
+2. Output to any channel
+3. Open DAW and set input device to "BlackHole" 
+4. Input audio from the corresponding outputs in VI
+
 ## Advanced Installation Instruction
 1. Build driver in Xcode
 2. Copy BlackHole.driver to "/Library⁩/Audio⁩/Plug-Ins⁩/HAL"
