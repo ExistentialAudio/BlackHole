@@ -4,10 +4,10 @@
 //
 //  Copyright (C) 2019 Existential Audio Inc.
 //
+//  
 
 #ifndef BlackHole_h
 #define BlackHole_h
-
 
 #endif /* BlackHole_h */
 
@@ -77,22 +77,19 @@
 //    qualities:
 //    - a box
 //    - a device
-//        - supports 44100 and 48000 sample rates
+//        - supports 44100, 48000, 88200, 96000, 176400 and 192000 sample rates
 //        - provides a rate scalar of 1.0 via hard coding
-//    - a single input stream
-//        - supports 2 channels of 32 bit float LPCM samples
-//        - always produces zeros
 //    - a single output stream
-//        - supports 2 channels of 32 bit float LPCM samples
-//        - data written to it is ignored
+//        - supports 16 channels of 32 bit float LPCM samples
+//        - writes to ring buffer
+//    - a single input stream
+//        - supports 16 channels of 32 bit float LPCM samples
+//        - reads from ring buffer
 //    - controls
 //        - master input volume
 //        - master output volume
 //        - master input mute
 //        - master output mute
-//        - master input data source
-//        - master output data source
-//        - all are for illustration purposes only and do not actually manipulate data
 
 
 //    Declare the internal object ID numbers for all the objects this driver implements. Note that
