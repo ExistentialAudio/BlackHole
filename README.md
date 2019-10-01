@@ -9,18 +9,18 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 - Supports 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, and 192kHz sample rates.
 - No additional driver latency. 
 
-## Installation Instructions
+## Easy Installation Instructions
 1. Download [BlackHole.vx.x.x.pkg](https://github.com/ExistentialAudio/BlackHole/releases/)
 2. Close all running audio applications
 3. Right-click on package and select open
 4. Open and install package
 
-## Build Instructions (ADVANCED ONLY)
+## Advanced Installation Instruction
 1. Build driver in Xcode
 2. Copy BlackHole.driver to "/Library⁩/Audio⁩/Plug-Ins⁩/HAL"
 3. Restart CoreAudio with terminal command "sudo killall coreaudiod"
 
-## Customization (ADVANCED ONLY)
+## Advanced Customization
 1. In "BlackHole.h" change "NUMBER_OF_CHANNELS" to the desired number of channels.
 2. Follow Build Installation instructions
 
