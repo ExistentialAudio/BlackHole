@@ -3903,6 +3903,16 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             // clear the 2nd half
             memset(ringBuffer, 0, inIOBufferByteSize - remainingRingBufferByteSize);
         }
+        
+        // set input volume
+        for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
+        {
+            // sample from ioMainBuffer
+            Float32* ioSample = ioMainBuffer + sample;
+            
+            // set volume
+            *ioSample *= gVolume_Input_Master_Value;
+        }
     }
     
     // copy io buffer to internal ring buffer
