@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- Mute control
-- Volume control
+
+## [0.2.2] - 2019-10-02
+### Fixed
+- Fixed bugs when multiple devices are reading and writing simulaniously.
+
 
 ## [0.2.1] - 2019-09-30
 ### Changed

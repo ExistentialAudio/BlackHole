@@ -3855,10 +3855,10 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
 	FailWithAction((inStreamObjectID != kObjectID_Stream_Input) && (inStreamObjectID != kObjectID_Stream_Output), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad stream ID");
     
     
-    // copy internal ring buffer to io buffer
+    /*     READ INPUT         */
 	if(inOperationID == kAudioServerPlugInIOOperationReadInput)
 	{
-
+        /*     WRITE TO IOBUFFER         */
         // calculate the ring buffer offset for the first sample INPUT
         ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
         
@@ -3868,81 +3868,59 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         
         if (remainingRingBufferByteSize > inIOBufferByteSize)
         {
-
-            //  check if mute is off
-            if (gMute_Input_Master_Value == false){
-                
-                // copy whole buffer if we have space
-                memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, inIOBufferByteSize);
-            } else {
-                // set output to zeros
-                memset(ioMainBuffer, 0, inIOBufferByteSize);
-            }
-
-            // clear the internal ring buffer
-            memset(ringBuffer + ringBufferOffset, 0, inIOBufferByteSize);
+            // copy whole buffer if we have space
+            memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, inIOBufferByteSize);
 
         }
         else
         {
-
-            //  check if mute is off
-            if (gMute_Input_Master_Value == false){
-                
-                // copy 1st half
-                memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, remainingRingBufferByteSize);
-                // copy 2nd half
-                memcpy(ioMainBuffer + remainingRingBufferByteSize, ringBuffer, inIOBufferByteSize - remainingRingBufferByteSize);
-            } else {
-                // set output to zeros
-                memset(ioMainBuffer, 0, inIOBufferByteSize);
-            }
-
+            // copy 1st half
+            memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, remainingRingBufferByteSize);
+            // copy 2nd half
+            memcpy(ioMainBuffer + remainingRingBufferByteSize, ringBuffer, inIOBufferByteSize - remainingRingBufferByteSize);
+        }
+        
+        
+        /*     CLEAR TO RINGBUFFER TRAILING BY 3072 SAMPLES         */
+        // calculate the ring buffer offset for the first sample INPUT
+        ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME - 3072) % RING_BUFFER_SIZE);
+        remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
+        
+        if (remainingRingBufferByteSize > inIOBufferByteSize)
+        {
+            // clear the internal ring buffer
+            memset(ringBuffer + ringBufferOffset, 0, inIOBufferByteSize);
+        }
+        else
+        {
             // clear the 1st half
             memset(ringBuffer + ringBufferOffset, 0, remainingRingBufferByteSize);
             // clear the 2nd half
             memset(ringBuffer, 0, inIOBufferByteSize - remainingRingBufferByteSize);
         }
+    }
+    
+    /*     WRITE MIX         */
+    if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
+    {
+        /*     WRITE MIX TO RINGBUFFER         */
+        // calculate the ring buffer offset for the first sample OUTPUT
+        ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
         
-        // set input volume
+        // calculate the size of the buffer
+        inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
+        
+        // mix the audio
         for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
         {
             // sample from ioMainBuffer
             Float32* ioSample = ioMainBuffer + sample;
             
-            // set volume
-            *ioSample *= gVolume_Input_Master_Value;
-        }
-    }
-    
-    // copy io buffer to internal ring buffer
-    if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
-    {
-        // check if mute is off
-        if (gMute_Output_Master_Value == false) {
+            // sample from ring buffer
+            Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
             
-            // calculate the ring buffer offset for the first sample OUTPUT
-            ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
-            
-            // calculate the size of the buffer
-            inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
-            
-            // mix the audio
-            for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
-            {
-                // sample from ioMainBuffer
-                Float32* ioSample = ioMainBuffer + sample;
-                
-                // set output volume
-                *ioSample *= gVolume_Output_Master_Value;
-                
-                
-                // sample from ring buffer
-                Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
-                
-                // mix the two together
-                *ringSample += *ioSample;
-            }
+            // mix the two together
+            *ringSample += *ioSample;
         }
         
         // clear the io buffer
