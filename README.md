@@ -8,7 +8,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 - Customizable to 256+ channels if you think your computer can handle it.
 - Supports 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, and 192kHz sample rates.
 - No additional driver latency. 
-- Works on macOS 10.10 and newer
+- Works on macOS 10.10+ including macOS 10.15 Catalina GM
 
 ## Easy Installation Instructions
 1. Download [BlackHole.vx.x.x.pkg](https://github.com/ExistentialAudio/BlackHole/releases/)
