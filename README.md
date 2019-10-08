@@ -15,6 +15,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 2. Close all running audio applications
 3. Right-click on package and select open
 4. Open and install package
+5. Restart Computer (Catalina Only)
 
 ## Usage
 ### Record System Audio
