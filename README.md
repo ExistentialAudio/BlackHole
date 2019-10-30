@@ -62,7 +62,10 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 Unfortunately macOS does not support changing the volume of a Multi-Output device but you can set the volume of individual devices in Audio MIDI Setup. 
 
 ### How can I use BlackHole with Audacity in Catalina?
-Audacity is not compatible with Catalina. But there might be a [work around](https://www.audacityteam.org/macos-10-15-catalina-is-not-yet-supported-by-audacity/). 
+Audacity is not compatible with Catalina. But there might be a [work around](https://www.audacityteam.org/macos-10-15-catalina-is-not-yet-supported-by-audacity/).
+
+### Why is nothing is playing through BlackHole? 
+Check System `Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your DAW has microphone access. 
 
 ### You are awesome. Where can I donate?
 [Support us on Patreon](https://www.patreon.com/existentialaudio)
