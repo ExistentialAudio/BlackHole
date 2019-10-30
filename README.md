@@ -51,5 +51,11 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 ### How can I listen to the audio and use BlackHole at the same time?
 [Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
 
+### How can I use BlackHole with Audacity in Catalina?
+Audacity is not compatible with Catalina. But there might be a [work around](https://www.audacityteam.org/macos-10-15-catalina-is-not-yet-supported-by-audacity/). 
+
 ### You are awesome. Where can I donate?
 [Support us on Patreon](https://www.patreon.com/existentialaudio)
+
+Bitcoin:  1DxkhWHfRUBezMNbRM3rDKLbxEi1GVZRXz
+Litecoin: LchR249L8aXnDEDToLpPVSJotuvV381Yka
