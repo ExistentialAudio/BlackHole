@@ -4,11 +4,11 @@
 BlackHole is a modern MacOS virtual audio driver that allows applications to pass audio to other applications with zero additional latency.
 
 - [Features](README.md#features)
-- [Easy Installation Instructions](/#easy-installation-instructions)
+- [Easy Installation Instructions](#easy-installation-instructions)
 - [Usage Examples]()
-- [Advanced Installation Instructions](/#advanced-installation-instructions)
-- [Advanced Customization](/#advanced-customization)
-- [FAQ](/faq)
+- [Advanced Installation Instructions](#advanced-installation-instructions)
+- [Advanced Customization](#advanced-customization)
+- [FAQ](#faq)
 
 ## Features
 - Supports 16 audio channels.
