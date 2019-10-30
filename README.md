@@ -17,7 +17,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 - No additional driver latency. 
 - Works on macOS 10.10+ including macOS 10.15 Catalina
 
-![Image of BlackHole Audio Driver](https://github.com/ExistentialAudio/BlackHole/blob/master/BlackHole.png)
+![Image of BlackHole Audio Driver](Images/BlackHole.png)
 
 ## Easy Installation Instructions
 1. Download [BlackHole.vx.x.x.pkg](https://github.com/ExistentialAudio/BlackHole/releases/)
