@@ -51,4 +51,5 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 ### How can I listen to the audio and use BlackHole at the same time?
 [Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
 
+### You are awesome. Where can I donate?
 [Support us on Patreon](https://www.patreon.com/existentialaudio)
