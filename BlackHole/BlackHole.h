@@ -142,7 +142,7 @@ static bool                         gStream_Input_IsActive              = true;
 static bool                         gStream_Output_IsActive             = true;
 
 static const Float32                kVolume_MinDB                       = -96.0;
-static const Float32                kVolume_MaxDB                       = 6.0;
+static const Float32                kVolume_MaxDB                       = 0.0;
 static Float32                      gVolume_Input_Master_Value          = 0.0;
 static Float32                      gVolume_Output_Master_Value         = 0.0;
 
