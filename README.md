@@ -46,4 +46,9 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 1. Delete BlackHole.driver from `/Library⁩/Audio⁩/Plug-Ins⁩/HAL`
 2. Restart computer or restart CoreAudio with terminal command `sudo killall coreaudiod`
 
+## FAQ
+
+### How can I listen to the audio and use BlackHole at the same time?
+[Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
+
 [Support us on Patreon](https://www.patreon.com/existentialaudio)
