@@ -3,6 +3,13 @@
 ## Description
 BlackHole is a modern MacOS virtual audio driver that allows applications to pass audio to other applications with zero additional latency.
 
+- [Features](#features)
+- [Easy Installation Instructions](#easy-installation-instructions)
+- [Usage Examples]()
+- [Advanced Installation Instructions](#advanced-installation-instructions)
+- [Advanced Customization](#advanced-customization)
+- [FAQ](faq)
+
 ## Features
 - Supports 16 audio channels.
 - Customizable to 256+ channels if you think your computer can handle it.
@@ -19,7 +26,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 4. Open and install package
 5. Restart Computer (Catalina Only)
 
-## Usage
+## Usage Examples
 ### Record System Audio
 1. Open Audio MIDI Setup
 2. Right-click on "BlackHole" and select "Use This Device For Sound Output"
