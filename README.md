@@ -58,4 +58,5 @@ Audacity is not compatible with Catalina. But there might be a [work around](htt
 [Support us on Patreon](https://www.patreon.com/existentialaudio)
 
 Bitcoin:  1DxkhWHfRUBezMNbRM3rDKLbxEi1GVZRXz
+
 Litecoin: LchR249L8aXnDEDToLpPVSJotuvV381Yka
