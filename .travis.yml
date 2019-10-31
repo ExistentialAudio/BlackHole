@@ -1,0 +1,3 @@
+language: objective-c
+xcode_project: BlackHole.xcodeproj
+xcode_scheme: BlackHole
