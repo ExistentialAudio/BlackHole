@@ -1,12 +1,12 @@
 # BlackHole Virtual Audio Driver v0.2
 
 [![Build Status](https://travis-ci.com/ExistentialAudio/BlackHole.svg?branch=master)](https://travis-ci.com/ExistentialAudio/BlackHole)
-![GitHub](https://img.shields.io/github/license/ExistentialAudio/BlackHole)
-![GitHub](https://img.shields.io/github/v/release/ExistentialAudio/BlackHole)
+[![GitHub](https://img.shields.io/github/license/ExistentialAudio/BlackHole)](LICENCE)
+[![GitHub](https://img.shields.io/github/v/release/ExistentialAudio/BlackHole)](https://github.com/ExistentialAudio/BlackHole/releases)
 ![Platform:macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
 ![GitHub All Releases](https://img.shields.io/github/downloads/existentialaudio/blackhole/total)
 
-![Twitter Follow](https://img.shields.io/twitter/follow/ExistentialAI?style=social)
+[![Twitter Follow](https://img.shields.io/twitter/follow/ExistentialAI?style=social)](https://twitter.com/ExistentialAI)
 
 ## Description
 BlackHole is a modern MacOS virtual audio driver that allows applications to pass audio to other applications with zero additional latency.
