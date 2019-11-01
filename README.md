@@ -6,6 +6,8 @@
 ![Platform:macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
 ![GitHub All Releases](https://img.shields.io/github/downloads/existentialaudio/blackhole/total)
 
+![Twitter Follow](https://img.shields.io/twitter/follow/existentialai?style=social)
+
 ## Description
 BlackHole is a modern MacOS virtual audio driver that allows applications to pass audio to other applications with zero additional latency.
 
