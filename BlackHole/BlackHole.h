@@ -152,6 +152,9 @@ static bool                         gMute_Output_Master_Value           = false;
 static const UInt32                 kDataSource_NumberItems             = 1;
 #define                             kDataSource_ItemNamePattern         "BlackHole %ich"
 
+#define                             DEVICE_NAME                         "BlackHole %ich"
+#define                             MANUFACTURER_NAME                   "Existential Audio Inc."
+
 static UInt32                       gDataSource_Input_Master_Value      = 0;
 static UInt32                       gDataSource_Output_Master_Value     = 0;
 

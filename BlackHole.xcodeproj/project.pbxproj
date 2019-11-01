@@ -10,14 +10,12 @@
 		039FF2582341B6E800400D7A /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 039FF2572341B6E800400D7A /* CHANGELOG.md */; };
 		03FDCADA233F235500101681 /* BlackHole.icns in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCAD9233F235500101681 /* BlackHole.icns */; };
 		03FDCADC233FAE0500101681 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCADB233FAE0500101681 /* LICENSE */; };
-		2D46CA7B17D6ADCA00049D4A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2D46CA7817D6AD8A00049D4A /* Localizable.strings */; };
 		2D616EF415B8C82500D598BD /* BlackHole.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D616EF215B8C82500D598BD /* BlackHole.c */; };
 		2D7477AD1578168D00412279 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477AC1578168D00412279 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		039FF2572341B6E800400D7A /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
-		03CC4B9422FB96D600876F87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		03FDCAD9233F235500101681 /* BlackHole.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BlackHole.icns; sourceTree = "<group>"; };
 		03FDCADB233FAE0500101681 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		03FEA4BB233D27770005D277 /* BlackHole.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlackHole.h; sourceTree = "<group>"; };
@@ -47,7 +45,6 @@
 			isa = PBXGroup;
 			children = (
 				03FDCAD9233F235500101681 /* BlackHole.icns */,
-				2D46CA7817D6AD8A00049D4A /* Localizable.strings */,
 				2D616EF115B8C82500D598BD /* BlackHole-Info.plist */,
 				03FEA4BB233D27770005D277 /* BlackHole.h */,
 				2D616EF215B8C82500D598BD /* BlackHole.c */,
@@ -139,7 +136,6 @@
 			files = (
 				03FDCADC233FAE0500101681 /* LICENSE in Resources */,
 				03FDCADA233F235500101681 /* BlackHole.icns in Resources */,
-				2D46CA7B17D6ADCA00049D4A /* Localizable.strings in Resources */,
 				039FF2582341B6E800400D7A /* CHANGELOG.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -156,17 +152,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		2D46CA7817D6AD8A00049D4A /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				03CC4B9422FB96D600876F87 /* en */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2D7477A21578162B00412279 /* Release */ = {
