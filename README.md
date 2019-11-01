@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.com/ExistentialAudio/BlackHole.svg?branch=master)](https://travis-ci.com/ExistentialAudio/BlackHole)
 [![GitHub](https://img.shields.io/github/license/ExistentialAudio/BlackHole)](LICENSE)
-[![GitHub](https://img.shields.io/github/v/release/ExistentialAudio/BlackHole)](https://github.com/ExistentialAudio/BlackHole/releases)
-![Platform:macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
-![GitHub All Releases](https://img.shields.io/github/downloads/existentialaudio/blackhole/total)
+[![Platform:macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
+![GitHub](https://img.shields.io/github/v/release/ExistentialAudio/BlackHole)
+![GitHub All Releases](https://img.shields.io/github/downloads/existentialaudio/blackhole/total)](https://github.com/ExistentialAudio/BlackHole/releases)
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/ExistentialAI?style=social)](https://twitter.com/ExistentialAI)
 
