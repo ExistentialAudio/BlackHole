@@ -68,6 +68,9 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 
 ## FAQ
 
+### Why isn't BlackHole showing up in the Applications folder?
+BlackHole is an audio interface driver. It only shows up in `Audio MIDI Setup`, `Sound Preferences`, or other audio applications.
+
 ### How can I listen to the audio and use BlackHole at the same time?
 [Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
 
