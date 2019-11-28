@@ -3903,24 +3903,28 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     /*     WRITE MIX         */
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
-        /*     WRITE MIX TO RINGBUFFER         */
-        // calculate the ring buffer offset for the first sample OUTPUT
-        ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
-        
-        // calculate the size of the buffer
-        inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
-        
-        // mix the audio
-        for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
+        // don't do anything if muted
+        if (!(gMute_Input_Master_Value || gMute_Output_Master_Value ))
         {
-            // sample from ioMainBuffer
-            Float32* ioSample = ioMainBuffer + sample;
+            /*     WRITE MIX TO RINGBUFFER         */
+            // calculate the ring buffer offset for the first sample OUTPUT
+            ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
             
-            // sample from ring buffer
-            Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
+            // calculate the size of the buffer
+            inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
             
-            // mix the two together
-            *ringSample += *ioSample;
+            // mix the audio
+            for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
+            {
+                // sample from ioMainBuffer
+                Float32* ioSample = ioMainBuffer + sample;
+                
+                // sample from ring buffer
+                Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
+                
+                // mix the two together scale by volume
+                *ringSample += *ioSample * gVolume_Output_Master_Value * gVolume_Input_Master_Value;
+            }
         }
         
         // clear the io buffer
