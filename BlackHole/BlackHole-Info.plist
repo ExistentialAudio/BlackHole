@@ -24,14 +24,14 @@
 	<string>1</string>
 	<key>CFPlugInFactories</key>
 	<dict>
-		<key>99A15A8B-DA3C-42C3-BD5D-D035A0C2377A</key>
+		<key>ff5ed090-1521-11ea-8d71-362b9e155667</key>
 		<string>BlackHole_Create</string>
 	</dict>
 	<key>CFPlugInTypes</key>
 	<dict>
 		<key>443ABAB8-E7B3-491A-B985-BEB9187030DB</key>
 		<array>
-			<string>99A15A8B-DA3C-42C3-BD5D-D035A0C2377A</string>
+			<string>ff5ed090-1521-11ea-8d71-362b9e155667</string>
 		</array>
 	</dict>
 </dict>
