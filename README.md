@@ -83,6 +83,9 @@ Audacity is not compatible with Catalina. But there might be a [work around](htt
 ### Why is nothing is playing through BlackHole? 
 Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your DAW has microphone access. 
 
+### Can I integrate BlackHole into my app?
+BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications contact me directly at devinroth@existential.audio.
+
 ### You are awesome. Where can I donate?
 [Support us on Patreon](https://www.patreon.com/existentialaudio)
 
