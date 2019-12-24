@@ -71,12 +71,12 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 
 If you are interested in any of the following features please leave a comment in the linked issue. If you want any features not listed please create a new issue.
 
-### [Sync Clock with other Audio Devices](https://github.com/ExistentialAudio/BlackHole/issues/27)
-### [Output Blackhole to other Audio Device](https://github.com/ExistentialAudio/BlackHole/issues/40)
-### [Add Support for AU Plug-ins](https://github.com/ExistentialAudio/BlackHole/issues/18)
-### [Inter-channel routing](https://github.com/ExistentialAudio/BlackHole/issues/13)
-### [Record Directly to File](https://github.com/ExistentialAudio/BlackHole/issues/8)
-### [Configuration Options Menu](https://github.com/ExistentialAudio/BlackHole/issues/7)
+- [Sync Clock with other Audio Devices](https://github.com/ExistentialAudio/BlackHole/issues/27)
+- [Output Blackhole to other Audio Device](https://github.com/ExistentialAudio/BlackHole/issues/40)
+- [Add Support for AU Plug-ins](https://github.com/ExistentialAudio/BlackHole/issues/18)
+- [Inter-channel routing](https://github.com/ExistentialAudio/BlackHole/issues/13)
+- [Record Directly to File](https://github.com/ExistentialAudio/BlackHole/issues/8)
+- [Configuration Options Menu](https://github.com/ExistentialAudio/BlackHole/issues/7)
 
 ## FAQ
 
