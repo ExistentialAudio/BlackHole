@@ -6,7 +6,9 @@
 [![GitHub](https://img.shields.io/github/license/ExistentialAudio/BlackHole)](LICENSE)
 [![Build Status](https://travis-ci.com/ExistentialAudio/BlackHole.svg?branch=master)](https://travis-ci.com/ExistentialAudio/BlackHole)
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/ExistentialAI?style=social)](https://twitter.com/ExistentialAI)
+[![Patreon](https://img.shields.io/badge/Sponsor-Patreon-ff69b4)](https://www.patreon.com/existentialaudio) ![Bitcoin](https://img.shields.io/badge/Bitcoin-1DxkhWHfRUBezMNbRM3rDKLbxEi1GVZRXz-orange) ![Litecoin](https://img.shields.io/badge/Litecoin-LchR249L8aXnDEDToLpPVSJotuvV381Yka-blue)
+
+[![Twitter](https://img.shields.io/twitter/follow/ExistentialAI?style=social)](https://twitter.com/ExistentialAI)
 
 ## Description
 BlackHole is a modern MacOS virtual audio driver that allows applications to pass audio to other applications with zero additional latency.
@@ -38,7 +40,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 
 BlackHole is also available using `brew cask install blackhole`
 
-Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for application specific setup.
+Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for application specific setup.        
 
 ## Usage Examples
 ### Record System Audio
@@ -99,10 +101,3 @@ Check that the volume is all the way up on BlackHole input and output in ``Audio
 
 ### Can I integrate BlackHole into my app?
 BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications contact me directly at devinroth@existential.audio.
-
-### You are awesome. Where can I donate?
-[Support us on Patreon](https://www.patreon.com/existentialaudio)
-
-Bitcoin:  1DxkhWHfRUBezMNbRM3rDKLbxEi1GVZRXz
-
-Litecoin: LchR249L8aXnDEDToLpPVSJotuvV381Yka
