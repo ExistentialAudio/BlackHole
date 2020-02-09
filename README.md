@@ -6,7 +6,7 @@
 [![GitHub](https://img.shields.io/github/license/ExistentialAudio/BlackHole)](LICENSE)
 [![Build Status](https://travis-ci.com/ExistentialAudio/BlackHole.svg?branch=master)](https://travis-ci.com/ExistentialAudio/BlackHole)
 
-[![Patreon](https://img.shields.io/badge/Sponsor-Patreon-ff69b4)](https://www.patreon.com/existentialaudio) [![Bitcoin](https://img.shields.io/badge/Bitcoin-1DxkhWHfRUBezMNbRM3rDKLbxEi1GVZRXz-orange)](#) [![Litecoin](https://img.shields.io/badge/Litecoin-LchR249L8aXnDEDToLpPVSJotuvV381Yka-blue)](#)
+[![Patreon](https://img.shields.io/badge/Sponsor-Patreon-ff69b4)](https://www.patreon.com/existentialaudio) [![Bitcoin](https://img.shields.io/badge/Bitcoin-1DxkhWHfRUBezMNbRM3rDKLbxEi1GVZRXz-orange)](https://www.blockchain.com/btc/address/1DxkhWHfRUBezMNbRM3rDKLbxEi1GVZRXz) [![Litecoin](https://img.shields.io/badge/Litecoin-LchR249L8aXnDEDToLpPVSJotuvV381Yka-blue)](https://live.blockcypher.com/ltc/address/LchR249L8aXnDEDToLpPVSJotuvV381Yka/)
 
 [![Twitter](https://img.shields.io/twitter/follow/ExistentialAI?style=social)](https://twitter.com/ExistentialAI)
 
