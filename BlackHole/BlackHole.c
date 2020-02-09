@@ -3668,6 +3668,9 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 		gDevice_NumberTimeStamps = 0;
 		gDevice_AnchorSampleTime = 0;
 		gDevice_AnchorHostTime = mach_absolute_time();
+        
+        // allocate ring buffer
+        ringBuffer = malloc(RING_BUFFER_SIZE);
 	}
 	else
 	{
@@ -3709,6 +3712,7 @@ static OSStatus	BlackHole_StopIO(AudioServerPlugInDriverRef inDriver, AudioObjec
 	{
 		//	We need to stop the hardware, which in this case means that there's nothing to do.
 		gDevice_IOIsRunning = 0;
+        free(ringBuffer);
 	}
 	else
 	{
@@ -3854,18 +3858,17 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
 	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad device ID");
 	FailWithAction((inStreamObjectID != kObjectID_Stream_Input) && (inStreamObjectID != kObjectID_Stream_Output), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad stream ID");
     
-    
     /*     READ INPUT         */
 	if(inOperationID == kAudioServerPlugInIOOperationReadInput)
 	{
         /*     WRITE TO IOBUFFER         */
         // calculate the ring buffer offset for the first sample INPUT
         ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
-        
+
         // calculate the size of the buffer
         inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
         remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
-        
+
         if (remainingRingBufferByteSize > inIOBufferByteSize)
         {
             // copy whole buffer if we have space
@@ -3879,13 +3882,13 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             // copy 2nd half
             memcpy(ioMainBuffer + remainingRingBufferByteSize, ringBuffer, inIOBufferByteSize - remainingRingBufferByteSize);
         }
-        
-        
+
+
         /*     CLEAR TO RINGBUFFER TRAILING BY 3072 SAMPLES         */
         // calculate the ring buffer offset for the first sample INPUT
         ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME - 3072) % RING_BUFFER_SIZE);
         remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
-        
+
         if (remainingRingBufferByteSize > inIOBufferByteSize)
         {
             // clear the internal ring buffer
@@ -3899,7 +3902,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             memset(ringBuffer, 0, inIOBufferByteSize - remainingRingBufferByteSize);
         }
     }
-    
+
     /*     WRITE MIX         */
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
@@ -3909,24 +3912,24 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             /*     WRITE MIX TO RINGBUFFER         */
             // calculate the ring buffer offset for the first sample OUTPUT
             ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
-            
+
             // calculate the size of the buffer
             inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
-            
+
             // mix the audio
             for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
             {
                 // sample from ioMainBuffer
                 Float32* ioSample = ioMainBuffer + sample;
-                
+
                 // sample from ring buffer
                 Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
-                
+
                 // mix the two together scale by volume
                 *ringSample += *ioSample * gVolume_Output_Master_Value * gVolume_Input_Master_Value;
             }
         }
-        
+
         // clear the io buffer
         memset(ioMainBuffer, 0, inIOBufferByteSize);
     }

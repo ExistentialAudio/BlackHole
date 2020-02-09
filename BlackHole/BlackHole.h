@@ -164,10 +164,12 @@ static UInt32                       gDataSource_Output_Master_Value     = 0;
 #define                             BYTES_PER_CHANNEL                   (BITS_PER_CHANNEL / 8)
 #define                             BYTES_PER_FRAME                     (NUMBER_OF_CHANNELS * BYTES_PER_CHANNEL)
 #define                             RING_BUFFER_SIZE                    ((8192 + LATENCY_FRAME_SIZE) * NUMBER_OF_CHANNELS * BYTES_PER_CHANNEL)
-static char                         ringBuffer[RING_BUFFER_SIZE];
+static void*                        ringBuffer;
 static UInt64                       ringBufferOffset                    = 0;
 static UInt64                       inIOBufferByteSize                  = 0;
 static UInt64                       remainingRingBufferByteSize         = 0;
+
+//kAudioHardwarePropertySleepingIsAllowed
 
 
 //==================================================================================================
