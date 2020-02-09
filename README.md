@@ -49,6 +49,7 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 3. Open DAW and set input device to "BlackHole" 
 4. Set track to input from channel 1-2
 5. Play audio from another application and monitor or record in your DAW.
+NOTE: You will not be able to hear the audio with this method. 
 
 ### Route Audio Between Applications
 1. Set output driver to "BlackHole" in sending application
