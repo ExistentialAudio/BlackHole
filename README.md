@@ -16,6 +16,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 - [Usage Examples]()
 - [Advanced Installation Instructions](#advanced-installation-instructions)
 - [Advanced Customization](#advanced-customization)
+- [Feature Requests](#feature-requests)
 - [FAQ](#faq)
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
 
@@ -66,6 +67,17 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 1. Delete BlackHole.driver from `/Library⁩/Audio⁩/Plug-Ins⁩/HAL`
 2. Restart computer or restart CoreAudio with terminal command `sudo killall coreaudiod`
 
+## Feature Requests
+
+If you are interested in any of the following features please leave a comment in the linked issue. If you want any features not listed please create a new issue.
+
+- [Sync Clock with other Audio Devices](https://github.com/ExistentialAudio/BlackHole/issues/27)
+- [Output Blackhole to other Audio Device](https://github.com/ExistentialAudio/BlackHole/issues/40)
+- [Add Support for AU Plug-ins](https://github.com/ExistentialAudio/BlackHole/issues/18)
+- [Inter-channel routing](https://github.com/ExistentialAudio/BlackHole/issues/13)
+- [Record Directly to File](https://github.com/ExistentialAudio/BlackHole/issues/8)
+- [Configuration Options Menu](https://github.com/ExistentialAudio/BlackHole/issues/7)
+
 ## FAQ
 
 ### Why isn't BlackHole showing up in the Applications folder?
@@ -82,6 +94,8 @@ Audacity is not compatible with Catalina. But there might be a [work around](htt
 
 ### Why is nothing is playing through BlackHole? 
 Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your DAW has microphone access. 
+
+Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
 
 ### Can I integrate BlackHole into my app?
 BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications contact me directly at devinroth@existential.audio.
