@@ -1741,7 +1741,7 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 
 		case kAudioDevicePropertyPreferredChannelLayout:
-			*outDataSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (2 * sizeof(AudioChannelDescription));
+			*outDataSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (NUMBER_OF_CHANNELS * sizeof(AudioChannelDescription));
 			break;
 
 		case kAudioDevicePropertyZeroTimeStampPeriod:
@@ -2170,12 +2170,12 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	by default. For this device, we return a stereo ACL.
 			{
 				//	calcualte how big the
-				UInt32 theACLSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (2 * sizeof(AudioChannelDescription));
+				UInt32 theACLSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (NUMBER_OF_CHANNELS * sizeof(AudioChannelDescription));
 				FailWithAction(inDataSize < theACLSize, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyPreferredChannelLayout for the device");
 				((AudioChannelLayout*)outData)->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
 				((AudioChannelLayout*)outData)->mChannelBitmap = 0;
-				((AudioChannelLayout*)outData)->mNumberChannelDescriptions = 2;
-				for(theItemIndex = 0; theItemIndex < 2; ++theItemIndex)
+				((AudioChannelLayout*)outData)->mNumberChannelDescriptions = NUMBER_OF_CHANNELS;
+				for(theItemIndex = 0; theItemIndex < NUMBER_OF_CHANNELS; ++theItemIndex)
 				{
 					((AudioChannelLayout*)outData)->mChannelDescriptions[theItemIndex].mChannelLabel = kAudioChannelLabel_Left + theItemIndex;
 					((AudioChannelLayout*)outData)->mChannelDescriptions[theItemIndex].mChannelFlags = 0;
@@ -2538,14 +2538,14 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
 			//	format has to be the same as the physical format.
 			FailWithAction(inDataSize < sizeof(AudioStreamBasicDescription), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetStreamPropertyData: not enough space for the return value of kAudioStreamPropertyVirtualFormat for the stream");
 			pthread_mutex_lock(&gPlugIn_StateMutex);
-			((AudioStreamBasicDescription*)outData)->mSampleRate = gDevice_SampleRate;
-			((AudioStreamBasicDescription*)outData)->mFormatID = kAudioFormatLinearPCM;
-			((AudioStreamBasicDescription*)outData)->mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-			((AudioStreamBasicDescription*)outData)->mBytesPerPacket = BYTES_PER_CHANNEL * NUMBER_OF_CHANNELS;
-			((AudioStreamBasicDescription*)outData)->mFramesPerPacket = 1;
-			((AudioStreamBasicDescription*)outData)->mBytesPerFrame = BYTES_PER_CHANNEL * NUMBER_OF_CHANNELS;
-			((AudioStreamBasicDescription*)outData)->mChannelsPerFrame = NUMBER_OF_CHANNELS;
-			((AudioStreamBasicDescription*)outData)->mBitsPerChannel = BITS_PER_CHANNEL;
+            ((AudioStreamBasicDescription*)outData)->mSampleRate = gDevice_SampleRate;
+            ((AudioStreamBasicDescription*)outData)->mFormatID = kAudioFormatLinearPCM;
+            ((AudioStreamBasicDescription*)outData)->mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+            ((AudioStreamBasicDescription*)outData)->mBytesPerPacket = BYTES_PER_CHANNEL * NUMBER_OF_CHANNELS;
+            ((AudioStreamBasicDescription*)outData)->mFramesPerPacket = 1;
+            ((AudioStreamBasicDescription*)outData)->mBytesPerFrame = BYTES_PER_CHANNEL * NUMBER_OF_CHANNELS;
+            ((AudioStreamBasicDescription*)outData)->mChannelsPerFrame = NUMBER_OF_CHANNELS;
+            ((AudioStreamBasicDescription*)outData)->mBitsPerChannel = BITS_PER_CHANNEL;
 			pthread_mutex_unlock(&gPlugIn_StateMutex);
 			*outDataSize = sizeof(AudioStreamBasicDescription);
 			break;
@@ -2569,16 +2569,16 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
 			//	fill out the return array
 			if(theNumberItemsToFetch > 0)
 			{
-				((AudioStreamRangedDescription*)outData)[0].mFormat.mSampleRate = 44100.0;
-				((AudioStreamRangedDescription*)outData)[0].mFormat.mFormatID = kAudioFormatLinearPCM;
-				((AudioStreamRangedDescription*)outData)[0].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mSampleRate = 44100.0;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mFormatID = kAudioFormatLinearPCM;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
                 ((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerPacket = BYTES_PER_FRAME;
-				((AudioStreamRangedDescription*)outData)[0].mFormat.mFramesPerPacket = 1;
-				((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerFrame = BYTES_PER_FRAME;
-				((AudioStreamRangedDescription*)outData)[0].mFormat.mChannelsPerFrame = NUMBER_OF_CHANNELS;
-				((AudioStreamRangedDescription*)outData)[0].mFormat.mBitsPerChannel = BITS_PER_CHANNEL;
-				((AudioStreamRangedDescription*)outData)[0].mSampleRateRange.mMinimum = 44100.0;
-				((AudioStreamRangedDescription*)outData)[0].mSampleRateRange.mMaximum = 44100.0;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mFramesPerPacket = 1;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerFrame = BYTES_PER_FRAME;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mChannelsPerFrame = NUMBER_OF_CHANNELS;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBitsPerChannel = BITS_PER_CHANNEL;
+                ((AudioStreamRangedDescription*)outData)[0].mSampleRateRange.mMinimum = 44100.0;
+                ((AudioStreamRangedDescription*)outData)[0].mSampleRateRange.mMaximum = 44100.0;
 			}
 			if(theNumberItemsToFetch > 1)
 			{
@@ -3642,6 +3642,8 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 	//	important to note that multiple clients can have IO running on the device at the same time.
 	//	So, work only needs to be done when the first client starts. All subsequent starts simply
 	//	increment the counter.
+    
+    DebugMsg("BlackHole Start IO");
 	
 	#pragma unused(inClientID)
 	
@@ -3668,6 +3670,9 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 		gDevice_NumberTimeStamps = 0;
 		gDevice_AnchorSampleTime = 0;
 		gDevice_AnchorHostTime = mach_absolute_time();
+        
+        // allocate ring buffer
+        ringBuffer = malloc(RING_BUFFER_SIZE);
 	}
 	else
 	{
@@ -3686,6 +3691,8 @@ static OSStatus	BlackHole_StopIO(AudioServerPlugInDriverRef inDriver, AudioObjec
 {
 	//	This call tells the device that the client has stopped IO. The driver can stop the hardware
 	//	once all clients have stopped.
+    
+    DebugMsg("BlackHole Stop IO");
 	
 	#pragma unused(inClientID)
 	
@@ -3709,6 +3716,7 @@ static OSStatus	BlackHole_StopIO(AudioServerPlugInDriverRef inDriver, AudioObjec
 	{
 		//	We need to stop the hardware, which in this case means that there's nothing to do.
 		gDevice_IOIsRunning = 0;
+        free(ringBuffer);
 	}
 	else
 	{
@@ -3755,7 +3763,9 @@ static OSStatus	BlackHole_GetZeroTimeStamp(AudioServerPlugInDriverRef inDriver, 
 	
 	//	calculate the next host time
 	theHostTicksPerRingBuffer = gDevice_HostTicksPerFrame * ((Float64)kDevice_RingBufferSize);
+    
 	theHostTickOffset = ((Float64)(gDevice_NumberTimeStamps + 1)) * theHostTicksPerRingBuffer;
+    
 	theNextHostTime = gDevice_AnchorHostTime + ((UInt64)theHostTickOffset);
 	
 	//	go to the next time if the next host time is less than the current time
@@ -3854,18 +3864,17 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
 	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad device ID");
 	FailWithAction((inStreamObjectID != kObjectID_Stream_Input) && (inStreamObjectID != kObjectID_Stream_Output), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad stream ID");
     
-    
     /*     READ INPUT         */
 	if(inOperationID == kAudioServerPlugInIOOperationReadInput)
 	{
         /*     WRITE TO IOBUFFER         */
         // calculate the ring buffer offset for the first sample INPUT
         ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
-        
+
         // calculate the size of the buffer
         inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
         remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
-        
+
         if (remainingRingBufferByteSize > inIOBufferByteSize)
         {
             // copy whole buffer if we have space
@@ -3879,13 +3888,13 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             // copy 2nd half
             memcpy(ioMainBuffer + remainingRingBufferByteSize, ringBuffer, inIOBufferByteSize - remainingRingBufferByteSize);
         }
-        
-        
+
+
         /*     CLEAR TO RINGBUFFER TRAILING BY 3072 SAMPLES         */
         // calculate the ring buffer offset for the first sample INPUT
         ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME - 3072) % RING_BUFFER_SIZE);
         remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
-        
+
         if (remainingRingBufferByteSize > inIOBufferByteSize)
         {
             // clear the internal ring buffer
@@ -3899,7 +3908,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             memset(ringBuffer, 0, inIOBufferByteSize - remainingRingBufferByteSize);
         }
     }
-    
+
     /*     WRITE MIX         */
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
@@ -3909,24 +3918,24 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             /*     WRITE MIX TO RINGBUFFER         */
             // calculate the ring buffer offset for the first sample OUTPUT
             ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
-            
+
             // calculate the size of the buffer
             inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
-            
+
             // mix the audio
             for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
             {
                 // sample from ioMainBuffer
                 Float32* ioSample = ioMainBuffer + sample;
-                
+
                 // sample from ring buffer
                 Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
-                
+
                 // mix the two together scale by volume
                 *ringSample += *ioSample * gVolume_Output_Master_Value * gVolume_Input_Master_Value;
             }
         }
-        
+
         // clear the io buffer
         memset(ioMainBuffer, 0, inIOBufferByteSize);
     }
