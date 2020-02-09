@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.2.6] - 2020-02-08
+## [0.2.6] - 2020-02-09
 ### Changed
-- Fixed BlackHole error when switching devices from DAW
-- Fixed BlackHole error when sleeping
-- Audio Midi Setup speaker configuration now saves preferences 
+- Fixed BlackHole buffer allocation error when switching audio devices from DAW.
+- Fixed BlackHole buffer allocation error when sleeping.
+- Audio Midi Setup speaker configuration now saves preferences.
 
 ## [0.2.5] - 2019-11-29
 ### Changed
