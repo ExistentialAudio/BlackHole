@@ -22,7 +22,6 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 - [Easy Installation Instructions](#easy-installation-instructions)
 - [Usage Examples]()
 - [Advanced Installation Instructions](#advanced-installation-instructions)
-- [Advanced Customization](#advanced-customization)
 - [Feature Requests](#feature-requests)
 - [FAQ](#faq)
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
@@ -39,9 +38,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 ## Easy Installation Instructions
 1. Download [BlackHole.vx.x.x.pkg](https://github.com/ExistentialAudio/BlackHole/releases/)
 2. Close all running audio applications
-3. Right-click on package and select open
-4. Open and install package
-5. Restart Computer (Catalina Only)
+3. Open and install package
 
 BlackHole is also available using `brew cask install blackhole`
 
@@ -49,11 +46,12 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 
 ## Usage Examples
 ### Record System Audio
-1. Open Audio MIDI Setup
-2. Right-click on "BlackHole" and select "Use This Device For Sound Output"
+1. [Setup Multi-output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
+2. In `Audio Midi Setup`->`Audio Devices` Right-click on the newly created Multi-output and select "Use This Device For Sound Output"
 3. Open DAW and set input device to "BlackHole" 
 4. Set track to input from channel 1-2
 5. Play audio from another application and monitor or record in your DAW.
+
 NOTE: You will not be able to hear the audio with this method. 
 
 ### Route Audio Between Applications
@@ -65,19 +63,15 @@ NOTE: You will not be able to hear the audio with this method.
 ## Advanced Installation Instructions
 1. Build driver in Xcode
 2. Copy BlackHole.driver to `/Library⁩/Audio⁩/Plug-Ins⁩/HAL`
-3. Restart CoreAudio with terminal command `sudo killall coreaudiod`
-
-## Advanced Customization
-1. In "BlackHole.h" change `NUMBER_OF_CHANNELS` to the desired number of channels.
-2. Follow [Advanced Installation Instructions](#advanced-installation-instructions)
+3. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 ## Uninstallation Instructions
 1. Delete BlackHole.driver from `/Library⁩/Audio⁩/Plug-Ins⁩/HAL`
-2. Restart computer or restart CoreAudio with terminal command `sudo killall coreaudiod`
+2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 ## Feature Requests
 
-If you are interested in any of the following features please leave a comment in the linked issue. If you want any features not listed please create a new issue.
+If you are interested in any of the following features please leave a comment in the linked issue. To request a features not listed please create a new issue.
 
 - [Sync Clock with other Audio Devices](https://github.com/ExistentialAudio/BlackHole/issues/27)
 - [Output Blackhole to other Audio Device](https://github.com/ExistentialAudio/BlackHole/issues/40)
@@ -85,6 +79,7 @@ If you are interested in any of the following features please leave a comment in
 - [Inter-channel routing](https://github.com/ExistentialAudio/BlackHole/issues/13)
 - [Record Directly to File](https://github.com/ExistentialAudio/BlackHole/issues/8)
 - [Configuration Options Menu](https://github.com/ExistentialAudio/BlackHole/issues/7)
+- [Support for Additional Bit Depths](https://github.com/ExistentialAudio/BlackHole/issues/42)
 
 ## FAQ
 
@@ -101,9 +96,11 @@ Unfortunately macOS does not support changing the volume of a Multi-Output devic
 Audacity is not compatible with Catalina. But there might be a [work around](https://www.audacityteam.org/macos-10-15-catalina-is-not-yet-supported-by-audacity/).
 
 ### Why is nothing is playing through BlackHole? 
-Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your DAW has microphone access. 
+- Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your DAW has microphone access. 
 
-Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
+- Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
+
+- If you are using a multi-output device, due to issues with macOS the Build-in Output must be enabled and listed as the top device in the Multi-Output. https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices
 
 ### Can I integrate BlackHole into my app?
 BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications contact me directly at devinroth@existential.audio.
