@@ -1,5 +1,4 @@
-# BlackHole: Virtual Audio Driver v0.2
-
+# BlackHole: Virtual Audio Driver
 [![Platform:macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
 ![GitHub](https://img.shields.io/github/v/release/ExistentialAudio/BlackHole)
 ![GitHub All Releases](https://img.shields.io/github/downloads/existentialaudio/blackhole/total)](https://github.com/ExistentialAudio/BlackHole/releases)
