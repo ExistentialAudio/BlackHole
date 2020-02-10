@@ -13,8 +13,9 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 [![Litecoin](https://img.shields.io/badge/Litecoin-LchR249L8aXnDEDToLpPVSJotuvV381Yka-blue)](https://live.blockcypher.com/ltc/address/LchR249L8aXnDEDToLpPVSJotuvV381Yka/)
 
 ## Stay Up To Date 
-[![Twitter](https://img.shields.io/badge/Twitter-1da1f2)](https://twitter.com/ExistentialAI)
-[![Facebook](https://img.shields.io/badge/Facebook-4267B2)](https://www.facebook.com/Existential-Audio-103423234434751)
+[![Twitter](https://img.shields.io/badge/Follow%20on%20Twitter-1da1f2)](https://twitter.com/ExistentialAI)
+[![Facebook](https://img.shields.io/badge/Like%20on%20Facebook-4267B2)](https://www.facebook.com/Existential-Audio-103423234434751)
+[![Subscribe](https://img.shields.io/badge/Subscribe%20to%20Emails-000000)](http://existential.audio/)
 
 ## Table of Contents
 
