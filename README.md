@@ -43,6 +43,8 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 
 BlackHole is also available using `brew cask install blackhole`
 
+For more details visit https://github.com/ExistentialAudio/BlackHole/wiki/Installation
+
 Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for application specific setup.        
 
 ## Usage Examples
