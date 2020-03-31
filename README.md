@@ -25,6 +25,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 - [Easy Installation Instructions](#easy-installation-instructions)
 - [Usage Examples]()
 - [Advanced Installation Instructions](#advanced-installation-instructions)
+- [Uninstallation Instructions](#uninstallation-instructions)
 - [Feature Requests](#feature-requests)
 - [FAQ](#faq)
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
@@ -72,6 +73,8 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 1. Delete BlackHole.driver from `/Library⁩/Audio⁩/Plug-Ins⁩/HAL` NOTE: The directory is system/Library not user/Library
 2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
+Need more help? [Visit the wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
+
 ## Feature Requests
 
 If you are interested in any of the following features please leave a comment in the linked issue. To request a features not listed please create a new issue.
@@ -104,6 +107,10 @@ Audacity is not compatible with Catalina. But there might be a [work around](htt
 - Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
 
 - If you are using a multi-output device, due to issues with macOS the Build-in Output must be enabled and listed as the top device in the Multi-Output. https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices
+
+### Where is `/Library/Audio/Plug-Ins/HAL/`?
+
+Chances are you are looking in `~/Library/` or `user/Library/` instead of `/Library`.  
 
 ### Can I integrate BlackHole into my app?
 BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications contact me directly at devinroth@existential.audio.
