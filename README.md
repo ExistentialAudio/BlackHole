@@ -54,7 +54,7 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 ### Record System Audio
 1. [Setup Multi-output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
 2. In `Audio Midi Setup`->`Audio Devices` Right-click on the newly created Multi-output and select "Use This Device For Sound Output"
-3. Open DAW and set input device to "BlackHole" 
+3. Open digital audio workstation (DAW) such as GarageBand and set input device to "BlackHole" 
 4. Set track to input from channel 1-2
 5. Play audio from another application and monitor or record in your DAW.
 
@@ -102,7 +102,7 @@ Unfortunately macOS does not support changing the volume of a Multi-Output devic
 Audacity is not compatible with Catalina. But there might be a [work around](https://www.audacityteam.org/macos-10-15-catalina-is-not-yet-supported-by-audacity/).
 
 ### Why is nothing is playing through BlackHole? 
-- Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your DAW has microphone access. 
+- Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your digital audio workstation (DAW) has microphone access. 
 
 - Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
 
