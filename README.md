@@ -15,8 +15,7 @@ https://github.com/sponsors/ExistentialAudio
 ### Current Funding
 $34 per month.
 ### Goals
-#### $50 per month. 
-Create installer for BlackHole 2ch that will work along side BlackHole 16ch.
+$50 per month. Create installer for BlackHole 2ch that will work along side BlackHole 16ch.
  
 
 
