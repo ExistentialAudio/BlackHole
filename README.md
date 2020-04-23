@@ -12,9 +12,12 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 ## Funding
 Sponsor: https://github.com/sponsors/ExistentialAudio
 
-Current Funding: $39 per month.
+Current Funding: $54 per month.
 
-Goal: $50 per month. Create installer for BlackHole 2ch that will work along side BlackHole 16ch.
+### Goals
+
+- [x] $50 per month. Create installer for BlackHole 2ch that will work along side BlackHole 16ch.
+- [ ] $150 per month. Any ideas?
 
 
 ## Table of Contents
