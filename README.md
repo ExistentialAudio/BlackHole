@@ -17,7 +17,7 @@ Current Funding: $54 per month.
 ### Goals
 
 - [x] $50 per month. Create installer for BlackHole 2ch that will work along side BlackHole 16ch. (in progress)
-- [ ] $150 per month. Any ideas?
+- [ ] $100 per month. A new detailed setup guide for each DAW. 
 
 
 ## Table of Contents
