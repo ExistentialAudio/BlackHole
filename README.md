@@ -12,7 +12,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 ## Funding
 Sponsor: https://github.com/sponsors/ExistentialAudio
 
-Current Funding: $54 per month.
+Current Funding: $50 per month.
 
 ### Goals
 
