@@ -18,16 +18,6 @@
 
 // Volume conversions
 
-static Float32 volume_to_scalar(Float32 volume)
-{
-	return powf(volume, 1.0 / kVolume_Curve);
-}
-
-static Float32 volume_from_scalar(Float32 scalar)
-{
-	return powf(scalar, kVolume_Curve);
-}
-
 static Float32 volume_to_decibel(Float32 volume)
 {
 	if (volume <= powf(10.0f, kVolume_MinDB / 20.0f))
@@ -42,6 +32,18 @@ static Float32 volume_from_decibel(Float32 decibel)
 		return 0.0f;
 	else
 		return powf(10.0f, decibel / 20.0f);
+}
+
+static Float32 volume_to_scalar(Float32 volume)
+{
+	Float32 decibel = volume_to_decibel(volume);
+	return (decibel - kVolume_MinDB) / (kVolume_MaxDB - kVolume_MinDB);
+}
+
+static Float32 volume_from_scalar(Float32 scalar)
+{
+	Float32 decibel = scalar * (kVolume_MaxDB - kVolume_MinDB) + kVolume_MinDB;
+	return volume_from_decibel(decibel);
 }
 
 
