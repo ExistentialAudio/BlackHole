@@ -17,7 +17,9 @@ Current Funding: $126 per month.
 ### Goals
 
 - [x] $50 per month. Create installer for BlackHole 2ch that will work along side BlackHole 16ch. (in progress)
-- [x] $100 per month. One new detailed setup guide for each DAW. Coming May 2020: Logic Pro X. 
+- [x] $100 per month. One new detailed setup guide for each DAW. 
+      May: Logic Pro X
+      June: GarageBand
 - [ ] $200 per month. One video tutorial per month.
 
 ## Table of Contents
