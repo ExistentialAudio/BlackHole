@@ -47,6 +47,8 @@ Current Funding: $126 per month.
 2. Close all running audio applications
 3. Open and install package
 
+Install via Homebrew `brew cask install blackhole`
+
 For more details visit https://github.com/ExistentialAudio/BlackHole/wiki/Installation
 
 Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for application specific setup.        
