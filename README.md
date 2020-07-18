@@ -12,7 +12,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 ## Funding
 Sponsor: https://github.com/sponsors/ExistentialAudio
 
-Current Funding: $126 per month.
+Current Funding: $137 per month.
 
 ### Goals
 
@@ -20,6 +20,7 @@ Current Funding: $126 per month.
 - [x] $100 per month. One new detailed setup guide for each DAW. 
       May: Logic Pro X
       June: GarageBand
+      July: Audacity
 - [ ] $200 per month. One video tutorial per month.
 
 ## Table of Contents
