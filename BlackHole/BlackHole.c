@@ -16,6 +16,35 @@
 #include "BlackHole.h"
 
 
+// Volume conversions
+
+static Float32 volume_to_decibel(Float32 volume)
+{
+	if (volume <= powf(10.0f, kVolume_MinDB / 20.0f))
+		return kVolume_MinDB;
+	else
+		return 20.0f * log10f(volume);
+}
+
+static Float32 volume_from_decibel(Float32 decibel)
+{
+	if (decibel <= kVolume_MinDB)
+		return 0.0f;
+	else
+		return powf(10.0f, decibel / 20.0f);
+}
+
+static Float32 volume_to_scalar(Float32 volume)
+{
+	Float32 decibel = volume_to_decibel(volume);
+	return (decibel - kVolume_MinDB) / (kVolume_MaxDB - kVolume_MinDB);
+}
+
+static Float32 volume_from_scalar(Float32 scalar)
+{
+	Float32 decibel = scalar * (kVolume_MaxDB - kVolume_MinDB) + kVolume_MinDB;
+	return volume_from_decibel(decibel);
+}
 
 
 #pragma mark Factory
@@ -3171,7 +3200,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					//	Note that we need to take the state lock to examine the value.
 					FailWithAction(inDataSize < sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioLevelControlPropertyScalarValue for the volume control");
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					*((Float32*)outData) = (inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Input_Master_Value : gVolume_Output_Master_Value;
+					*((Float32*)outData) = volume_to_scalar((inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Input_Master_Value : gVolume_Output_Master_Value);
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					*outDataSize = sizeof(Float32);
 					break;
@@ -3183,11 +3212,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					pthread_mutex_lock(&gPlugIn_StateMutex);
 					*((Float32*)outData) = (inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Input_Master_Value : gVolume_Output_Master_Value;
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
-					
-					//	Note that we square the scalar value before converting to dB so as to
-					//	provide a better curve for the slider
-					*((Float32*)outData) *= *((Float32*)outData);
-					*((Float32*)outData) = kVolume_MinDB + (*((Float32*)outData) * (kVolume_MaxDB - kVolume_MinDB));
+					*((Float32*)outData) = volume_to_decibel(*((Float32*)outData));
 					
 					//	report how much we wrote
 					*outDataSize = sizeof(Float32);
@@ -3447,7 +3472,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					//	For the scalar volume, we clamp the new value to [0, 1]. Note that if this
 					//	value changes, it implies that the dB value changed too.
 					FailWithAction(inDataSize != sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetControlPropertyData: wrong size for the data for kAudioLevelControlPropertyScalarValue");
-					theNewVolume = *((const Float32*)inData);
+					theNewVolume = volume_from_scalar(*((const Float32*)inData));
 					if(theNewVolume < 0.0)
 					{
 						theNewVolume = 0.0;
@@ -3502,11 +3527,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					{
 						theNewVolume = kVolume_MaxDB;
 					}
-					//	Note that we square the scalar value before converting to dB so as to
-					//	provide a better curve for the slider. We undo that here.
-					theNewVolume = theNewVolume - kVolume_MinDB;
-					theNewVolume /= kVolume_MaxDB - kVolume_MinDB;
-					theNewVolume = sqrtf(theNewVolume);
+					theNewVolume = volume_from_decibel(theNewVolume);
 					pthread_mutex_lock(&gPlugIn_StateMutex);
 					if(inObjectID == kObjectID_Volume_Input_Master)
 					{
