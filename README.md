@@ -74,6 +74,10 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 3. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 ## Uninstallation Instructions
+[Download Uninstaller](https://existential.audio/downloads/BlackHoleUninstaller.pkg)
+
+or manually uninstal
+
 1. Delete BlackHole.driver by running `rm -fr /Library/Audio/Plug-Ins/HAL/BlackHole.driver` NOTE: The directory is in `/Library` not `user/Library`
 2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
