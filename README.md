@@ -22,7 +22,7 @@ Current Funding: $137 per month.
 - June: [GarageBand](https://existential.audio/blackhole/support/)
 - July: Audacity (in progress)
 - August: Record System Audio with Quicktime (in progress)
-- September: Record System Audio with Screen Capture.
+- September: Record System Audio with Screen Capture. (in progress)
 - [ ] $200 per month. One video tutorial per month.
 
 ## Table of Contents
