@@ -16,11 +16,13 @@ Current Funding: $137 per month.
 
 ### Goals
 
-- [x] $50 per month. Create installer for BlackHole 2ch that will work along side BlackHole 16ch. (in progress)
+- [x] $50 per month. Create installer for BlackHole 2ch that will work along side BlackHole 16ch. (complete)
 - [x] $100 per month. One new detailed setup guide for each DAW. 
 - May: [Logic Pro X](https://existential.audio/blackhole/support/)
 - June: [GarageBand](https://existential.audio/blackhole/support/)
 - July: Audacity (in progress)
+- August: Record System Audio with Quicktime (in progress)
+- September: Record System Audio with Screen Capture.
 - [ ] $200 per month. One video tutorial per month.
 
 ## Table of Contents
