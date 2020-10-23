@@ -111,7 +111,7 @@ Unfortunately macOS does not support changing the volume of a Multi-Output devic
 ### How can I use BlackHole with Audacity in Catalina?
 Audacity only works with macOS Catalina as of Audacity version 2.4.1 in May 2020. If you have an older version, you will need to upgrade to the latest release.
 
-### Why is nothing is playing through BlackHole? 
+### Why is nothing playing through BlackHole? 
 - Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your digital audio workstation (DAW) has microphone access. 
 
 - Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
