@@ -12,21 +12,7 @@ BlackHole is a modern MacOS virtual audio driver that allows applications to pas
 ## Funding
 Sponsor: https://github.com/sponsors/ExistentialAudio
 
-Current Funding: $137 per month.
-
-### Goals
-
-- [x] $50 per month. Create installer for BlackHole 2ch that will work along side BlackHole 16ch. (complete)
-- [x] $100 per month. One new detailed setup guide for each DAW. 
-- May: [Logic Pro X](https://existential.audio/blackhole/support/)
-- June: [GarageBand](https://existential.audio/blackhole/support/)
-- July: Audacity (in progress)
-- August: Record System Audio with Quicktime (in progress)
-- September: Record System Audio with Screen Capture. (in progress)
-- [ ] $200 per month. One video tutorial per month.
-
 ## Table of Contents
-
 - [Features](#features)
 - [Easy Installation Instructions](#easy-installation-instructions)
 - [Usage Examples](#usage-examples)
