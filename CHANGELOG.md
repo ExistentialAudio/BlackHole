@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### In Progress
 - Fix bug that caused crashes in certain situations. Issue#206
-- Add support for additional formats. 
+- Add support for additional virtual formats. 24bit, 16bit.
+- Clear buffer on read and write. Fixes bug where there is a loud pop when audio starts.
 
 ## [0.2.8] - Unreleased
 
