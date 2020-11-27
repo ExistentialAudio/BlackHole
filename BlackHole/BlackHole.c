@@ -3693,7 +3693,7 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 		gDevice_AnchorHostTime = mach_absolute_time();
         
         // allocate ring buffer
-        ringBuffer = malloc(RING_BUFFER_SIZE);
+        ringBuffer = calloc(RING_BUFFER_FRAME_SIZE * NUMBER_OF_CHANNELS, sizeof(Float32));
 	}
 	else
 	{
@@ -3888,80 +3888,125 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     // IO Lock
     pthread_mutex_lock(&gDevice_IOMutex);
     
-    /*     READ INPUT         */
-	if(inOperationID == kAudioServerPlugInIOOperationReadInput)
-	{
-        /*     WRITE TO IOBUFFER         */
-        // calculate the ring buffer offset for the first sample INPUT
-        ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
+//    /*     READ INPUT         */
+//    // Called when an application reads audio from the driver.
+//	if(inOperationID == kAudioServerPlugInIOOperationReadInput)
+//	{
+//        /*     WRITE TO IOBUFFER         */
+//        // calculate the ring buffer offset for the first sample INPUT
+//        ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
+//
+//        // calculate the size of the buffer
+//        inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
+//        remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
+//
+//        if (remainingRingBufferByteSize > inIOBufferByteSize)
+//        {
+//            // copy whole buffer if we have space
+//            memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, inIOBufferByteSize);
+//
+//        }
+//        else
+//        {
+//            // copy 1st half
+//            memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, remainingRingBufferByteSize);
+//            // copy 2nd half
+//            memcpy(ioMainBuffer + remainingRingBufferByteSize, ringBuffer, inIOBufferByteSize - remainingRingBufferByteSize);
+//        }
+//
+//
+//        /*     CLEAR TO RINGBUFFER TRAILING BY 3072 SAMPLES         */
+//        // calculate the ring buffer offset for the first sample INPUT
+//        ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME - 3072) % RING_BUFFER_SIZE);
+//        remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
+//
+//        if (remainingRingBufferByteSize > inIOBufferByteSize)
+//        {
+//            // clear the internal ring buffer
+//            memset(ringBuffer + ringBufferOffset, 0, inIOBufferByteSize);
+//        }
+//        else
+//        {
+//            // clear the 1st half
+//            memset(ringBuffer + ringBufferOffset, 0, remainingRingBufferByteSize);
+//            // clear the 2nd half
+//            memset(ringBuffer, 0, inIOBufferByteSize - remainingRingBufferByteSize);
+//        }
+//    }
+//
+//    /*     WRITE MIX         */
+//    // Called when an application writes a mix to the driver.
+//    if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
+//    {
+//        // don't do anything if muted
+//        if (!(gMute_Input_Master_Value || gMute_Output_Master_Value ))
+//        {
+//            /*     WRITE MIX TO RINGBUFFER         */
+//            // calculate the ring buffer offset for the first sample OUTPUT
+//            ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
+//
+//            // calculate the size of the buffer
+//            inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
+//
+//            // mix the audio
+//            for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
+//            {
+//                // sample from ioMainBuffer
+//                Float32* ioSample = ioMainBuffer + sample;
+//
+//                // sample from ring buffer
+//                Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
+//
+//                // mix the two together scale by volume
+//                *ringSample += *ioSample * gVolume_Output_Master_Value * gVolume_Input_Master_Value;
+//            }
+//        }
+//
+//        // clear the io buffer
+//        memset(ioMainBuffer, 0, inIOBufferByteSize);
+//    }
+    
 
-        // calculate the size of the buffer
-        inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
-        remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
-
-        if (remainingRingBufferByteSize > inIOBufferByteSize)
-        {
-            // copy whole buffer if we have space
-            memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, inIOBufferByteSize);
-
-        }
-        else
-        {
-            // copy 1st half
-            memcpy(ioMainBuffer, ringBuffer + ringBufferOffset, remainingRingBufferByteSize);
-            // copy 2nd half
-            memcpy(ioMainBuffer + remainingRingBufferByteSize, ringBuffer, inIOBufferByteSize - remainingRingBufferByteSize);
-        }
-
-
-        /*     CLEAR TO RINGBUFFER TRAILING BY 3072 SAMPLES         */
-        // calculate the ring buffer offset for the first sample INPUT
-        ringBufferOffset = ((UInt64)(inIOCycleInfo->mInputTime.mSampleTime * BYTES_PER_FRAME - 3072) % RING_BUFFER_SIZE);
-        remainingRingBufferByteSize = RING_BUFFER_SIZE - ringBufferOffset;
-
-        if (remainingRingBufferByteSize > inIOBufferByteSize)
-        {
-            // clear the internal ring buffer
-            memset(ringBuffer + ringBufferOffset, 0, inIOBufferByteSize);
-        }
-        else
-        {
-            // clear the 1st half
-            memset(ringBuffer + ringBufferOffset, 0, remainingRingBufferByteSize);
-            // clear the 2nd half
-            memset(ringBuffer, 0, inIOBufferByteSize - remainingRingBufferByteSize);
-        }
-    }
-
-    /*     WRITE MIX         */
-    if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
+    if(inOperationID == kAudioServerPlugInIOOperationReadInput)
     {
-        // don't do anything if muted
-        if (!(gMute_Input_Master_Value || gMute_Output_Master_Value ))
-        {
-            /*     WRITE MIX TO RINGBUFFER         */
-            // calculate the ring buffer offset for the first sample OUTPUT
-            ringBufferOffset = ((UInt64)(inIOCycleInfo->mOutputTime.mSampleTime * BYTES_PER_FRAME) % RING_BUFFER_SIZE);
 
-            // calculate the size of the buffer
-            inIOBufferByteSize = inIOBufferFrameSize * BYTES_PER_FRAME;
+        Float32* buffer = (Float32*)ioMainBuffer;
+        UInt64 mSampleTime = inIOCycleInfo->mInputTime.mSampleTime;
 
-            // mix the audio
-            for(UInt64 sample = 0; sample < inIOBufferByteSize; sample += sizeof(Float32))
-            {
-                // sample from ioMainBuffer
-                Float32* ioSample = ioMainBuffer + sample;
+        for(UInt32 frame = 0; frame < inIOBufferFrameSize; frame++){
+            for(int channel = 0; channel < NUMBER_OF_CHANNELS; channel++){
+                
+                // write to the ioMainBuffer
+                buffer[frame*NUMBER_OF_CHANNELS+channel] = ringBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel];
+                
+                // clear ring buffer after 8192 samples.
+                ringBuffer[((mSampleTime+frame-8192)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] = 0;
 
-                // sample from ring buffer
-                Float32* ringSample = (Float32*)(ringBuffer + (ringBufferOffset + sample) % RING_BUFFER_SIZE);
-
-                // mix the two together scale by volume
-                *ringSample += *ioSample * gVolume_Output_Master_Value * gVolume_Input_Master_Value;
             }
         }
+    }
+    
+    if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
+    {
+        
+        Float32* buffer = (Float32*)ioMainBuffer;
 
+        UInt64 mSampleTime = inIOCycleInfo->mOutputTime.mSampleTime;
+
+        for(UInt32 frame = 0; frame < inIOBufferFrameSize; frame++){
+            for(int channel = 0; channel < NUMBER_OF_CHANNELS; channel++){
+                
+                // write to internal ring buffer
+                ringBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] += buffer[frame*NUMBER_OF_CHANNELS+channel];
+                
+                // clear ring buffer after 8192 samples.
+                ringBuffer[((mSampleTime+frame-8192)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] = 0;
+            }
+
+        }
+        
         // clear the io buffer
-        memset(ioMainBuffer, 0, inIOBufferByteSize);
+        memset(ioMainBuffer, 0, inIOBufferFrameSize * NUMBER_OF_CHANNELS * sizeof(Float32));
     }
     
     pthread_mutex_unlock(&gDevice_IOMutex);
