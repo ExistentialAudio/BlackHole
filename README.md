@@ -102,7 +102,7 @@ Audacity only works with macOS Catalina as of Audacity version 2.4.1 in May 2020
 
 - Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
 
-- If you are using a multi-output device, due to issues with macOS the Build-in Output must be enabled and listed as the top device in the Multi-Output. https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices
+- If you are using a multi-output device, due to issues with macOS the Built-in Output must be enabled and listed as the top device in the Multi-Output. https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices
 
 ### Where is `/Library/Audio/Plug-Ins/HAL/`?
 
