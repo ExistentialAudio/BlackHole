@@ -36,7 +36,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 2. Close all running audio applications
 3. Open and install package
 
-Install via Homebrew `brew cask install blackhole`
+Install via Homebrew `brew install --cask blackhole-2ch` (2-channel version) or `brew install --cask blackhole-16ch` (16-channel version)
 
 For more details visit https://github.com/ExistentialAudio/BlackHole/wiki/Installation
 
