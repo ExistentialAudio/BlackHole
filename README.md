@@ -38,8 +38,8 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 Install via Homebrew:
 
-- 2ch: `brew install --cask blackhole-2ch`
-- 16ch: `brew install --cask blackhole-16ch`
+- 2ch: `brew install blackhole-2ch`
+- 16ch: `brew install blackhole-16ch`
 
 For more details visit https://github.com/ExistentialAudio/BlackHole/wiki/Installation
 
