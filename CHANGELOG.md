@@ -7,17 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ### In Progress
-- Fix bug that caused crashes in certain situations. Issue#206
+
 - Add support for additional virtual formats. 24bit, 16bit.
-- Clear buffer on read and write. Fixes bug where there is a loud pop when audio starts.
+
 
 ## [0.2.8] - Unreleased
 
 ### Added
-
+- Support for Apple Silicon
 
 ### Changed
-- Removed deployment target. BlackHole will not restrict older macOS versions.
+- Set deployment target to 10.9. 
+- Fixed bug where there is a loud pop when audio starts.
+- Fix bug that caused crashes in certain situations. Issue#206
+- Disable Volume and Mute controls on input. They are only needed on the output. 
+- Fix clock bug.
 
 
 ## [0.2.7] - 2020-08-08
