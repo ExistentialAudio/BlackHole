@@ -412,9 +412,7 @@ static Boolean	BlackHole_HasProperty(AudioServerPlugInDriverRef inDriver, AudioO
 			theAnswer = BlackHole_HasStreamProperty(inDriver, inObjectID, inClientProcessID, inAddress);
 			break;
 		
-		case kObjectID_Volume_Input_Master:
 		case kObjectID_Volume_Output_Master:
-		case kObjectID_Mute_Input_Master:
 		case kObjectID_Mute_Output_Master:
 		case kObjectID_DataSource_Input_Master:
 		case kObjectID_DataSource_Output_Master:
@@ -461,9 +459,7 @@ static OSStatus	BlackHole_IsPropertySettable(AudioServerPlugInDriverRef inDriver
 			theAnswer = BlackHole_IsStreamPropertySettable(inDriver, inObjectID, inClientProcessID, inAddress, outIsSettable);
 			break;
 		
-		case kObjectID_Volume_Input_Master:
 		case kObjectID_Volume_Output_Master:
-		case kObjectID_Mute_Input_Master:
 		case kObjectID_Mute_Output_Master:
 		case kObjectID_DataSource_Input_Master:
 		case kObjectID_DataSource_Output_Master:
@@ -566,9 +562,7 @@ static OSStatus	BlackHole_GetPropertyData(AudioServerPlugInDriverRef inDriver, A
 			theAnswer = BlackHole_GetStreamPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, outDataSize, outData);
 			break;
 		
-		case kObjectID_Volume_Input_Master:
 		case kObjectID_Volume_Output_Master:
-		case kObjectID_Mute_Input_Master:
 		case kObjectID_Mute_Output_Master:
 		case kObjectID_DataSource_Input_Master:
 		case kObjectID_DataSource_Output_Master:
@@ -617,9 +611,7 @@ static OSStatus	BlackHole_SetPropertyData(AudioServerPlugInDriverRef inDriver, A
 			theAnswer = BlackHole_SetStreamPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData, &theNumberPropertiesChanged, theChangedAddresses);
 			break;
 		
-		case kObjectID_Volume_Input_Master:
 		case kObjectID_Volume_Output_Master:
-		case kObjectID_Mute_Input_Master:
 		case kObjectID_Mute_Output_Master:
 		case kObjectID_DataSource_Input_Master:
 		case kObjectID_DataSource_Output_Master:
