@@ -60,16 +60,16 @@ For more specific details [visit the wiki.](https://github.com/ExistentialAudio/
 ## Guides
 
 ### Logic Pro X
--[Logic Pro X to FaceTime](https://existential.audio/howto/StreamFromLogicProXtoFaceTime.php)
--[Logic Pro X to Google Meet](https://existential.audio/howto/StreamFromLogicProXtoGoogleMeet.php)
--[Logic Pro X to Skype](https://existential.audio/howto/StreamFromLogicProXtoSkype.php)
--[Logic Pro X to Zoom](https://existential.audio/howto/StreamFromLogicProXtoZoom.php)
+- [Logic Pro X to FaceTime](https://existential.audio/howto/StreamFromLogicProXtoFaceTime.php)
+- [Logic Pro X to Google Meet](https://existential.audio/howto/StreamFromLogicProXtoGoogleMeet.php)
+- [Logic Pro X to Skype](https://existential.audio/howto/StreamFromLogicProXtoSkype.php)
+- [Logic Pro X to Zoom](https://existential.audio/howto/StreamFromLogicProXtoZoom.php)
 
 ### GarageBand
--[GarageBand to FaceTime](https://existential.audio/howto/StreamFromGarageBandToFaceTime.php)
--[GarageBand to Google Meet](https://existential.audio/howto/StreamFromGarageBandToGoogleMeet.php)
--[GarageBand to Skype](https://existential.audio/howto/StreamFromGarageBandToSkype.php)
--[GarageBand to Zoom](https://existential.audio/howto/StreamFromGarageBandToZoom.php)
+- [GarageBand to FaceTime](https://existential.audio/howto/StreamFromGarageBandToFaceTime.php)
+- [GarageBand to Google Meet](https://existential.audio/howto/StreamFromGarageBandToGoogleMeet.php)
+- [GarageBand to Skype](https://existential.audio/howto/StreamFromGarageBandToSkype.php)
+- [GarageBand to Zoom](https://existential.audio/howto/StreamFromGarageBandToZoom.php)
 
 ### Record System Audio
 1. [Setup Multi-output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
