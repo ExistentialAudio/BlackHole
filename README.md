@@ -33,12 +33,12 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ## Installation Instructions
 
-### Download Installer
+### Option 1: Download Installer
 1. [Download Installer](http://existential.audio/blackhole/)
 2. Close all running audio applications
 3. Open and install package
 
-### Install via Homebrew:
+### Option 2: Install via Homebrew:
 
 - 2ch: `brew install blackhole-2ch`
 - 16ch: `brew install blackhole-16ch`
