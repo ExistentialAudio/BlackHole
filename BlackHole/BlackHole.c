@@ -221,7 +221,7 @@ static OSStatus	BlackHole_Initialize(AudioServerPlugInDriverRef inDriver, AudioS
 	//	calculate the host ticks per frame
 	struct mach_timebase_info theTimeBaseInfo;
 	mach_timebase_info(&theTimeBaseInfo);
-	Float64 theHostClockFrequency = theTimeBaseInfo.denom / theTimeBaseInfo.numer;
+	Float64 theHostClockFrequency = theTimeBaseInfo.numer / theTimeBaseInfo.denom;
 	theHostClockFrequency *= 1000000000.0;
 	gDevice_HostTicksPerFrame = theHostClockFrequency / gDevice_SampleRate;
 	
@@ -346,7 +346,7 @@ static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriv
 	//	recalculate the state that depends on the sample rate
 	struct mach_timebase_info theTimeBaseInfo;
 	mach_timebase_info(&theTimeBaseInfo);
-	Float64 theHostClockFrequency = theTimeBaseInfo.denom / theTimeBaseInfo.numer;
+    Float64 theHostClockFrequency = theTimeBaseInfo.numer / theTimeBaseInfo.denom;
 	theHostClockFrequency *= 1000000000.0;
 	gDevice_HostTicksPerFrame = theHostClockFrequency / gDevice_SampleRate;
 
