@@ -509,9 +509,7 @@ static OSStatus	BlackHole_GetPropertyDataSize(AudioServerPlugInDriverRef inDrive
 			theAnswer = BlackHole_GetStreamPropertyDataSize(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, outDataSize);
 			break;
 		
-		case kObjectID_Volume_Input_Master:
 		case kObjectID_Volume_Output_Master:
-		case kObjectID_Mute_Input_Master:
 		case kObjectID_Mute_Output_Master:
 		case kObjectID_DataSource_Input_Master:
 		case kObjectID_DataSource_Output_Master:
