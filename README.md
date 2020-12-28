@@ -71,6 +71,9 @@ For more specific details [visit the wiki.](https://github.com/ExistentialAudio/
 - [GarageBand to Skype](https://existential.audio/howto/StreamFromGarageBandToSkype.php)
 - [GarageBand to Zoom](https://existential.audio/howto/StreamFromGarageBandToZoom.php)
 
+### Reaper
+- Reaper to Zoom by Noah Liebman (https://noahliebman.net/2020/12/telephone-colophon-or-how-i-overengineered-my-call-audio/)
+
 ### Record System Audio
 1. [Setup Multi-output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
 2. In `Audio Midi Setup`->`Audio Devices` Right-click on the newly created Multi-output and select "Use This Device For Sound Output"
