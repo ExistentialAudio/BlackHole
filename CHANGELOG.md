@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix bug that caused crashes in certain situations. Issue#206
 - Disable Volume and Mute controls on input. They are only needed on the output. 
 - Fix clock bug.
+- Automatically change UIDs to include the number of channels. Makes it easier to build and install multiple versions. Ex: BlackHole2ch_UID
 
 
 ## [0.2.7] - 2020-08-08
