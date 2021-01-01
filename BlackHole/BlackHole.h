@@ -118,17 +118,19 @@ enum
 //    multiple devices were supported, this state would need to be encapsulated in one or more structs
 //    so that each object's state can be tracked individually.
 //    Note also that we share a single mutex across all objects to be thread safe for the same reason.
-#define                             kPlugIn_BundleID                    "audio.existential.BlackHole"
+
+
+#define                             kPlugIn_BundleID                    "audio.existential.BlackHole%ich"
 static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
 static UInt32                       gPlugIn_RefCount                    = 0;
 static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
 
-#define                             kBox_UID                            "BlackHole_UID"
+#define                             kBox_UID                            "BlackHole%ich_UID"
 static CFStringRef                  gBox_Name                           = NULL;
 static Boolean                      gBox_Acquired                       = true;
 
-#define                             kDevice_UID                         "BlackHole_UID"
-#define                             kDevice_ModelUID                    "BlackHole_ModelUID"
+#define                             kDevice_UID                         "BlackHole%ich_UID"
+#define                             kDevice_ModelUID                    "BlackHole%ich_ModelUID"
 static pthread_mutex_t              gDevice_IOMutex                     = PTHREAD_MUTEX_INITIALIZER;
 static Float64                      gDevice_SampleRate                  = 44100.0;
 static UInt64                       gDevice_IOIsRunning                 = 0;
