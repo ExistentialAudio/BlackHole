@@ -221,9 +221,11 @@ static OSStatus	BlackHole_Initialize(AudioServerPlugInDriverRef inDriver, AudioS
 	//	calculate the host ticks per frame
 	struct mach_timebase_info theTimeBaseInfo;
 	mach_timebase_info(&theTimeBaseInfo);
-	Float64 theHostClockFrequency = theTimeBaseInfo.numer / theTimeBaseInfo.denom;
+	Float64 theHostClockFrequency = (Float64)theTimeBaseInfo.denom / (Float64)theTimeBaseInfo.numer;
 	theHostClockFrequency *= 1000000000.0;
 	gDevice_HostTicksPerFrame = theHostClockFrequency / gDevice_SampleRate;
+    
+    // DebugMsg("BlackHole theTimeBaseInfo.numer: %u \t theTimeBaseInfo.denom: %u", theTimeBaseInfo.numer, theTimeBaseInfo.denom);
 	
 Done:
 	return theAnswer;
@@ -346,12 +348,14 @@ static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriv
 	//	recalculate the state that depends on the sample rate
 	struct mach_timebase_info theTimeBaseInfo;
 	mach_timebase_info(&theTimeBaseInfo);
-    Float64 theHostClockFrequency = theTimeBaseInfo.numer / theTimeBaseInfo.denom;
+    Float64 theHostClockFrequency = (Float64)theTimeBaseInfo.numer / (Float64)theTimeBaseInfo.denom;
 	theHostClockFrequency *= 1000000000.0;
 	gDevice_HostTicksPerFrame = theHostClockFrequency / gDevice_SampleRate;
 
 	//	unlock the state mutex
 	pthread_mutex_unlock(&gPlugIn_StateMutex);
+    
+    // DebugMsg("BlackHole theTimeBaseInfo.numer: %u \t theTimeBaseInfo.denom: %u", theTimeBaseInfo.numer, theTimeBaseInfo.denom);
 	
 Done:
 	return theAnswer;
@@ -3789,6 +3793,8 @@ static OSStatus	BlackHole_GetZeroTimeStamp(AudioServerPlugInDriverRef inDriver, 
 	*outSampleTime = gDevice_NumberTimeStamps * kDevice_RingBufferSize;
 	*outHostTime = gDevice_AnchorHostTime + (((Float64)gDevice_NumberTimeStamps) * theHostTicksPerRingBuffer);
 	*outSeed = 1;
+    
+    // DebugMsg("SampleTime: %f \t HostTime: %llu", *outSampleTime, *outHostTime);
 	
 	//	unlock the state lock
 	pthread_mutex_unlock(&gDevice_IOMutex);
@@ -3894,6 +3900,10 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
                     // write to the ioMainBuffer
                     buffer[frame*NUMBER_OF_CHANNELS+channel] = ringBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel];
                 }
+                else
+                {
+                    buffer[frame*NUMBER_OF_CHANNELS+channel] = 0;
+                }
                 
                 // clear ring buffer after 8192 samples.
                 ringBuffer[((mSampleTime+frame-8192)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] = 0;
@@ -3918,6 +3928,10 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
                 {
                     // write to internal ring buffer
                     ringBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] += buffer[frame*NUMBER_OF_CHANNELS+channel] * gVolume_Output_Master_Value;
+                }
+                else
+                {
+                    buffer[frame*NUMBER_OF_CHANNELS+channel] = 0;
                 }
                 
                 // clear ring buffer after 8192 samples.
