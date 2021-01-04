@@ -14,38 +14,66 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ## Table of Contents
 - [Features](#features)
-- [Easy Installation Instructions](#easy-installation-instructions)
-- [Usage Examples](#usage-examples)
-- [Advanced Installation Instructions](#advanced-installation-instructions)
+- [Installation Instructions](#installation-instructions)
+- [Guides](#guides)
 - [Uninstallation Instructions](#uninstallation-instructions)
 - [Feature Requests](#feature-requests)
 - [FAQ](#faq)
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
 
 ## Features
-- Supports 16 audio channels.
+- Supports 2 or 16 audio channels.
 - Customizable to 256+ channels if you think your computer can handle it.
 - Supports 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, and 192kHz sample rates.
 - No additional driver latency. 
-- Works on macOS 10.10+ including macOS Big Sur
+- Compatible with macOS Mavericks (10.9) to macOS Big Sur (11).
+- Compatible with Apple Silicon.
 
 ![Image of BlackHole Audio Driver](Images/BlackHole.png)
 
-## Easy Installation Instructions
+## Installation Instructions
+
+### Option 1: Download Installer
 1. [Download Installer](http://existential.audio/blackhole/)
 2. Close all running audio applications
 3. Open and install package
 
-Install via Homebrew:
+### Option 2: Install via Homebrew:
 
 - 2ch: `brew install blackhole-2ch`
 - 16ch: `brew install blackhole-16ch`
 
-For more details visit https://github.com/ExistentialAudio/BlackHole/wiki/Installation
+### Advanced Customization and Installation
+There are a number of options available to customize BlackHole including number of channels, names, running multiple drivers, and latency. 
+Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki#advanced-customization) for details.   
 
-Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for application specific setup.        
+## Uninstallation Instructions
+[Download Uninstaller](https://existential.audio/downloads/BlackHoleUninstaller.pkg)
 
-## Usage Examples
+or manually uninstall
+
+1. Delete BlackHole.driver by running `rm -fr /Library/Audio/Plug-Ins/HAL/BlackHole.driver` NOTE: The directory is in `/Library` not `user/Library`
+2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
+
+For more specific details [visit the wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
+
+## Guides
+
+### Logic Pro X
+- [Logic Pro X to FaceTime](https://existential.audio/howto/StreamFromLogicProXtoFaceTime.php)
+- [Logic Pro X to Google Meet](https://existential.audio/howto/StreamFromLogicProXtoGoogleMeet.php)
+- [Logic Pro X to Skype](https://existential.audio/howto/StreamFromLogicProXtoSkype.php)
+- [Logic Pro X to Zoom](https://existential.audio/howto/StreamFromLogicProXtoZoom.php)
+
+### GarageBand
+- [GarageBand to FaceTime](https://existential.audio/howto/StreamFromGarageBandToFaceTime.php)
+- [GarageBand to Google Meet](https://existential.audio/howto/StreamFromGarageBandToGoogleMeet.php)
+- [GarageBand to Skype](https://existential.audio/howto/StreamFromGarageBandToSkype.php)
+- [GarageBand to Zoom](https://existential.audio/howto/StreamFromGarageBandToZoom.php)
+
+### Reaper
+- Reaper to Zoom by Noah Liebman (https://noahliebman.net/2020/12/telephone-colophon-or-how-i-overengineered-my-call-audio/)
+
 ### Record System Audio
 1. [Setup Multi-output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
 2. In `Audio Midi Setup`->`Audio Devices` Right-click on the newly created Multi-output and select "Use This Device For Sound Output"
@@ -59,26 +87,11 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki) for applica
 3. Open receiving application and set input device to "BlackHole" 
 4. Input audio from the corresponding output channels
 
-## Advanced Installation Instructions
-1. Build driver in Xcode
-2. Copy BlackHole.driver to `/Library⁩/Audio⁩/Plug-Ins⁩/HAL`
-3. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
-
-## Uninstallation Instructions
-[Download Uninstaller](https://existential.audio/downloads/BlackHoleUninstaller.pkg)
-
-or manually uninstall
-
-1. Delete BlackHole.driver by running `rm -fr /Library/Audio/Plug-Ins/HAL/BlackHole.driver` NOTE: The directory is in `/Library` not `user/Library`
-2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
-
-Need more help? [Visit the wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
-
 ## Feature Requests
 
 If you are interested in any of the following features please leave a comment in the linked issue. To request a features not listed please create a new issue.
 
-- [Sync Clock with other Audio Devices](https://github.com/ExistentialAudio/BlackHole/issues/27)
+- [Sync Clock with other Audio Devices](https://github.com/ExistentialAudio/BlackHole/issues/27) in development see v0.3.0
 - [Output Blackhole to other Audio Device](https://github.com/ExistentialAudio/BlackHole/issues/40)
 - [Add Support for AU Plug-ins](https://github.com/ExistentialAudio/BlackHole/issues/18)
 - [Inter-channel routing](https://github.com/ExistentialAudio/BlackHole/issues/13)
@@ -96,9 +109,6 @@ BlackHole is an audio interface driver. It only shows up in `Audio MIDI Setup`, 
 
 ### How can I change the volume of a Multi-Output device?
 Unfortunately macOS does not support changing the volume of a Multi-Output device but you can set the volume of individual devices in Audio MIDI Setup. 
-
-### How can I use BlackHole with Audacity in Catalina?
-Audacity only works with macOS Catalina as of Audacity version 2.4.1 in May 2020. If you have an older version, you will need to upgrade to the latest release.
 
 ### Why is nothing playing through BlackHole? 
 - Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your digital audio workstation (DAW) has microphone access. 

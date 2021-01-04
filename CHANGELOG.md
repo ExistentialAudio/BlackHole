@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+### In Progress
+
+- Add support for additional virtual formats. 24bit, 16bit.
+- Sync BlackHole audio clock with any audio device.
+
+
+## [0.2.8] - 2020-12-26
+
+### Added
+- Support for Apple Silicon
+
+### Changed
+- Set deployment target to 10.9. 
+- Fixed bug where there is a loud pop when audio starts.
+- Fix bug that caused crashes in certain situations. Issue#206
+- Disable Volume and Mute controls on input. They are only needed on the output. 
+- Fix clock bug.
+- Automatically change UIDs to include the number of channels. Makes it easier to build and install multiple versions. Ex: BlackHole2ch_UID
+
+
 ## [0.2.7] - 2020-08-08
 ### Changed
 - Improved Logarithmic Volume Control
