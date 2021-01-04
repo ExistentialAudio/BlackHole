@@ -45,10 +45,11 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - 16ch: `brew install blackhole-16ch`
 
 ## Uninstallation Instructions
-[Download BlackHole2ch Uninstaller](https://existential.audio/downloads/BlackHole2chUninstaller.pkg)
-[Download BlackHole16ch Uninstaller](https://existential.audio/downloads/BlackHole16chUninstaller.pkg)
+### Use Uninstaller
+- [Download BlackHole2ch Uninstaller](https://existential.audio/downloads/BlackHole2chUninstaller.pkg)
+- [Download BlackHole16ch Uninstaller](https://existential.audio/downloads/BlackHole16chUninstaller.pkg)
 
-or manually uninstall
+### Manually Uninstall
 
 1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library`
 2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
