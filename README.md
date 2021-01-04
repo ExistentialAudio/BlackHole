@@ -35,7 +35,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 ## Installation Instructions
 
 ### Option 1: Download Installer
-1. [Download Installer](http://existential.audio/blackhole/)
+1. [Download Installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme)
 2. Close all running audio applications
 3. Open and install package
 
