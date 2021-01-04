@@ -23,12 +23,12 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
 
 ## Features
-- Supports 2 or 16 audio channels.
-- Customizable to 256+ channels if you think your computer can handle it.
+- Supports 2 or 16 audio channels versions.
+- Customizable to 256+ audio channels.
 - Supports 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, and 192kHz sample rates.
-- No additional driver latency. 
+- No driver latency. 
 - Compatible with macOS Mavericks (10.9) to macOS Big Sur (11).
-- Compatible with Apple Silicon.
+- Built for Intel and Apple Silicon.
 
 ![Image of BlackHole Audio Driver](Images/BlackHole.png)
 
