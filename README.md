@@ -15,8 +15,9 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 ## Table of Contents
 - [Features](#features)
 - [Installation Instructions](#installation-instructions)
-- [Guides](#guides)
 - [Uninstallation Instructions](#uninstallation-instructions)
+- [Guides](#guides)
+- [Advanced Customization and Installation](#advanced-customization-and-installation)
 - [Feature Requests](#feature-requests)
 - [FAQ](#faq)
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
@@ -43,19 +44,20 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - 2ch: `brew install blackhole-2ch`
 - 16ch: `brew install blackhole-16ch`
 
-### Advanced Customization and Installation
-There are a number of options available to customize BlackHole including number of channels, names, running multiple drivers, and latency. 
-Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki#advanced-customization) for details.   
-
 ## Uninstallation Instructions
-[Download Uninstaller](https://existential.audio/downloads/BlackHoleUninstaller.pkg)
+[Download BlackHole2ch Uninstaller](https://existential.audio/downloads/BlackHole2chUninstaller.pkg)
+[Download BlackHole16ch Uninstaller](https://existential.audio/downloads/BlackHole16chUninstaller.pkg)
 
 or manually uninstall
 
-1. Delete BlackHole.driver by running `rm -fr /Library/Audio/Plug-Ins/HAL/BlackHole.driver` NOTE: The directory is in `/Library` not `user/Library`
+1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library`
 2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 For more specific details [visit the wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
+
+### Advanced Customization and Installation
+There are a number of options available to customize BlackHole including number of channels, names, running multiple drivers, and latency. 
+Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki#advanced-customization) for details.   
 
 ## Guides
 
