@@ -126,3 +126,8 @@ Chances are you are looking in `~/Library/` or `user/Library/` instead of `/Libr
 
 ### Can I integrate BlackHole into my app?
 BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications contact me directly at devinroth@existential.audio.
+
+### What Apps Don't Work with Multi-Outputs?
+Unfortunatley multi-outputs are pretty buggy and some apps just won't work with them at all. Here is a list of known ones. If you have more to add please let me know.
+- Apple Podcasts
+- HDHomeRun
