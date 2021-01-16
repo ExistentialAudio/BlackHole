@@ -123,6 +123,7 @@ Unfortunately macOS does not support changing the volume of a Multi-Output devic
 ### What Apps Don't Work with Multi-Outputs?
 Unfortunatley multi-outputs are pretty buggy and some apps just won't work with them at all. Here is a list of known ones. If you have more to add please let me know.
 - Apple Podcasts
+- Apple Messages
 - HDHomeRun
 
 ### Multi-Outputs crash every 20 minutes on Apple Silicon.
