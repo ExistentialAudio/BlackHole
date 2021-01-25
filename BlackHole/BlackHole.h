@@ -165,7 +165,7 @@ static UInt32                       gDataSource_Output_Master_Value     = 0;
 #define                             BITS_PER_CHANNEL                    32
 #define                             BYTES_PER_CHANNEL                   (BITS_PER_CHANNEL / 8)
 #define                             BYTES_PER_FRAME                     (NUMBER_OF_CHANNELS * BYTES_PER_CHANNEL)
-#define                             RING_BUFFER_FRAME_SIZE               ((32768 + LATENCY_FRAME_SIZE) * NUMBER_OF_CHANNELS)
+#define                             RING_BUFFER_FRAME_SIZE               ((65536 + LATENCY_FRAME_SIZE) * NUMBER_OF_CHANNELS)
 static Float32*                     ringBuffer;
 static UInt64                       ringBufferOffset                    = 0;
 //static UInt64                       inIOBufferFrameSize                 = 0;

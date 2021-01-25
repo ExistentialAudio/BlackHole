@@ -3905,8 +3905,8 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
                     buffer[frame*NUMBER_OF_CHANNELS+channel] = 0;
                 }
                 
-                // clear ring buffer after 8192 samples.
-                ringBuffer[((mSampleTime+frame-8192)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] = 0;
+                // clear ring buffer leading by 16384 samples.
+                ringBuffer[((mSampleTime+frame-16384)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] = 0;
 
             }
         }
@@ -3934,8 +3934,8 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
                     buffer[frame*NUMBER_OF_CHANNELS+channel] = 0;
                 }
                 
-                // clear ring buffer after 8192 samples.
-                ringBuffer[((mSampleTime+frame-8192)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] = 0;
+                // clear ring buffer trailing by 16384 samples.
+                ringBuffer[((mSampleTime+frame+8192)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] = 0;
             }
 
         }
