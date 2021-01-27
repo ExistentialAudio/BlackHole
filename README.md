@@ -126,13 +126,6 @@ Unfortunatley multi-outputs are pretty buggy and some apps just won't work with 
 - Apple Messages
 - HDHomeRun
 
-### Why does Multi-Outputs crash every 20 minutes on Apple Silicon?
-Multi-Outputs have always been buggy and now it looks like Apple has abandoned them officially. Instead use BlackHole as system output and Audacity with BlackHole input, speaker output and enable monitoring. https://forum.audacityteam.org/viewtopic.php?t=83137
-
-Another solution that some people have found to work is disable Drift Correction on the multi-output. 
-
-Read the discussion. https://github.com/ExistentialAudio/BlackHole/discussions/227
-
 ### AirPods with an Aggregate/Multi-Output is not working.
 The microphone from AirPods runs at a lower sample rate which means it should not be used as the primary/clock device in an Aggregate or Multi-Output device. The solution is to use your built-in speakers (and just mute them) or BlackHole 2ch as the primary/clock device. BlackHole 16ch will not work as the primary since the primary needs to have 2ch. 
 
