@@ -51,7 +51,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ### Option 2: Manually Uninstall
 
-1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library`
+1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library` and be sure to replace `X` with either `2` or `16`
 2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 For more specific details [visit the wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
