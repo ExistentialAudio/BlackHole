@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add support for additional virtual formats. 24bit, 16bit.
 - Sync BlackHole audio clock with any audio device.
 
+## [0.2.9] - 2021-1-27
+### Changed
+- Fix clock bug. Fixes issues with BlackHole crashing on Apple Silicon.
 
 ## [0.2.8] - 2020-12-26
 

@@ -51,7 +51,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ### Option 2: Manually Uninstall
 
-1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library`
+1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library` and be sure to replace `X` with either `2` or `16`
 2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 For more specific details [visit the wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
@@ -121,17 +121,10 @@ Unfortunately macOS does not support changing the volume of a Multi-Output devic
 - If you are using a multi-output device, due to issues with macOS the Built-in Output must be enabled and listed as the top device in the Multi-Output. https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices
 
 ### What Apps Don't Work with Multi-Outputs?
-Unfortunatley multi-outputs are pretty buggy and some apps just won't work with them at all. Here is a list of known ones. If you have more to add please let me know.
+Unfortunately multi-outputs are pretty buggy and some apps just won't work with them at all. Here is a list of known ones. If you have more to add please let me know.
 - Apple Podcasts
 - Apple Messages
 - HDHomeRun
-
-### Why does Multi-Outputs crash every 20 minutes on Apple Silicon?
-Multi-Outputs have always been buggy and now it looks like Apple has abandoned them officially. Instead use BlackHole as system output and Audacity with BlackHole input, speaker output and enable monitoring. https://forum.audacityteam.org/viewtopic.php?t=83137
-
-Another solution that some people have found to work is disable Drift Correction on the multi-output. 
-
-Read the discussion. https://github.com/ExistentialAudio/BlackHole/discussions/227
 
 ### AirPods with an Aggregate/Multi-Output is not working.
 The microphone from AirPods runs at a lower sample rate which means it should not be used as the primary/clock device in an Aggregate or Multi-Output device. The solution is to use your built-in speakers (and just mute them) or BlackHole 2ch as the primary/clock device. BlackHole 16ch will not work as the primary since the primary needs to have 2ch. 
