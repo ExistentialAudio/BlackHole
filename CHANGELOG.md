@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Add support for additional virtual formats. 24bit, 16bit.
 - Sync BlackHole audio clock with any audio device.
+- Create multi-output / aggregate device with installer.
+
+
+## [0.2.10] - Unreleased
+- Fix latency for higher values [in progress]
+- sound playing through mpd is choppy [in progress]
+
 
 ## [0.2.9] - 2021-1-27
 ### Changed
