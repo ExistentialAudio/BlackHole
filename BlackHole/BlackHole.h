@@ -151,7 +151,7 @@ static Float32                      gVolume_Output_Master_Value         = 1.0;
 static bool                         gMute_Input_Master_Value            = false;
 static bool                         gMute_Output_Master_Value           = false;
 
-static const UInt32                 kDataSource_NumberItems             = 1;
+static const UInt32                 kDataSource_NumberItems             = 0;
 #define                             kDataSource_ItemNamePattern         "BlackHole %ich"
 
 #define                             DEVICE_NAME                         "BlackHole %ich"
