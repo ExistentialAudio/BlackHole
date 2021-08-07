@@ -333,7 +333,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MARKETING_VERSION = 0.2.10;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole;
+				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = driver;
 			};
@@ -353,7 +353,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MARKETING_VERSION = 0.2.10;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole;
+				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = driver;
 			};
@@ -373,7 +373,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MARKETING_VERSION = 0.2.10;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole;
+				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = driver;
 			};
