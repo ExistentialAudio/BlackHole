@@ -3868,8 +3868,7 @@ Done:
 
 static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, AudioObjectID inDeviceObjectID, AudioObjectID inStreamObjectID, UInt32 inClientID, UInt32 inOperationID, UInt32 inIOBufferFrameSize, const AudioServerPlugInIOCycleInfo* inIOCycleInfo, void* ioMainBuffer, void* ioSecondaryBuffer)
 {
-	//	This is called to actuall perform a given operation. For this device, all we need to do is
-	//	clear the buffer for the ReadInput operation.
+	//	This is called to actually perform a given operation. 
 	
 	#pragma unused(inClientID, inIOCycleInfo, ioSecondaryBuffer)
 	
@@ -3934,7 +3933,6 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
                     buffer[frame*NUMBER_OF_CHANNELS+channel] = 0;
                 }
             }
-
         }
         
         // clear the io buffer
