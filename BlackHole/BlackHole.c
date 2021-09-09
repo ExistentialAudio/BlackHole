@@ -123,7 +123,7 @@ static ULONG	BlackHole_AddRef(void* inDriver)
 	//	check the arguments
 	FailIf(inDriver != gAudioServerPlugInDriverRef, Done, "BlackHole_AddRef: bad driver reference");
 
-	//	decrement the refcount
+	//	increment the refcount
 	pthread_mutex_lock(&gPlugIn_StateMutex);
 	if(gPlugIn_RefCount < UINT32_MAX)
 	{
@@ -146,7 +146,7 @@ static ULONG	BlackHole_Release(void* inDriver)
 	//	check the arguments
 	FailIf(inDriver != gAudioServerPlugInDriverRef, Done, "BlackHole_Release: bad driver reference");
 
-	//	increment the refcount
+	//	decrement the refcount
 	pthread_mutex_lock(&gPlugIn_StateMutex);
 	if(gPlugIn_RefCount > 0)
 	{
