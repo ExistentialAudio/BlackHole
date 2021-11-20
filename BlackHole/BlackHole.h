@@ -154,22 +154,21 @@ static bool                         gMute_Output_Master_Value           = false;
 static const UInt32                 kDataSource_NumberItems             = 0;
 #define                             kDataSource_ItemNamePattern         "BlackHole %ich"
 
-#define                             DEVICE_NAME                         "BlackHole %ich"
-#define                             MANUFACTURER_NAME                   "Existential Audio Inc."
+#define                             kDevice_Name                        "BlackHole %ich"
+#define                             kManufacturer_Name                  "Existential Audio Inc."
 
 static UInt32                       gDataSource_Input_Master_Value      = 0;
 static UInt32                       gDataSource_Output_Master_Value     = 0;
 
-#define                             LATENCY_FRAME_SIZE                  0
-#define                             NUMBER_OF_CHANNELS                  2
-#define                             BITS_PER_CHANNEL                    32
-#define                             BYTES_PER_CHANNEL                   (BITS_PER_CHANNEL / 8)
-#define                             BYTES_PER_FRAME                     (NUMBER_OF_CHANNELS * BYTES_PER_CHANNEL)
-#define                             RING_BUFFER_FRAME_SIZE               ((65536 + LATENCY_FRAME_SIZE) * NUMBER_OF_CHANNELS)
-static Float32*                     ringBuffer;
-static UInt64                       ringBufferOffset                    = 0;
-//static UInt64                       inIOBufferFrameSize                 = 0;
-static UInt64                       remainingRingBufferFrameSize        = 0;
+#define                             kLatency_Frame_Size                 0
+#define                             kNumber_Of_Channels                 2
+#define                             kBits_Per_Channel                   32
+#define                             kBytes_Per_Channel                  (kBits_Per_Channel/ 8)
+#define                             kBytes_Per_Frame                    (kNumber_Of_Channels * kBytes_Per_Channel)
+#define                             kRing_Buffer_Frame_Size             ((65536 + kLatency_Frame_Size) * kNumber_Of_Channels)
+static Float32*                     gRingBuffer;
+static UInt64                       gRingBufferOffset                    = 0;
+static UInt64                       gRemainingRingBufferFrameSize        = 0;
 
 //kAudioHardwarePropertySleepingIsAllowed
 

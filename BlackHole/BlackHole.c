@@ -909,7 +909,7 @@ static OSStatus	BlackHole_GetPlugInPropertyData(AudioServerPlugInDriverRef inDri
 			FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: not enough space for the return value of kAudioPlugInPropertyTranslateUIDToBox");
 			FailWithAction(inQualifierDataSize == sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToBox");
 			FailWithAction(inQualifierData == NULL, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: no qualifier for kAudioPlugInPropertyTranslateUIDToBox");
-			if(CFStringCompare(*((CFStringRef*)inQualifierData), CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), NUMBER_OF_CHANNELS), 0) == kCFCompareEqualTo)
+			if(CFStringCompare(*((CFStringRef*)inQualifierData), CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), kNumber_Of_Channels), 0) == kCFCompareEqualTo)
 			{
 				*((AudioObjectID*)outData) = kObjectID_Box;
 			}
@@ -952,7 +952,7 @@ static OSStatus	BlackHole_GetPlugInPropertyData(AudioServerPlugInDriverRef inDri
 			FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: not enough space for the return value of kAudioPlugInPropertyTranslateUIDToDevice");
 			FailWithAction(inQualifierDataSize == sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToDevice");
 			FailWithAction(inQualifierData == NULL, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: no qualifier for kAudioPlugInPropertyTranslateUIDToDevice");
-			if(CFStringCompare(*((CFStringRef*)inQualifierData), CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_UID), NUMBER_OF_CHANNELS), 0) == kCFCompareEqualTo)
+			if(CFStringCompare(*((CFStringRef*)inQualifierData), CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_UID), kNumber_Of_Channels), 0) == kCFCompareEqualTo)
 			{
 				*((AudioObjectID*)outData) = kObjectID_Device;
 			}
@@ -1323,7 +1323,7 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 		case kAudioBoxPropertyBoxUID:
 			//	Boxes have UIDs the same as devices
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioObjectPropertyManufacturer for the box");
-			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), NUMBER_OF_CHANNELS);
+			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), kNumber_Of_Channels);
 			break;
 			
 		case kAudioBoxPropertyTransportType:
@@ -1764,7 +1764,7 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 
 		case kAudioDevicePropertyPreferredChannelLayout:
-			*outDataSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (NUMBER_OF_CHANNELS * sizeof(AudioChannelDescription));
+			*outDataSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (kNumber_Of_Channels * sizeof(AudioChannelDescription));
 			break;
 
 		case kAudioDevicePropertyZeroTimeStampPeriod:
@@ -1831,14 +1831,14 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 		case kAudioObjectPropertyName:
 			//	This is the human readable name of the device.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioObjectPropertyManufacturer for the device");
-			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(DEVICE_NAME), NUMBER_OF_CHANNELS);
+			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_Name), kNumber_Of_Channels);
 			*outDataSize = sizeof(CFStringRef);
 			break;
 			
 		case kAudioObjectPropertyManufacturer:
 			//	This is the human readable name of the maker of the plug-in.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioObjectPropertyManufacturer for the device");
-			*((CFStringRef*)outData) = CFSTR(MANUFACTURER_NAME);
+			*((CFStringRef*)outData) = CFSTR(kManufacturer_Name);
 			*outDataSize = sizeof(CFStringRef);
 			break;
 			
@@ -1904,7 +1904,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	audio device across boot sessions. Note that two instances of the same
 			//	device must have different values for this property.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyDeviceUID for the device");
-			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_UID), NUMBER_OF_CHANNELS);
+			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_UID), kNumber_Of_Channels);
 			*outDataSize = sizeof(CFStringRef);
 			break;
 
@@ -1913,7 +1913,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	devices that are the same kind of device. Note that two instances of the
 			//	save device must have the same value for this property.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyModelUID for the device");
-			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_ModelUID), NUMBER_OF_CHANNELS);
+			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_ModelUID), kNumber_Of_Channels);
 			*outDataSize = sizeof(CFStringRef);
 			break;
 
@@ -2106,7 +2106,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	This property returns the how close to now the HAL can read and write. For
 			//	this, device, the value is 0 due to the fact that it always vends silence.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertySafetyOffset for the device");
-			*((UInt32*)outData) = LATENCY_FRAME_SIZE;
+			*((UInt32*)outData) = kLatency_Frame_Size;
 			*outDataSize = sizeof(UInt32);
 			break;
 
@@ -2193,12 +2193,12 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	by default. For this device, we return a stereo ACL.
 			{
 				//	calcualte how big the
-				UInt32 theACLSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (NUMBER_OF_CHANNELS * sizeof(AudioChannelDescription));
+				UInt32 theACLSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (kNumber_Of_Channels * sizeof(AudioChannelDescription));
 				FailWithAction(inDataSize < theACLSize, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyPreferredChannelLayout for the device");
 				((AudioChannelLayout*)outData)->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
 				((AudioChannelLayout*)outData)->mChannelBitmap = 0;
-				((AudioChannelLayout*)outData)->mNumberChannelDescriptions = NUMBER_OF_CHANNELS;
-				for(theItemIndex = 0; theItemIndex < NUMBER_OF_CHANNELS; ++theItemIndex)
+				((AudioChannelLayout*)outData)->mNumberChannelDescriptions = kNumber_Of_Channels;
+				for(theItemIndex = 0; theItemIndex < kNumber_Of_Channels; ++theItemIndex)
 				{
 					((AudioChannelLayout*)outData)->mChannelDescriptions[theItemIndex].mChannelLabel = kAudioChannelLabel_Left + theItemIndex;
 					((AudioChannelLayout*)outData)->mChannelDescriptions[theItemIndex].mChannelFlags = 0;
@@ -2548,7 +2548,7 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
 		case kAudioStreamPropertyLatency:
 			//	This property returns any additonal presentation latency the stream has.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetStreamPropertyData: not enough space for the return value of kAudioStreamPropertyStartingChannel for the stream");
-			*((UInt32*)outData) = LATENCY_FRAME_SIZE;
+			*((UInt32*)outData) = kLatency_Frame_Size;
 			*outDataSize = sizeof(UInt32);
 			break;
 
@@ -2564,11 +2564,11 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
             ((AudioStreamBasicDescription*)outData)->mSampleRate = gDevice_SampleRate;
             ((AudioStreamBasicDescription*)outData)->mFormatID = kAudioFormatLinearPCM;
             ((AudioStreamBasicDescription*)outData)->mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-            ((AudioStreamBasicDescription*)outData)->mBytesPerPacket = BYTES_PER_CHANNEL * NUMBER_OF_CHANNELS;
+            ((AudioStreamBasicDescription*)outData)->mBytesPerPacket = kBytes_Per_Channel * kNumber_Of_Channels;
             ((AudioStreamBasicDescription*)outData)->mFramesPerPacket = 1;
-            ((AudioStreamBasicDescription*)outData)->mBytesPerFrame = BYTES_PER_CHANNEL * NUMBER_OF_CHANNELS;
-            ((AudioStreamBasicDescription*)outData)->mChannelsPerFrame = NUMBER_OF_CHANNELS;
-            ((AudioStreamBasicDescription*)outData)->mBitsPerChannel = BITS_PER_CHANNEL;
+            ((AudioStreamBasicDescription*)outData)->mBytesPerFrame = kBytes_Per_Channel * kNumber_Of_Channels;
+            ((AudioStreamBasicDescription*)outData)->mChannelsPerFrame = kNumber_Of_Channels;
+            ((AudioStreamBasicDescription*)outData)->mBitsPerChannel = kBits_Per_Channel;
 			pthread_mutex_unlock(&gPlugIn_StateMutex);
 			*outDataSize = sizeof(AudioStreamBasicDescription);
 			break;
@@ -2595,11 +2595,11 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
                 ((AudioStreamRangedDescription*)outData)[0].mFormat.mSampleRate = 44100.0;
                 ((AudioStreamRangedDescription*)outData)[0].mFormat.mFormatID = kAudioFormatLinearPCM;
                 ((AudioStreamRangedDescription*)outData)[0].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerPacket = BYTES_PER_FRAME;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerPacket = kBytes_Per_Frame;
                 ((AudioStreamRangedDescription*)outData)[0].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerFrame = BYTES_PER_FRAME;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mChannelsPerFrame = NUMBER_OF_CHANNELS;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBitsPerChannel = BITS_PER_CHANNEL;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerFrame = kBytes_Per_Frame;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
+                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBitsPerChannel = kBits_Per_Channel;
                 ((AudioStreamRangedDescription*)outData)[0].mSampleRateRange.mMinimum = 44100.0;
                 ((AudioStreamRangedDescription*)outData)[0].mSampleRateRange.mMaximum = 44100.0;
 			}
@@ -2608,11 +2608,11 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
 				((AudioStreamRangedDescription*)outData)[1].mFormat.mSampleRate = 48000.0;
 				((AudioStreamRangedDescription*)outData)[1].mFormat.mFormatID = kAudioFormatLinearPCM;
 				((AudioStreamRangedDescription*)outData)[1].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mBytesPerPacket = BYTES_PER_FRAME;
+				((AudioStreamRangedDescription*)outData)[1].mFormat.mBytesPerPacket = kBytes_Per_Frame;
 				((AudioStreamRangedDescription*)outData)[1].mFormat.mFramesPerPacket = 1;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mBytesPerFrame = BYTES_PER_FRAME;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mChannelsPerFrame = NUMBER_OF_CHANNELS;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mBitsPerChannel = BITS_PER_CHANNEL;
+				((AudioStreamRangedDescription*)outData)[1].mFormat.mBytesPerFrame = kBytes_Per_Frame;
+				((AudioStreamRangedDescription*)outData)[1].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
+				((AudioStreamRangedDescription*)outData)[1].mFormat.mBitsPerChannel = kBits_Per_Channel;
 				((AudioStreamRangedDescription*)outData)[1].mSampleRateRange.mMinimum = 48000.0;
 				((AudioStreamRangedDescription*)outData)[1].mSampleRateRange.mMaximum = 48000.0;
 			}
@@ -2621,11 +2621,11 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
                 ((AudioStreamRangedDescription*)outData)[2].mFormat.mSampleRate = 88200.0;
                 ((AudioStreamRangedDescription*)outData)[2].mFormat.mFormatID = kAudioFormatLinearPCM;
                 ((AudioStreamRangedDescription*)outData)[2].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBytesPerPacket = BYTES_PER_FRAME;
+                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBytesPerPacket = kBytes_Per_Frame;
                 ((AudioStreamRangedDescription*)outData)[2].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBytesPerFrame = BYTES_PER_FRAME;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mChannelsPerFrame = NUMBER_OF_CHANNELS;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBitsPerChannel = BITS_PER_CHANNEL;
+                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBytesPerFrame = kBytes_Per_Frame;
+                ((AudioStreamRangedDescription*)outData)[2].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
+                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBitsPerChannel = kBits_Per_Channel;
                 ((AudioStreamRangedDescription*)outData)[2].mSampleRateRange.mMinimum = 88200.0;
                 ((AudioStreamRangedDescription*)outData)[2].mSampleRateRange.mMaximum = 88200.0;
             }
@@ -2634,11 +2634,11 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
                 ((AudioStreamRangedDescription*)outData)[3].mFormat.mSampleRate = 96000.0;
                 ((AudioStreamRangedDescription*)outData)[3].mFormat.mFormatID = kAudioFormatLinearPCM;
                 ((AudioStreamRangedDescription*)outData)[3].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBytesPerPacket = BYTES_PER_FRAME;
+                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBytesPerPacket = kBytes_Per_Frame;
                 ((AudioStreamRangedDescription*)outData)[3].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBytesPerFrame = BYTES_PER_FRAME;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mChannelsPerFrame = NUMBER_OF_CHANNELS;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBitsPerChannel = BITS_PER_CHANNEL;
+                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBytesPerFrame = kBytes_Per_Frame;
+                ((AudioStreamRangedDescription*)outData)[3].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
+                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBitsPerChannel = kBits_Per_Channel;
                 ((AudioStreamRangedDescription*)outData)[3].mSampleRateRange.mMinimum = 96000.0;
                 ((AudioStreamRangedDescription*)outData)[3].mSampleRateRange.mMaximum = 96000.0;
             }
@@ -2647,11 +2647,11 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
                 ((AudioStreamRangedDescription*)outData)[4].mFormat.mSampleRate = 176400.0;
                 ((AudioStreamRangedDescription*)outData)[4].mFormat.mFormatID = kAudioFormatLinearPCM;
                 ((AudioStreamRangedDescription*)outData)[4].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBytesPerPacket = BYTES_PER_FRAME;
+                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBytesPerPacket = kBytes_Per_Frame;
                 ((AudioStreamRangedDescription*)outData)[4].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBytesPerFrame = BYTES_PER_FRAME;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mChannelsPerFrame = NUMBER_OF_CHANNELS;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBitsPerChannel = BITS_PER_CHANNEL;
+                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBytesPerFrame = kBytes_Per_Frame;
+                ((AudioStreamRangedDescription*)outData)[4].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
+                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBitsPerChannel = kBits_Per_Channel;
                 ((AudioStreamRangedDescription*)outData)[4].mSampleRateRange.mMinimum = 176400.0;
                 ((AudioStreamRangedDescription*)outData)[4].mSampleRateRange.mMaximum = 176400.0;
             }
@@ -2660,11 +2660,11 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
                 ((AudioStreamRangedDescription*)outData)[5].mFormat.mSampleRate = 192000.0;
                 ((AudioStreamRangedDescription*)outData)[5].mFormat.mFormatID = kAudioFormatLinearPCM;
                 ((AudioStreamRangedDescription*)outData)[5].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBytesPerPacket = BYTES_PER_FRAME;
+                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBytesPerPacket = kBytes_Per_Frame;
                 ((AudioStreamRangedDescription*)outData)[5].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBytesPerFrame = BYTES_PER_FRAME;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mChannelsPerFrame = NUMBER_OF_CHANNELS;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBitsPerChannel = BITS_PER_CHANNEL;
+                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBytesPerFrame = kBytes_Per_Frame;
+                ((AudioStreamRangedDescription*)outData)[5].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
+                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBitsPerChannel = kBits_Per_Channel;
                 ((AudioStreamRangedDescription*)outData)[5].mSampleRateRange.mMinimum = 192000.0;
                 ((AudioStreamRangedDescription*)outData)[5].mSampleRateRange.mMaximum = 192000.0;
             }
@@ -2745,11 +2745,11 @@ static OSStatus	BlackHole_SetStreamPropertyData(AudioServerPlugInDriverRef inDri
 			FailWithAction(inDataSize != sizeof(AudioStreamBasicDescription), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetStreamPropertyData: wrong size for the data for kAudioStreamPropertyPhysicalFormat");
 			FailWithAction(((const AudioStreamBasicDescription*)inData)->mFormatID != kAudioFormatLinearPCM, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported format ID for kAudioStreamPropertyPhysicalFormat");
 			FailWithAction(((const AudioStreamBasicDescription*)inData)->mFormatFlags != (kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked), theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported format flags for kAudioStreamPropertyPhysicalFormat");
-			FailWithAction(((const AudioStreamBasicDescription*)inData)->mBytesPerPacket != BYTES_PER_FRAME, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported bytes per packet for kAudioStreamPropertyPhysicalFormat");
+			FailWithAction(((const AudioStreamBasicDescription*)inData)->mBytesPerPacket != kBytes_Per_Frame, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported bytes per packet for kAudioStreamPropertyPhysicalFormat");
 			FailWithAction(((const AudioStreamBasicDescription*)inData)->mFramesPerPacket != 1, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported frames per packet for kAudioStreamPropertyPhysicalFormat");
-			FailWithAction(((const AudioStreamBasicDescription*)inData)->mBytesPerFrame != BYTES_PER_FRAME, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported bytes per frame for kAudioStreamPropertyPhysicalFormat");
-			FailWithAction(((const AudioStreamBasicDescription*)inData)->mChannelsPerFrame != NUMBER_OF_CHANNELS, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported channels per frame for kAudioStreamPropertyPhysicalFormat");
-			FailWithAction(((const AudioStreamBasicDescription*)inData)->mBitsPerChannel != BITS_PER_CHANNEL, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported bits per channel for kAudioStreamPropertyPhysicalFormat");
+			FailWithAction(((const AudioStreamBasicDescription*)inData)->mBytesPerFrame != kBytes_Per_Frame, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported bytes per frame for kAudioStreamPropertyPhysicalFormat");
+			FailWithAction(((const AudioStreamBasicDescription*)inData)->mChannelsPerFrame != kNumber_Of_Channels, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported channels per frame for kAudioStreamPropertyPhysicalFormat");
+			FailWithAction(((const AudioStreamBasicDescription*)inData)->mBitsPerChannel != kBits_Per_Channel, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported bits per channel for kAudioStreamPropertyPhysicalFormat");
 			FailWithAction((((const AudioStreamBasicDescription*)inData)->mSampleRate != 44100.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 48000.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 88200.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 96000.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 176400.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 192000.0), theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetStreamPropertyData: unsupported sample rate for kAudioStreamPropertyPhysicalFormat");
 			
 			//	If we made it this far, the requested format is something we support, so make sure the sample rate is actually different
@@ -3417,7 +3417,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioSelectorControlPropertyItemName for the data source control");
 					FailWithAction(inQualifierDataSize != sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: wrong size for the qualifier of kAudioSelectorControlPropertyItemName for the data source control");
 					FailWithAction(*((const UInt32*)inQualifierData) >= kDataSource_NumberItems, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_GetControlPropertyData: the item in the qualifier is not valid for kAudioSelectorControlPropertyItemName for the data source control");
-					*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDataSource_ItemNamePattern), NUMBER_OF_CHANNELS);
+					*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDataSource_ItemNamePattern), kNumber_Of_Channels);
 					*outDataSize = sizeof(CFStringRef);
 					break;
 
@@ -3687,7 +3687,7 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 		gDevice_AnchorHostTime = mach_absolute_time();
         
         // allocate ring buffer
-        ringBuffer = calloc(RING_BUFFER_FRAME_SIZE * NUMBER_OF_CHANNELS, sizeof(Float32));
+        gRingBuffer = calloc(kRing_Buffer_Frame_Size * kNumber_Of_Channels, sizeof(Float32));
 	}
 	else
 	{
@@ -3731,7 +3731,7 @@ static OSStatus	BlackHole_StopIO(AudioServerPlugInDriverRef inDriver, AudioObjec
 	{
 		//	We need to stop the hardware, which in this case means that there's nothing to do.
 		gDevice_IOIsRunning = 0;
-        free(ringBuffer);
+        free(gRingBuffer);
 	}
 	else
 	{
@@ -3891,21 +3891,21 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         UInt64 mSampleTime = inIOCycleInfo->mInputTime.mSampleTime;
 
         for(UInt32 frame = 0; frame < inIOBufferFrameSize; frame++){
-            for(int channel = 0; channel < NUMBER_OF_CHANNELS; channel++){
+            for(int channel = 0; channel < kNumber_Of_Channels; channel++){
                 
                 // don't do anything if muted
                 if (!gMute_Output_Master_Value)
                 {
                     // write to the ioMainBuffer
-                    buffer[frame*NUMBER_OF_CHANNELS+channel] = ringBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel];
+                    buffer[frame*kNumber_Of_Channels+channel] = gRingBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*kNumber_Of_Channels+channel];
                 }
                 else
                 {
-                    buffer[frame*NUMBER_OF_CHANNELS+channel] = 0;
+                    buffer[frame*kNumber_Of_Channels+channel] = 0;
                 }
                 
                 // clear ring buffer leading by 16384 samples.
-                ringBuffer[((mSampleTime+frame-16384)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] = 0;
+                gRingBuffer[((mSampleTime+frame-16384)%kDevice_RingBufferSize)*kNumber_Of_Channels+channel] = 0;
 
             }
         }
@@ -3920,23 +3920,23 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         UInt64 mSampleTime = inIOCycleInfo->mOutputTime.mSampleTime;
 
         for(UInt32 frame = 0; frame < inIOBufferFrameSize; frame++){
-            for(int channel = 0; channel < NUMBER_OF_CHANNELS; channel++){
+            for(int channel = 0; channel < kNumber_Of_Channels; channel++){
                 
                 // don't do anything if muted
                 if (!gMute_Output_Master_Value)
                 {
                     // write to internal ring buffer
-                    ringBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*NUMBER_OF_CHANNELS+channel] += buffer[frame*NUMBER_OF_CHANNELS+channel] * gVolume_Output_Master_Value;
+                    gRingBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*kNumber_Of_Channels+channel] += buffer[frame*kNumber_Of_Channels+channel] * gVolume_Output_Master_Value;
                 }
                 else
                 {
-                    buffer[frame*NUMBER_OF_CHANNELS+channel] = 0;
+                    buffer[frame*kNumber_Of_Channels+channel] = 0;
                 }
             }
         }
         
         // clear the io buffer
-        memset(ioMainBuffer, 0, inIOBufferFrameSize * NUMBER_OF_CHANNELS * sizeof(Float32));
+        memset(ioMainBuffer, 0, inIOBufferFrameSize * kNumber_Of_Channels * sizeof(Float32));
     }
     
     pthread_mutex_unlock(&gDevice_IOMutex);
