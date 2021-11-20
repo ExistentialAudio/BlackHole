@@ -3903,10 +3903,6 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
                 {
                     buffer[frame*kNumber_Of_Channels+channel] = 0;
                 }
-                
-                // clear ring buffer leading by 16384 samples.
-                gRingBuffer[((mSampleTime+frame-16384)%kDevice_RingBufferSize)*kNumber_Of_Channels+channel] = 0;
-
             }
         }
     }
@@ -3926,7 +3922,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
                 if (!gMute_Output_Master_Value)
                 {
                     // write to internal ring buffer
-                    gRingBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*kNumber_Of_Channels+channel] += buffer[frame*kNumber_Of_Channels+channel] * gVolume_Output_Master_Value;
+                    gRingBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*kNumber_Of_Channels+channel] = buffer[frame*kNumber_Of_Channels+channel] * gVolume_Output_Master_Value;
                 }
                 else
                 {
@@ -3934,9 +3930,6 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
                 }
             }
         }
-        
-        // clear the io buffer
-        memset(ioMainBuffer, 0, inIOBufferFrameSize * kNumber_Of_Channels * sizeof(Float32));
     }
     
     pthread_mutex_unlock(&gDevice_IOMutex);
