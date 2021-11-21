@@ -106,11 +106,9 @@ enum
     kObjectID_Stream_Input                = 4,
     kObjectID_Volume_Input_Master        = 5,
     kObjectID_Mute_Input_Master            = 6,
-    kObjectID_DataSource_Input_Master    = 7,
-    kObjectID_Stream_Output                = 8,
-    kObjectID_Volume_Output_Master        = 9,
-    kObjectID_Mute_Output_Master        = 10,
-    kObjectID_DataSource_Output_Master    = 11
+    kObjectID_Stream_Output                = 7,
+    kObjectID_Volume_Output_Master        = 8,
+    kObjectID_Mute_Output_Master        = 9,
 };
 
 //    Declare the stuff that tracks the state of the plug-in, the device and its sub-objects.
@@ -120,7 +118,7 @@ enum
 //    Note also that we share a single mutex across all objects to be thread safe for the same reason.
 
 
-#define                             kPlugIn_BundleID                    "audio.existential.BlackHole%ich"
+#define                             kPlugIn_BundleID                    "audio.existential.BlackHole2ch"
 static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
 static UInt32                       gPlugIn_RefCount                    = 0;
 static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
@@ -150,9 +148,6 @@ static Float32                      gVolume_Output_Master_Value         = 1.0;
 
 static bool                         gMute_Input_Master_Value            = false;
 static bool                         gMute_Output_Master_Value           = false;
-
-static const UInt32                 kDataSource_NumberItems             = 0;
-#define                             kDataSource_ItemNamePattern         "BlackHole %ich"
 
 #define                             kDevice_Name                        "BlackHole %ich"
 #define                             kManufacturer_Name                  "Existential Audio Inc."
