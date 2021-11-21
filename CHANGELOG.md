@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Create multi-output / aggregate device with installer.
 
 
+## [0.2.11] - Unreleased
+
+
 ## [0.2.10] - Unreleased
 - Fix latency for higher values [in progress]
 - sound playing through mpd is choppy [in progress]
