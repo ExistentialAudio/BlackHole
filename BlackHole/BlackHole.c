@@ -336,7 +336,13 @@ static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriv
                    && (inChangeAction != 88200)
                    && (inChangeAction != 96000)
                    && (inChangeAction != 176400)
-                   && (inChangeAction != 192000),
+                   && (inChangeAction != 192000)
+                   && (inChangeAction != 352800)
+                   && (inChangeAction != 384000)
+                   && (inChangeAction != 705600)
+                   && (inChangeAction != 768000)
+                   && (inChangeAction != 8000)
+                   && (inChangeAction != 16000),
                    theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad sample rate");
 	
 	//	lock the state mutex
@@ -2121,9 +2127,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			theNumberItemsToFetch = inDataSize / sizeof(AudioValueRange);
 			
 			//	clamp it to the number of items we have
-			if(theNumberItemsToFetch > 6)
+			if(theNumberItemsToFetch > 12)
 			{
-				theNumberItemsToFetch = 6;
+				theNumberItemsToFetch = 12;
 			}
 			
 			//	fill out the return array
@@ -2156,6 +2162,36 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
             {
                 ((AudioValueRange*)outData)[5].mMinimum = 192000.0;
                 ((AudioValueRange*)outData)[5].mMaximum = 192000.0;
+            }
+            if(theNumberItemsToFetch > 6)
+            {
+                ((AudioValueRange*)outData)[6].mMinimum = 352800.0;
+                ((AudioValueRange*)outData)[6].mMaximum = 352800.0;
+            }
+            if(theNumberItemsToFetch > 7)
+            {
+                ((AudioValueRange*)outData)[7].mMinimum = 384000.0;
+                ((AudioValueRange*)outData)[7].mMaximum = 384000.0;
+            }
+            if(theNumberItemsToFetch > 8)
+            {
+                ((AudioValueRange*)outData)[8].mMinimum = 705600.0;
+                ((AudioValueRange*)outData)[8].mMaximum = 705600.0;
+            }
+            if(theNumberItemsToFetch > 9)
+            {
+                ((AudioValueRange*)outData)[9].mMinimum = 768000.0;
+                ((AudioValueRange*)outData)[9].mMaximum = 768000.0;
+            }
+            if(theNumberItemsToFetch > 10)
+            {
+                ((AudioValueRange*)outData)[10].mMinimum = 8000.0;
+                ((AudioValueRange*)outData)[10].mMaximum = 8000.0;
+            }
+            if(theNumberItemsToFetch > 11)
+            {
+                ((AudioValueRange*)outData)[11].mMinimum = 16000.0;
+                ((AudioValueRange*)outData)[11].mMaximum = 16000.0;
             }
 			
 			//	report how much we wrote
@@ -2260,7 +2296,7 @@ static OSStatus	BlackHole_SetDevicePropertyData(AudioServerPlugInDriverRef inDri
 
 			//	check the arguments
 			FailWithAction(inDataSize != sizeof(Float64), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetDevicePropertyData: wrong size for the data for kAudioDevicePropertyNominalSampleRate");
-			FailWithAction((*((const Float64*)inData) != 44100.0) && (*((const Float64*)inData) != 48000.0) && (*((const Float64*)inData) != 88200.0) && (*((const Float64*)inData) != 96000.0) && (*((const Float64*)inData) != 176400.0) && (*((const Float64*)inData) != 192000.0), theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetDevicePropertyData: unsupported value for kAudioDevicePropertyNominalSampleRate");
+			FailWithAction((*((const Float64*)inData) != 44100.0) && (*((const Float64*)inData) != 48000.0) && (*((const Float64*)inData) != 88200.0) && (*((const Float64*)inData) != 96000.0) && (*((const Float64*)inData) != 176400.0) && (*((const Float64*)inData) != 192000.0) && (*((const Float64*)inData) != 352800.0) && (*((const Float64*)inData) != 384000.0) && (*((const Float64*)inData) != 705600.0) && (*((const Float64*)inData) != 768000.0) && (*((const Float64*)inData) != 8000.0) && (*((const Float64*)inData) != 16000.0), theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetDevicePropertyData: unsupported value for kAudioDevicePropertyNominalSampleRate");
 			
 			//	make sure that the new value is different than the old value
 			pthread_mutex_lock(&gPlugIn_StateMutex);
