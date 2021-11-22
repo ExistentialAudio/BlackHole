@@ -156,16 +156,12 @@ static UInt32                       gDataSource_Input_Master_Value      = 0;
 static UInt32                       gDataSource_Output_Master_Value     = 0;
 
 #define                             kLatency_Frame_Size                 0
-#define                             kNumber_Of_Channels                 2
+#define                             kNumber_Of_Channels                 512
 #define                             kBits_Per_Channel                   32
 #define                             kBytes_Per_Channel                  (kBits_Per_Channel/ 8)
 #define                             kBytes_Per_Frame                    (kNumber_Of_Channels * kBytes_Per_Channel)
-#define                             kRing_Buffer_Frame_Size             ((65536 + kLatency_Frame_Size) * kNumber_Of_Channels)
+#define                             kRing_Buffer_Frame_Size             ((65536 + kLatency_Frame_Size))
 static Float32*                     gRingBuffer;
-static UInt64                       gRingBufferOffset                    = 0;
-static UInt64                       gRemainingRingBufferFrameSize        = 0;
-
-//kAudioHardwarePropertySleepingIsAllowed
 
 
 //==================================================================================================

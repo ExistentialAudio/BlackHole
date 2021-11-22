@@ -3535,8 +3535,6 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 	//	important to note that multiple clients can have IO running on the device at the same time.
 	//	So, work only needs to be done when the first client starts. All subsequent starts simply
 	//	increment the counter.
-    
-    DebugMsg("BlackHole Start IO");
 	
 	#pragma unused(inClientID)
 	
@@ -3584,8 +3582,6 @@ static OSStatus	BlackHole_StopIO(AudioServerPlugInDriverRef inDriver, AudioObjec
 {
 	//	This call tells the device that the client has stopped IO. The driver can stop the hardware
 	//	once all clients have stopped.
-    
-    DebugMsg("BlackHole Stop IO");
 	
 	#pragma unused(inClientID)
 	
@@ -3758,53 +3754,38 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
 	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad device ID");
 	FailWithAction((inStreamObjectID != kObjectID_Stream_Input) && (inStreamObjectID != kObjectID_Stream_Output), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad stream ID");
 
+    // Calculate the ring buffer offsets and splits.
+    UInt64 mSampleTime = inOperationID == kAudioServerPlugInIOOperationReadInput ? inIOCycleInfo->mInputTime.mSampleTime : inIOCycleInfo->mOutputTime.mSampleTime;
+    UInt32 ringBufferFrameLocationStart = mSampleTime % kRing_Buffer_Frame_Size;
+    UInt32 firstPartFrameSize = kRing_Buffer_Frame_Size - ringBufferFrameLocationStart;
+    UInt32 secondPartFrameSize = 0;
+    
+    if (firstPartFrameSize >= inIOBufferFrameSize)
+    {
+        firstPartFrameSize = inIOBufferFrameSize;
+    }
+    else
+    {
+        secondPartFrameSize = inIOBufferFrameSize - firstPartFrameSize;
+    }
+    
     // From BlackHole to Application
     if(inOperationID == kAudioServerPlugInIOOperationReadInput)
     {
+        
+        memcpy(ioMainBuffer, ((void*)gRingBuffer) + ringBufferFrameLocationStart * kNumber_Of_Channels * sizeof(Float32), firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+        memcpy(ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32), gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
 
-        Float32* buffer = (Float32*)ioMainBuffer;
-        UInt64 mSampleTime = inIOCycleInfo->mInputTime.mSampleTime;
-
-        for(UInt32 frame = 0; frame < inIOBufferFrameSize; frame++){
-            for(int channel = 0; channel < kNumber_Of_Channels; channel++){
-                
-                // don't do anything if muted
-                if (!gMute_Output_Master_Value)
-                {
-                    // write to the ioMainBuffer
-                    buffer[frame*kNumber_Of_Channels+channel] = gRingBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*kNumber_Of_Channels+channel] * gVolume_Output_Master_Value;
-                }
-                else
-                {
-                    buffer[frame*kNumber_Of_Channels+channel] = 0;
-                }
-            }
-        }
+        // Finally we'll apply the output volume to the buffer.
     }
     
     // From Application to BlackHole
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
         
-        Float32* buffer = (Float32*)ioMainBuffer;
-
-        UInt64 mSampleTime = inIOCycleInfo->mOutputTime.mSampleTime;
-
-        for(UInt32 frame = 0; frame < inIOBufferFrameSize; frame++){
-            for(int channel = 0; channel < kNumber_Of_Channels; channel++){
-                
-                // don't do anything if muted
-                if (!gMute_Output_Master_Value)
-                {
-                    // write to internal ring buffer
-                    gRingBuffer[((mSampleTime+frame)%kDevice_RingBufferSize)*kNumber_Of_Channels+channel] = buffer[frame*kNumber_Of_Channels+channel];
-                }
-                else
-                {
-                    buffer[frame*kNumber_Of_Channels+channel] = 0;
-                }
-            }
-        }
+        memcpy(((void*)gRingBuffer) + ringBufferFrameLocationStart * kNumber_Of_Channels * sizeof(Float32), ioMainBuffer, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+        memcpy(gRingBuffer, ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32), secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+        
     }
 
 Done:
