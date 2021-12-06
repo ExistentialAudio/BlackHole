@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add support for additional virtual formats. 24bit, 16bit.
 - Sync BlackHole audio clock with any audio device.
 - Create multi-output / aggregate device with installer.
+- Keep track of which apps are connected to the driver.
 
 
 ## [0.3.0] - Unreleased
@@ -23,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Improved performance
 - Fixed various bugs
 - Renamed constants and variables for consistency
+- Connect input and output volume.
+- Connect input and output mute. 
 
 
 
