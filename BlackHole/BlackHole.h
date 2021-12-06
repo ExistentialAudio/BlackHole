@@ -17,6 +17,7 @@
 #include <pthread.h>
 #include <stdint.h>
 #include <sys/syslog.h>
+#include <Accelerate/Accelerate.h>
 
 //==================================================================================================
 #pragma mark -

@@ -3772,11 +3772,22 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     // From BlackHole to Application
     if(inOperationID == kAudioServerPlugInIOOperationReadInput)
     {
-        
-        memcpy(ioMainBuffer, ((void*)gRingBuffer) + ringBufferFrameLocationStart * kNumber_Of_Channels * sizeof(Float32), firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
-        memcpy(ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32), gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+        // If mute is one let's just fill the buffer with zeros
+        if (gMute_Output_Master_Value || gMute_Output_Master_Value)
+        {
+            memset(ioMainBuffer, 0, inIOBufferFrameSize * kNumber_Of_Channels * sizeof(Float32));
+        }
+        else
+        {
+            // Copy the buffers.
+            memcpy(ioMainBuffer, ((void*)gRingBuffer) + ringBufferFrameLocationStart * kNumber_Of_Channels * sizeof(Float32), firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+            memcpy(ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32), gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
 
-        // Finally we'll apply the output volume to the buffer.
+            // Finally we'll apply the output volume to the buffer.
+            vDSP_vsmul(ioMainBuffer, 1, &gVolume_Output_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
+        }
+        
+
     }
     
     // From Application to BlackHole
