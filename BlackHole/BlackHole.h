@@ -155,9 +155,6 @@ static bool                         gMute_Output_Master_Value           = false;
 #define                             kDevice_Name                        "BlackHole %ich"
 #define                             kManufacturer_Name                  "Existential Audio Inc."
 
-static UInt32                       gDataSource_Input_Master_Value      = 0;
-static UInt32                       gDataSource_Output_Master_Value     = 0;
-
 #define                             kLatency_Frame_Size                 0
 #define                             kNumber_Of_Channels                 2
 #define                             kBits_Per_Channel                   32
