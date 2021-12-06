@@ -424,6 +424,8 @@ static Boolean	BlackHole_HasProperty(AudioServerPlugInDriverRef inDriver, AudioO
 		
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
+        case kObjectID_Volume_Input_Master:
+        case kObjectID_Mute_Input_Master:
 			theAnswer = BlackHole_HasControlProperty(inDriver, inObjectID, inClientProcessID, inAddress);
 			break;
 	};
@@ -469,6 +471,8 @@ static OSStatus	BlackHole_IsPropertySettable(AudioServerPlugInDriverRef inDriver
 		
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
+        case kObjectID_Volume_Input_Master:
+        case kObjectID_Mute_Input_Master:
 			theAnswer = BlackHole_IsControlPropertySettable(inDriver, inObjectID, inClientProcessID, inAddress, outIsSettable);
 			break;
 				
@@ -517,6 +521,8 @@ static OSStatus	BlackHole_GetPropertyDataSize(AudioServerPlugInDriverRef inDrive
 		
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
+        case kObjectID_Volume_Input_Master:
+        case kObjectID_Mute_Input_Master:
 			theAnswer = BlackHole_GetControlPropertyDataSize(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, outDataSize);
 			break;
 				
@@ -566,6 +572,8 @@ static OSStatus	BlackHole_GetPropertyData(AudioServerPlugInDriverRef inDriver, A
 		
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
+        case kObjectID_Volume_Input_Master:
+        case kObjectID_Mute_Input_Master:
 			theAnswer = BlackHole_GetControlPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, outDataSize, outData);
 			break;
 				
@@ -613,6 +621,8 @@ static OSStatus	BlackHole_SetPropertyData(AudioServerPlugInDriverRef inDriver, A
 		
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
+        case kObjectID_Volume_Input_Master:
+        case kObjectID_Mute_Input_Master:
 			theAnswer = BlackHole_SetControlPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData, &theNumberPropertiesChanged, theChangedAddresses);
 			break;
 				
@@ -3206,7 +3216,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					//	Note that we need to take the state lock to examine the value.
 					FailWithAction(inDataSize < sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioLevelControlPropertyScalarValue for the volume control");
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					*((Float32*)outData) = volume_to_scalar((inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Input_Master_Value : gVolume_Output_Master_Value);
+					*((Float32*)outData) = volume_to_scalar((inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Master_Value : gVolume_Master_Value);
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					*outDataSize = sizeof(Float32);
 					break;
@@ -3216,7 +3226,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					//	Note that we need to take the state lock to examine the value.
 					FailWithAction(inDataSize < sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioLevelControlPropertyDecibelValue for the volume control");
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					*((Float32*)outData) = (inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Input_Master_Value : gVolume_Output_Master_Value;
+					*((Float32*)outData) = (inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Master_Value : gVolume_Master_Value;
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					*((Float32*)outData) = volume_to_decibel(*((Float32*)outData));
 					
@@ -3335,7 +3345,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					//	Note that we need to take the state lock to examine this value.
 					FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioBooleanControlPropertyValue for the mute control");
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					*((UInt32*)outData) = (inObjectID == kObjectID_Mute_Input_Master) ? (gMute_Input_Master_Value ? 1 : 0) : (gMute_Output_Master_Value ? 1 : 0);
+					*((UInt32*)outData) = (inObjectID == kObjectID_Mute_Input_Master) ? (gMute_Master_Value ? 1 : 0) : (gMute_Master_Value ? 1 : 0);
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					*outDataSize = sizeof(UInt32);
 					break;
@@ -3397,9 +3407,9 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					pthread_mutex_lock(&gPlugIn_StateMutex);
 					if(inObjectID == kObjectID_Volume_Input_Master)
 					{
-						if(gVolume_Input_Master_Value != theNewVolume)
+						if(gVolume_Master_Value != theNewVolume)
 						{
-							gVolume_Input_Master_Value = theNewVolume;
+							gVolume_Master_Value = theNewVolume;
 							*outNumberPropertiesChanged = 2;
 							outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
@@ -3411,9 +3421,9 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					}
 					else
 					{
-						if(gVolume_Output_Master_Value != theNewVolume)
+						if(gVolume_Master_Value != theNewVolume)
 						{
-							gVolume_Output_Master_Value = theNewVolume;
+							gVolume_Master_Value = theNewVolume;
 							*outNumberPropertiesChanged = 2;
 							outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
@@ -3444,11 +3454,11 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					pthread_mutex_lock(&gPlugIn_StateMutex);
 					if(inObjectID == kObjectID_Volume_Input_Master)
 					{
-						if(gVolume_Input_Master_Value != theNewVolume)
+						if(gVolume_Master_Value != theNewVolume)
 						{
-							gVolume_Input_Master_Value = theNewVolume;
+							gVolume_Master_Value = theNewVolume;
 							*outNumberPropertiesChanged = 2;
-							outChangedAddresses[0].mSelector = gVolume_Output_Master_Value;
+							outChangedAddresses[0].mSelector = gVolume_Master_Value;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
 							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
 							outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
@@ -3458,9 +3468,9 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					}
 					else
 					{
-						if(gVolume_Output_Master_Value != theNewVolume)
+						if(gVolume_Master_Value != theNewVolume)
 						{
-							gVolume_Output_Master_Value = theNewVolume;
+							gVolume_Master_Value = theNewVolume;
 							*outNumberPropertiesChanged = 2;
 							outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
@@ -3488,9 +3498,9 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					pthread_mutex_lock(&gPlugIn_StateMutex);
 					if(inObjectID == kObjectID_Mute_Input_Master)
 					{
-						if(gMute_Input_Master_Value != (*((const UInt32*)inData) != 0))
+						if(gMute_Master_Value != (*((const UInt32*)inData) != 0))
 						{
-							gMute_Input_Master_Value = *((const UInt32*)inData) != 0;
+							gMute_Master_Value = *((const UInt32*)inData) != 0;
 							*outNumberPropertiesChanged = 1;
 							outChangedAddresses[0].mSelector = kAudioBooleanControlPropertyValue;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
@@ -3499,9 +3509,9 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					}
 					else
 					{
-						if(gMute_Output_Master_Value != (*((const UInt32*)inData) != 0))
+						if(gMute_Master_Value != (*((const UInt32*)inData) != 0))
 						{
-							gMute_Output_Master_Value = *((const UInt32*)inData) != 0;
+							gMute_Master_Value = *((const UInt32*)inData) != 0;
 							*outNumberPropertiesChanged = 1;
 							outChangedAddresses[0].mSelector = kAudioBooleanControlPropertyValue;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
@@ -3773,7 +3783,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     if(inOperationID == kAudioServerPlugInIOOperationReadInput)
     {
         // If mute is one let's just fill the buffer with zeros
-        if (gMute_Output_Master_Value || gMute_Output_Master_Value)
+        if (gMute_Master_Value || gMute_Master_Value)
         {
             memset(ioMainBuffer, 0, inIOBufferFrameSize * kNumber_Of_Channels * sizeof(Float32));
         }
@@ -3784,7 +3794,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             memcpy(ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32), gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
 
             // Finally we'll apply the output volume to the buffer.
-            vDSP_vsmul(ioMainBuffer, 1, &gVolume_Output_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
+            vDSP_vsmul(ioMainBuffer, 1, &gVolume_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
         }
         
 
