@@ -3779,13 +3779,25 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         secondPartFrameSize = inIOBufferFrameSize - firstPartFrameSize;
     }
     
+    // Keep track of last outputSampleTime and the cleared buffer status.
+    static Float64 lastOutputSampleTime = 0;
+    static Boolean isBufferClear = true;
+    
     // From BlackHole to Application
     if(inOperationID == kAudioServerPlugInIOOperationReadInput)
     {
-        // If mute is one let's just fill the buffer with zeros
-        if (gMute_Master_Value || gMute_Master_Value)
+        // If mute is one let's just fill the buffer with zeros or if there's no apps outputing audio
+        if (gMute_Master_Value || lastOutputSampleTime - inIOBufferFrameSize < inIOCycleInfo->mInputTime.mSampleTime)
         {
-            memset(ioMainBuffer, 0, inIOBufferFrameSize * kNumber_Of_Channels * sizeof(Float32));
+            // Clear the ioMainBuffer
+            vDSP_vclr(ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
+            
+            // Clear the ring buffer.
+            if (!isBufferClear)
+            {
+                vDSP_vclr(gRingBuffer, 1, kRing_Buffer_Frame_Size * kNumber_Of_Channels);
+                isBufferClear = true;
+            }
         }
         else
         {
@@ -3803,6 +3815,9 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     // From Application to BlackHole
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
+        // Save the last output time.
+        lastOutputSampleTime= inIOCycleInfo->mOutputTime.mSampleTime;
+        isBufferClear = false;
         
         memcpy(((void*)gRingBuffer) + ringBufferFrameLocationStart * kNumber_Of_Channels * sizeof(Float32), ioMainBuffer, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
         memcpy(gRingBuffer, ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32), secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
