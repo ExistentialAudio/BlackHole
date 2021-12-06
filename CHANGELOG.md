@@ -13,12 +13,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Create multi-output / aggregate device with installer.
 
 
-## [0.2.11] - Unreleased
+## [0.3.0] - Unreleased
+
+### Added
+- Sample rates: 352800, 384000, 705600, 768000, 8000, 16000
 
 
-## [0.2.10] - Unreleased
-- Fix latency for higher values [in progress]
-- sound playing through mpd is choppy [in progress]
+### Changed
+- Improved performance
+- Fixed various bugs
+- Renamed constants and variables for consistency
+
+
+
+## [0.2.10] - 2021-08-21
+### Changed
+- Increased internal buffer size
+- Change kDataSource_NumberItems to zero
+
 
 
 ## [0.2.9] - 2021-1-27
