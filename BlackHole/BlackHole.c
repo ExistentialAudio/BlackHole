@@ -3802,8 +3802,8 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         else
         {
             // Copy the buffers.
-            memcpy(ioMainBuffer, ((void*)gRingBuffer) + ringBufferFrameLocationStart * kNumber_Of_Channels * sizeof(Float32), firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
-            memcpy(ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32), gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+            cblas_scopy(firstPartFrameSize * kNumber_Of_Channels, gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, 1, ioMainBuffer, 1);
+            cblas_scopy(secondPartFrameSize * kNumber_Of_Channels, gRingBuffer, 1, (Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, 1);
 
             // Finally we'll apply the output volume to the buffer.
             vDSP_vsmul(ioMainBuffer, 1, &gVolume_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
@@ -3819,8 +3819,9 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         lastOutputSampleTime= inIOCycleInfo->mOutputTime.mSampleTime;
         isBufferClear = false;
         
-        memcpy(((void*)gRingBuffer) + ringBufferFrameLocationStart * kNumber_Of_Channels * sizeof(Float32), ioMainBuffer, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
-        memcpy(gRingBuffer, ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32), secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+        // Copy the buffers.
+        cblas_scopy(firstPartFrameSize * kNumber_Of_Channels, ioMainBuffer, 1, gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, 1);
+        cblas_scopy(secondPartFrameSize * kNumber_Of_Channels, (Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, 1, gRingBuffer, 1);
         
     }
 
