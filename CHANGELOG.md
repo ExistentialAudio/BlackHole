@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-### In Progress
+### Feature Requests
 
 - Add support for additional virtual formats. 24bit, 16bit.
 - Sync BlackHole audio clock with any audio device.
