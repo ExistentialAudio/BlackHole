@@ -6,16 +6,34 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-### In Progress
+### Feature Requests
 
 - Add support for additional virtual formats. 24bit, 16bit.
 - Sync BlackHole audio clock with any audio device.
 - Create multi-output / aggregate device with installer.
+- Keep track of which apps are connected to the driver.
 
 
-## [0.2.10] - Unreleased
-- Fix latency for higher values [in progress]
-- sound playing through mpd is choppy [in progress]
+## [0.3.0] - Unreleased
+
+### Added
+- Sample rates: 352800, 384000, 705600, 768000, 8000, 16000
+
+
+### Changed
+- Improved performance
+- Fixed various bugs
+- Renamed constants and variables for consistency
+- Connect input and output volume.
+- Connect input and output mute. 
+
+
+
+## [0.2.10] - 2021-08-21
+### Changed
+- Increased internal buffer size
+- Change kDataSource_NumberItems to zero
+
 
 
 ## [0.2.9] - 2021-1-27

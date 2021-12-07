@@ -17,6 +17,7 @@
 #include <pthread.h>
 #include <stdint.h>
 #include <sys/syslog.h>
+#include <Accelerate/Accelerate.h>
 
 //==================================================================================================
 #pragma mark -
@@ -77,7 +78,9 @@
 //    qualities:
 //    - a box
 //    - a device
-//        - supports 44100, 48000, 88200, 96000, 176400 and 192000 sample rates
+//        - supports 44100, 48000, 88200, 96000, 176400, 192000, 352800, 384000, 705600, 768000, 8000, 16000 sample rates
+
+
 //        - provides a rate scalar of 1.0 via hard coding
 //    - a single output stream
 //        - supports 16 channels of 32 bit float LPCM samples
@@ -106,11 +109,9 @@ enum
     kObjectID_Stream_Input                = 4,
     kObjectID_Volume_Input_Master        = 5,
     kObjectID_Mute_Input_Master            = 6,
-    kObjectID_DataSource_Input_Master    = 7,
-    kObjectID_Stream_Output                = 8,
-    kObjectID_Volume_Output_Master        = 9,
-    kObjectID_Mute_Output_Master        = 10,
-    kObjectID_DataSource_Output_Master    = 11
+    kObjectID_Stream_Output                = 7,
+    kObjectID_Volume_Output_Master        = 8,
+    kObjectID_Mute_Output_Master        = 9,
 };
 
 //    Declare the stuff that tracks the state of the plug-in, the device and its sub-objects.
@@ -120,7 +121,7 @@ enum
 //    Note also that we share a single mutex across all objects to be thread safe for the same reason.
 
 
-#define                             kPlugIn_BundleID                    "audio.existential.BlackHole%ich"
+#define                             kPlugIn_BundleID                    "audio.existential.BlackHole2ch"
 static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
 static UInt32                       gPlugIn_RefCount                    = 0;
 static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
@@ -145,33 +146,19 @@ static bool                         gStream_Output_IsActive             = true;
 
 static const Float32                kVolume_MinDB                       = -64.0;
 static const Float32                kVolume_MaxDB                       = 0.0;
-static Float32                      gVolume_Input_Master_Value          = 1.0;
-static Float32                      gVolume_Output_Master_Value         = 1.0;
+static Float32                      gVolume_Master_Value                = 1.0;
+static bool                         gMute_Master_Value                  = false;
 
-static bool                         gMute_Input_Master_Value            = false;
-static bool                         gMute_Output_Master_Value           = false;
+#define                             kDevice_Name                        "BlackHole %ich"
+#define                             kManufacturer_Name                  "Existential Audio Inc."
 
-static const UInt32                 kDataSource_NumberItems             = 0;
-#define                             kDataSource_ItemNamePattern         "BlackHole %ich"
-
-#define                             DEVICE_NAME                         "BlackHole %ich"
-#define                             MANUFACTURER_NAME                   "Existential Audio Inc."
-
-static UInt32                       gDataSource_Input_Master_Value      = 0;
-static UInt32                       gDataSource_Output_Master_Value     = 0;
-
-#define                             LATENCY_FRAME_SIZE                  0
-#define                             NUMBER_OF_CHANNELS                  2
-#define                             BITS_PER_CHANNEL                    32
-#define                             BYTES_PER_CHANNEL                   (BITS_PER_CHANNEL / 8)
-#define                             BYTES_PER_FRAME                     (NUMBER_OF_CHANNELS * BYTES_PER_CHANNEL)
-#define                             RING_BUFFER_FRAME_SIZE               ((65536 + LATENCY_FRAME_SIZE) * NUMBER_OF_CHANNELS)
-static Float32*                     ringBuffer;
-static UInt64                       ringBufferOffset                    = 0;
-//static UInt64                       inIOBufferFrameSize                 = 0;
-static UInt64                       remainingRingBufferFrameSize        = 0;
-
-//kAudioHardwarePropertySleepingIsAllowed
+#define                             kLatency_Frame_Size                 0
+#define                             kNumber_Of_Channels                 2
+#define                             kBits_Per_Channel                   32
+#define                             kBytes_Per_Channel                  (kBits_Per_Channel/ 8)
+#define                             kBytes_Per_Frame                    (kNumber_Of_Channels * kBytes_Per_Channel)
+#define                             kRing_Buffer_Frame_Size             ((65536 + kLatency_Frame_Size))
+static Float32*                     gRingBuffer;
 
 
 //==================================================================================================
