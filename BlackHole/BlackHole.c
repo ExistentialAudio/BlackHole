@@ -756,6 +756,7 @@ static OSStatus	BlackHole_Initialize(AudioServerPlugInDriverRef inDriver, AudioS
 	Float64 theHostClockFrequency = (Float64)theTimeBaseInfo.denom / (Float64)theTimeBaseInfo.numer;
 	theHostClockFrequency *= 1000000000.0;
 	gDevice_HostTicksPerFrame = theHostClockFrequency / gDevice_SampleRate;
+	gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
     
     // DebugMsg("BlackHole theTimeBaseInfo.numer: %u \t theTimeBaseInfo.denom: %u", theTimeBaseInfo.numer, theTimeBaseInfo.denom);
 	
@@ -878,6 +879,7 @@ static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriv
     Float64 theHostClockFrequency = (Float64)theTimeBaseInfo.denom / (Float64)theTimeBaseInfo.numer;
 	theHostClockFrequency *= 1000000000.0;
 	gDevice_HostTicksPerFrame = theHostClockFrequency / gDevice_SampleRate;
+	gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
 
 	//	unlock the state mutex
 	pthread_mutex_unlock(&gPlugIn_StateMutex);
@@ -3948,6 +3950,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 						if(gPitch_Adjust != theNewPitch)
 						{
 							gPitch_Adjust = theNewPitch;
+							gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
 							*outNumberPropertiesChanged = 1;
 							outChangedAddresses[0].mSelector = kAudioStereoPanControlPropertyValue;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
@@ -3956,9 +3959,10 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					}
 					else
 					{
-						if(gVolume_Master_Value != theNewPitch)
+						if(gPitch_Adjust != theNewPitch)
 						{
 							gPitch_Adjust = theNewPitch;
+							gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
 							*outNumberPropertiesChanged = 1;
 							outChangedAddresses[0].mSelector = kAudioStereoPanControlPropertyValue;
 							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
@@ -4020,6 +4024,7 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 		gDevice_NumberTimeStamps = 0;
 		gDevice_AnchorSampleTime = 0;
 		gDevice_AnchorHostTime = mach_absolute_time();
+		gDevice_PreviousTicks = 0;
 		
 		// allocate ring buffer
 		gRingBuffer = calloc(kRing_Buffer_Frame_Size * kNumber_Of_Channels, sizeof(Float32));
@@ -4096,7 +4101,8 @@ static OSStatus	BlackHole_GetZeroTimeStamp(AudioServerPlugInDriverRef inDriver, 
 	OSStatus theAnswer = 0;
 	UInt64 theCurrentHostTime;
 	Float64 theHostTicksPerRingBuffer;
-	Float64 theHostTickOffset;
+	Float64 theAdjustedTicksPerRingBuffer;
+	Float64 theNextTickOffset;
 	UInt64 theNextHostTime;
 	
 	//	check the arguments
@@ -4111,20 +4117,22 @@ static OSStatus	BlackHole_GetZeroTimeStamp(AudioServerPlugInDriverRef inDriver, 
 	
 	//	calculate the next host time
 	theHostTicksPerRingBuffer = gDevice_HostTicksPerFrame * ((Float64)kDevice_RingBufferSize);
+	theAdjustedTicksPerRingBuffer = gDevice_AdjustedTicksPerFrame * ((Float64)kDevice_RingBufferSize);
     
-	theHostTickOffset = ((Float64)(gDevice_NumberTimeStamps + 1)) * theHostTicksPerRingBuffer;
+	theNextTickOffset = gDevice_PreviousTicks + theAdjustedTicksPerRingBuffer;
     
-	theNextHostTime = gDevice_AnchorHostTime + ((UInt64)theHostTickOffset);
+	theNextHostTime = gDevice_AnchorHostTime + ((UInt64)theNextTickOffset);
 	
 	//	go to the next time if the next host time is less than the current time
 	if(theNextHostTime <= theCurrentHostTime)
 	{
 		++gDevice_NumberTimeStamps;
+		gDevice_PreviousTicks = theNextTickOffset;
 	}
 	
 	//	set the return values
 	*outSampleTime = gDevice_NumberTimeStamps * kDevice_RingBufferSize;
-	*outHostTime = gDevice_AnchorHostTime + (((Float64)gDevice_NumberTimeStamps) * theHostTicksPerRingBuffer);
+	*outHostTime = gDevice_AnchorHostTime + gDevice_PreviousTicks;
 	*outSeed = 1;
     
     // DebugMsg("SampleTime: %f \t HostTime: %llu", *outSampleTime, *outHostTime);
