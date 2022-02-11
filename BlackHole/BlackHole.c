@@ -3581,7 +3581,7 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 		gDevice_AnchorHostTime = mach_absolute_time();
         
         // allocate ring buffer
-        gRingBuffer = calloc(kRing_Buffer_Frame_Size * kNumber_Of_Channels, sizeof(Float32));
+        gRingBuffer = calloc(kDevice_RingBufferSize * kNumber_Of_Channels, sizeof(Float32));
 	}
 	else
 	{
