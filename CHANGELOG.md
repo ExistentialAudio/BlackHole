@@ -13,8 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Create multi-output / aggregate device with installer.
 - Keep track of which apps are connected to the driver.
 
+## [0.3.1] - Unreleased
+- Fix potential memory leak.
 
-## [0.3.0] - Unreleased
+
+
+## [0.3.0] - 2021-12-07
 
 ### Added
 - Sample rates: 352800, 384000, 705600, 768000, 8000, 16000
