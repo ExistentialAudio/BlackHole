@@ -121,17 +121,42 @@ enum
 //    Note also that we share a single mutex across all objects to be thread safe for the same reason.
 
 
+#ifndef kDriver_Name
+#define                             kDriver_Name                        "BlackHole"
+#endif
+
+#ifndef kPlugIn_BundleID
 #define                             kPlugIn_BundleID                    "audio.existential.BlackHole2ch"
+#endif
+
+#ifndef kPlugIn_Icon
+#define                             kPlugIn_Icon                        "BlackHole.icns"
+#endif
+
+#ifndef kHas_Driver_Name_Format
+#define                             kHas_Driver_Name_Format             true
+#endif
+
+#if kHas_Driver_Name_Format
+#define                             kDriver_Name_Format                 "%ich"
+#define                             kBox_UID                            kDriver_Name kDriver_Name_Format "_UID"
+#define                             kDevice_UID                         kDriver_Name kDriver_Name_Format "_UID"
+#define                             kDevice_ModelUID                    kDriver_Name kDriver_Name_Format "_ModelUID"
+#else
+#define                             kBox_UID                            kDriver_Name "_UID"
+#define                             kDevice_UID                         kDriver_Name "_UID"
+#define                             kDevice_ModelUID                    kDriver_Name "_ModelUID"
+#endif
+
 static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
 static UInt32                       gPlugIn_RefCount                    = 0;
 static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
 
-#define                             kBox_UID                            "BlackHole%ich_UID"
+
 static CFStringRef                  gBox_Name                           = NULL;
 static Boolean                      gBox_Acquired                       = true;
 
-#define                             kDevice_UID                         "BlackHole%ich_UID"
-#define                             kDevice_ModelUID                    "BlackHole%ich_ModelUID"
+
 static pthread_mutex_t              gDevice_IOMutex                     = PTHREAD_MUTEX_INITIALIZER;
 static Float64                      gDevice_SampleRate                  = 44100.0;
 static UInt64                       gDevice_IOIsRunning                 = 0;
@@ -141,19 +166,36 @@ static UInt64                       gDevice_NumberTimeStamps            = 0;
 static Float64                      gDevice_AnchorSampleTime            = 0.0;
 static UInt64                       gDevice_AnchorHostTime              = 0;
 
-static bool                         gStream_Input_IsActive              = true;
-static bool                         gStream_Output_IsActive             = true;
+#ifndef kStream_Input_IsActive
+#define                             kStream_Input_IsActive              true
+#endif
+
+#ifndef kStream_Output_IsActive
+#define                             kStream_Output_IsActive             true
+#endif
+
+static bool                         gStream_Input_IsActive              = kStream_Input_IsActive;
+static bool                         gStream_Output_IsActive             = kStream_Output_IsActive;
 
 static const Float32                kVolume_MinDB                       = -64.0;
 static const Float32                kVolume_MaxDB                       = 0.0;
 static Float32                      gVolume_Master_Value                = 1.0;
 static bool                         gMute_Master_Value                  = false;
 
-#define                             kDevice_Name                        "BlackHole %ich"
+#ifndef kDevice_Name
+#define                             kDevice_Name                        kDriver_Name " %ich"
+#endif
+
+#ifndef kManufacturer_Name
 #define                             kManufacturer_Name                  "Existential Audio Inc."
+#endif
 
 #define                             kLatency_Frame_Size                 0
+
+#ifndef kNumber_Of_Channels
 #define                             kNumber_Of_Channels                 2
+#endif
+
 #define                             kBits_Per_Channel                   32
 #define                             kBytes_Per_Channel                  (kBits_Per_Channel/ 8)
 #define                             kBytes_Per_Frame                    (kNumber_Of_Channels * kBytes_Per_Channel)
