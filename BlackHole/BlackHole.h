@@ -104,14 +104,15 @@
 enum
 {
     kObjectID_PlugIn                    = kAudioObjectPlugInObject,
-    kObjectID_Box                        = 2,
+    kObjectID_Box                       = 2,
     kObjectID_Device                    = 3,
-    kObjectID_Stream_Input                = 4,
-    kObjectID_Volume_Input_Master        = 5,
-    kObjectID_Mute_Input_Master            = 6,
-    kObjectID_Stream_Output                = 7,
-    kObjectID_Volume_Output_Master        = 8,
+    kObjectID_Stream_Input              = 4,
+    kObjectID_Volume_Input_Master       = 5,
+    kObjectID_Mute_Input_Master         = 6,
+    kObjectID_Stream_Output             = 7,
+    kObjectID_Volume_Output_Master      = 8,
     kObjectID_Mute_Output_Master        = 9,
+    kObjectID2_Device                   = 10,
 };
 
 //    Declare the stuff that tracks the state of the plug-in, the device and its sub-objects.
@@ -141,6 +142,7 @@ enum
 #define                             kDriver_Name_Format                 "%ich"
 #define                             kBox_UID                            kDriver_Name kDriver_Name_Format "_UID"
 #define                             kDevice_UID                         kDriver_Name kDriver_Name_Format "_UID"
+#define                             kDevice2_UID                        kDriver_Name kDriver_Name_Format "2_UID"
 #define                             kDevice_ModelUID                    kDriver_Name kDriver_Name_Format "_ModelUID"
 #else
 #define                             kBox_UID                            kDriver_Name "_UID"
@@ -166,16 +168,8 @@ static UInt64                       gDevice_NumberTimeStamps            = 0;
 static Float64                      gDevice_AnchorSampleTime            = 0.0;
 static UInt64                       gDevice_AnchorHostTime              = 0;
 
-#ifndef kStream_Input_IsActive
-#define                             kStream_Input_IsActive              true
-#endif
-
-#ifndef kStream_Output_IsActive
-#define                             kStream_Output_IsActive             true
-#endif
-
-static bool                         gStream_Input_IsActive              = kStream_Input_IsActive;
-static bool                         gStream_Output_IsActive             = kStream_Output_IsActive;
+static bool                         gStream_Input_IsActive              = true;
+static bool                         gStream_Output_IsActive             = true;
 
 static const Float32                kVolume_MinDB                       = -64.0;
 static const Float32                kVolume_MaxDB                       = 0.0;
@@ -184,6 +178,7 @@ static bool                         gMute_Master_Value                  = false;
 
 #ifndef kDevice_Name
 #define                             kDevice_Name                        kDriver_Name " %ich"
+#define                             kDevice2_Name                       kDriver_Name " %ich2"
 #endif
 
 #ifndef kManufacturer_Name
