@@ -192,7 +192,21 @@ static bool                         gMute_Master_Value                  = false;
 #define                             kDevice2_IsHidden                   true
 #endif
 
+#ifndef kDevice_HasInput
+#define                             kDevice_HasInput                    true
+#endif
 
+#ifndef kDevice_HasOutput
+#define                             kDevice_HasOutput                   true
+#endif
+
+#ifndef kDevice2_HasInput
+#define                             kDevice2_HasInput                    true
+#endif
+
+#ifndef kDevice2_HasOutput
+#define                             kDevice2_HasOutput                   true
+#endif
 
 #ifndef kManufacturer_Name
 #define                             kManufacturer_Name                  "Existential Audio Inc."

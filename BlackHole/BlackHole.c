@@ -1728,20 +1728,71 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 			
 		case kAudioObjectPropertyOwnedObjects:
-			switch(inAddress->mScope)
-			{
-				case kAudioObjectPropertyScopeGlobal:
-					*outDataSize = 8 * sizeof(AudioObjectID);
-					break;
-					
-				case kAudioObjectPropertyScopeInput:
-					*outDataSize = 4 * sizeof(AudioObjectID);
-					break;
-					
-				case kAudioObjectPropertyScopeOutput:
-					*outDataSize = 4 * sizeof(AudioObjectID);
-					break;
-			};
+            
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    switch(inAddress->mScope)
+                    {
+                        case kAudioObjectPropertyScopeGlobal:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasInput) numberOfOwnedObjects += 3;
+                                if (kDevice_HasOutput) numberOfOwnedObjects += 3;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeInput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasInput) numberOfOwnedObjects += 3;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeOutput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasOutput) numberOfOwnedObjects += 3;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                    };
+                    break;
+                    
+                case kObjectID2_Device:
+                    switch(inAddress->mScope)
+                    {
+                        case kAudioObjectPropertyScopeGlobal:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice2_HasInput) numberOfOwnedObjects += 3;
+                                if (kDevice2_HasOutput) numberOfOwnedObjects += 3;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeInput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice2_HasInput) numberOfOwnedObjects += 3;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeOutput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice2_HasOutput) numberOfOwnedObjects += 3;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                    };
+                    break;
+            }
+            
+            
+
 			break;
 
 		case kAudioDevicePropertyDeviceUID:
@@ -1785,24 +1836,72 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 
 		case kAudioDevicePropertyStreams:
-			switch(inAddress->mScope)
-			{
-				case kAudioObjectPropertyScopeGlobal:
-					*outDataSize = 2 * sizeof(AudioObjectID);
-					break;
-					
-				case kAudioObjectPropertyScopeInput:
-					*outDataSize = 1 * sizeof(AudioObjectID);
-					break;
-					
-				case kAudioObjectPropertyScopeOutput:
-					*outDataSize = 1 * sizeof(AudioObjectID);
-					break;
-			};
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    switch(inAddress->mScope)
+                    {
+                        case kAudioObjectPropertyScopeGlobal:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasInput) numberOfOwnedObjects += 1;
+                                if (kDevice_HasOutput) numberOfOwnedObjects += 1;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeInput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasInput) numberOfOwnedObjects += 1;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeOutput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasOutput) numberOfOwnedObjects += 1;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                    };
+                    break;
+                    
+                case kObjectID2_Device:
+                    switch(inAddress->mScope)
+                    {
+                        case kAudioObjectPropertyScopeGlobal:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice2_HasInput) numberOfOwnedObjects += 1;
+                                if (kDevice2_HasOutput) numberOfOwnedObjects += 1;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeInput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice2_HasInput) numberOfOwnedObjects += 1;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeOutput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice2_HasOutput) numberOfOwnedObjects += 1;
+                                *outDataSize = numberOfOwnedObjects * sizeof(AudioObjectID);
+                            }
+                            break;
+                    };
+                    break;
+            };
 			break;
 
+        // TODO I might have to alter this.
 		case kAudioObjectPropertyControlList:
-			*outDataSize = 6 * sizeof(AudioObjectID);
+			*outDataSize = 4 * sizeof(AudioObjectID);
 			break;
 
 		case kAudioDevicePropertySafetyOffset:
@@ -1814,7 +1913,7 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 
 		case kAudioDevicePropertyAvailableNominalSampleRates:
-			*outDataSize = 6 * sizeof(AudioValueRange);
+			*outDataSize = 12 * sizeof(AudioValueRange);
 			break;
 		
 		case kAudioDevicePropertyIsHidden:
@@ -1922,50 +2021,177 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			
 			//	The device owns its streams and controls. Note that what is returned here
 			//	depends on the scope requested.
-			switch(inAddress->mScope)
-			{
-				case kAudioObjectPropertyScopeGlobal:
-					//	global scope means return all objects
-					if(theNumberItemsToFetch > 6)
-					{
-						theNumberItemsToFetch = 6;
-					}
-					
-					//	fill out the list with as many objects as requested, which is everything
-					for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-					{
-						((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
-					}
-					break;
-					
-				case kAudioObjectPropertyScopeInput:
-					//	input scope means just the objects on the input side
-					if(theNumberItemsToFetch > 3)
-					{
-						theNumberItemsToFetch = 3;
-					}
-					
-					//	fill out the list with the right objects
-					for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-					{
-						((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
-					}
-					break;
-					
-				case kAudioObjectPropertyScopeOutput:
-					//	output scope means just the objects on the output side
-					if(theNumberItemsToFetch > 3)
-					{
-						theNumberItemsToFetch = 3;
-					}
-					
-					//	fill out the list with the right objects
-					for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-					{
-						((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
-					}
-					break;
-			};
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    switch(inAddress->mScope)
+                    {
+                        case kAudioObjectPropertyScopeGlobal:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice_HasInput) numberOfObjects += 3;
+                                if (kDevice_HasOutput) numberOfObjects += 3;
+                                
+                                //    global scope means return all objects
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                //    fill out the list with as many objects as requested, which is everything
+                                
+                                if (kDevice_HasInput && kDevice_HasOutput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
+                                    }
+                                }
+                                else if (kDevice_HasInput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
+                                    }
+                                }
+                                else if (kDevice_HasOutput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
+                                    }
+                                }
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeInput:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice_HasInput) numberOfObjects += 3;
+                                
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                if (kDevice_HasInput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
+                                    }
+                                }
+                                
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeOutput:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice_HasOutput) numberOfObjects += 3;
+                                
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                if (kDevice_HasOutput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
+                                    }
+                                }
+                                
+                            }
+                            break;
+                    };
+                    break;
+                    
+                case kObjectID2_Device:
+                    switch(inAddress->mScope)
+                    {
+                        case kAudioObjectPropertyScopeGlobal:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice2_HasInput) numberOfObjects += 3;
+                                if (kDevice2_HasOutput) numberOfObjects += 3;
+                                
+                                //    global scope means return all objects
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                //    fill out the list with as many objects as requested, which is everything
+                                
+                                if (kDevice2_HasInput && kDevice2_HasOutput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
+                                    }
+                                }
+                                else if (kDevice2_HasInput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
+                                    }
+                                }
+                                else if (kDevice2_HasOutput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
+                                    }
+                                }
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeInput:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice2_HasInput) numberOfObjects += 3;
+                                
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                if (kDevice2_HasInput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
+                                    }
+                                }
+                                
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeOutput:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice2_HasOutput) numberOfObjects += 3;
+                                
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                if (kDevice2_HasOutput)
+                                {
+                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                                    {
+                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
+                                    }
+                                }
+                                
+                            }
+                            break;
+                    };
+                    break;
+            }
 			
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
@@ -2116,81 +2342,293 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			theNumberItemsToFetch = inDataSize / sizeof(AudioObjectID);
 			
 			//	Note that what is returned here depends on the scope requested.
-			switch(inAddress->mScope)
-			{
-				case kAudioObjectPropertyScopeGlobal:
-					//	global scope means return all streams
-					if(theNumberItemsToFetch > 2)
-					{
-						theNumberItemsToFetch = 2;
-					}
-					
-					//	fill out the list with as many objects as requested
-					if(theNumberItemsToFetch > 0)
-					{
-						((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
-					}
-					if(theNumberItemsToFetch > 1)
-					{
-						((AudioObjectID*)outData)[1] = kObjectID_Stream_Output;
-					}
-					break;
-					
-				case kAudioObjectPropertyScopeInput:
-					//	input scope means just the objects on the input side
-					if(theNumberItemsToFetch > 1)
-					{
-						theNumberItemsToFetch = 1;
-					}
-					
-					//	fill out the list with as many objects as requested
-					if(theNumberItemsToFetch > 0)
-					{
-						((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
-					}
-					break;
-					
-				case kAudioObjectPropertyScopeOutput:
-					//	output scope means just the objects on the output side
-					if(theNumberItemsToFetch > 1)
-					{
-						theNumberItemsToFetch = 1;
-					}
-					
-					//	fill out the list with as many objects as requested
-					if(theNumberItemsToFetch > 0)
-					{
-						((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
-					}
-					break;
-			};
-			
-			//	report how much we wrote
-			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
-			break;
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    switch(inAddress->mScope)
+                    {
+                        case kAudioObjectPropertyScopeGlobal:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasInput) numberOfOwnedObjects += 1;
+                                if (kDevice_HasOutput) numberOfOwnedObjects += 1;
+                                
+                                //    global scope means return all objects
+                                if(theNumberItemsToFetch > numberOfOwnedObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfOwnedObjects;
+                                }
+                                
+                                //    fill out the list with as many objects as requested, which is everything
+                                
+                                if (kDevice_HasInput && kDevice_HasOutput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
+                                    }
+                                    
+                                    if (theNumberItemsToFetch > 1)
+                                    {
+                                        ((AudioObjectID*)outData)[1] = kObjectID_Stream_Output;
+                                    }
+                                    
+                                }
+                                else if (kDevice_HasInput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
+                                    }
+                                }
+                                else if (kDevice_HasOutput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
+                                    }
+                                }
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeInput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasInput) numberOfOwnedObjects += 1;
+                                
+                                if(theNumberItemsToFetch > numberOfOwnedObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfOwnedObjects;
+                                }
+                                
+                                else if (kDevice_HasInput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
+                                    }
+                                }
+                                
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeOutput:
+                            {
+                                UInt32 numberOfOwnedObjects = 0;
+                                if (kDevice_HasOutput) numberOfOwnedObjects += 1;
+                                
+                                if(theNumberItemsToFetch > numberOfOwnedObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfOwnedObjects;
+                                }
+                                
+                                else if (kDevice_HasInput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
+                                    }
+                                }
+                                
+                            }
+                            break;
+                    };
+                    break;
+                    
+                case kObjectID2_Device:
+                    switch(inAddress->mScope)
+                    {
+                        case kAudioObjectPropertyScopeGlobal:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice2_HasInput) numberOfObjects += 1;
+                                if (kDevice2_HasOutput) numberOfObjects += 1;
+                                
+                                //    global scope means return all objects
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                //    fill out the list with as many objects as requested, which is everything
+                                
+                                if (kDevice2_HasInput && kDevice2_HasOutput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
+                                    }
+                                    
+                                    if (theNumberItemsToFetch > 1)
+                                    {
+                                        ((AudioObjectID*)outData)[1] = kObjectID_Stream_Output;
+                                    }
+                                    
+                                }
+                                else if (kDevice2_HasInput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
+                                    }
+                                }
+                                else if (kDevice2_HasOutput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
+                                    }
+                                }
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeInput:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice2_HasInput) numberOfObjects += 1;
+                                
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                else if (kDevice2_HasInput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
+                                    }
+                                }
+                                
+                            }
+                            break;
+                            
+                        case kAudioObjectPropertyScopeOutput:
+                            {
+                                UInt32 numberOfObjects = 0;
+                                if (kDevice2_HasOutput) numberOfObjects += 1;
+                                
+                                if(theNumberItemsToFetch > numberOfObjects)
+                                {
+                                    theNumberItemsToFetch = numberOfObjects;
+                                }
+                                
+                                else if (kDevice2_HasInput)
+                                {
+                                    if (theNumberItemsToFetch > 0)
+                                    {
+                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
+                                    }
+                                }
+                                
+                            }
+                            break;
+                    };
+                    break;
+            }
+            
+            //    report how much we wrote
+            *outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
+            break;
 
 		case kAudioObjectPropertyControlList:
 			//	Calculate the number of items that have been requested. Note that this
 			//	number is allowed to be smaller than the actual size of the list. In such
 			//	case, only that number of items will be returned
 			theNumberItemsToFetch = inDataSize / sizeof(AudioObjectID);
-			if(theNumberItemsToFetch > 4)
-			{
-				theNumberItemsToFetch = 4;
-			}
-			
-			//	fill out the list with as many objects as requested, which is everything
-			for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-			{
-				if(theItemIndex < 2)
-				{
-					((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Input_Master + theItemIndex;
-				}
-				else
-				{
-					((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Output_Master + (theItemIndex - 2);
-				}
-			}
+            
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    {
+                        if(theNumberItemsToFetch > 4)
+                        {
+                            UInt32 numberOfObjects = 0;
+                            if (kDevice_HasInput) numberOfObjects += 2;
+                            if (kDevice_HasOutput) numberOfObjects += 2;
+                            theNumberItemsToFetch = numberOfObjects;
+                        }
+                        
+                        if (kDevice_HasInput && kDevice_HasOutput)
+                        {
+                            //    fill out the list with as many objects as requested, which is everything
+                            for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                            {
+                                if(theItemIndex < 2)
+                                {
+                                    ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Input_Master + theItemIndex;
+                                }
+                                else
+                                {
+                                    ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Output_Master + (theItemIndex - 2);
+                                }
+                            }
+                        }
+                        else if (kDevice_HasInput)
+                        {
+                            //    fill out the list with as many objects as requested, which is everything
+                            for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                            {
+                                ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Input_Master + theItemIndex;
+                            }
+                        }
+                        else if (kDevice_HasOutput)
+                        {
+                            //    fill out the list with as many objects as requested, which is everything
+                            for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                            {
+                                ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Output_Master + theItemIndex;
+                            }
+                        }
+                    }
+
+                    break;
+                    
+                case kObjectID2_Device:
+                    {
+                        if(theNumberItemsToFetch > 4)
+                        {
+                            UInt32 numberOfObjects = 0;
+                            if (kDevice2_HasInput) numberOfObjects += 2;
+                            if (kDevice2_HasOutput) numberOfObjects += 2;
+                            theNumberItemsToFetch = numberOfObjects;
+                        }
+                        
+                        if (kDevice2_HasInput && kDevice2_HasOutput)
+                        {
+                            //    fill out the list with as many objects as requested, which is everything
+                            for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                            {
+                                if(theItemIndex < 2)
+                                {
+                                    ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Input_Master + theItemIndex;
+                                }
+                                else
+                                {
+                                    ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Output_Master + (theItemIndex - 2);
+                                }
+                            }
+                        }
+                        else if (kDevice2_HasInput)
+                        {
+                            //    fill out the list with as many objects as requested, which is everything
+                            for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                            {
+                                ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Input_Master + theItemIndex;
+                            }
+                        }
+                        else if (kDevice2_HasOutput)
+                        {
+                            //    fill out the list with as many objects as requested, which is everything
+                            for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                            {
+                                ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Output_Master + theItemIndex;
+                            }
+                        }
+                    }
+
+                    break;
+            }
+            
+
 			
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
@@ -3647,7 +4085,7 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 	//	So, work only needs to be done when the first client starts. All subsequent starts simply
 	//	increment the counter.
 	
-	#pragma unused(inClientID)
+	#pragma unused(inClientID, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
@@ -3694,7 +4132,7 @@ static OSStatus	BlackHole_StopIO(AudioServerPlugInDriverRef inDriver, AudioObjec
 	//	This call tells the device that the client has stopped IO. The driver can stop the hardware
 	//	once all clients have stopped.
 	
-	#pragma unused(inClientID)
+	#pragma unused(inClientID, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
@@ -3742,7 +4180,7 @@ static OSStatus	BlackHole_GetZeroTimeStamp(AudioServerPlugInDriverRef inDriver, 
 	//	For this device, the zero time stamps' sample time increments every kDevice_RingBufferSize
 	//	frames and the host time increments by kDevice_RingBufferSize * gDevice_HostTicksPerFrame.
 	
-	#pragma unused(inClientID)
+	#pragma unused(inClientID, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
@@ -3793,7 +4231,7 @@ static OSStatus	BlackHole_WillDoIOOperation(AudioServerPlugInDriverRef inDriver,
 	//	This method returns whether or not the device will do a given IO operation. For this device,
 	//	we only support reading input data and writing output data.
 	
-	#pragma unused(inClientID)
+	#pragma unused(inClientID, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
@@ -3838,7 +4276,7 @@ static OSStatus	BlackHole_BeginIOOperation(AudioServerPlugInDriverRef inDriver, 
 	//	This is called at the beginning of an IO operation. This device doesn't do anything, so just
 	//	check the arguments and return.
 	
-	#pragma unused(inClientID, inOperationID, inIOBufferFrameSize, inIOCycleInfo)
+	#pragma unused(inClientID, inOperationID, inIOBufferFrameSize, inIOCycleInfo, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
@@ -3855,7 +4293,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
 {
 	//	This is called to actually perform a given operation. 
 	
-	#pragma unused(inClientID, inIOCycleInfo, ioSecondaryBuffer)
+	#pragma unused(inClientID, inIOCycleInfo, ioSecondaryBuffer, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
@@ -3934,7 +4372,7 @@ static OSStatus	BlackHole_EndIOOperation(AudioServerPlugInDriverRef inDriver, Au
 	//	This is called at the end of an IO operation. This device doesn't do anything, so just check
 	//	the arguments and return.
 	
-	#pragma unused(inClientID, inOperationID, inIOBufferFrameSize, inIOCycleInfo)
+	#pragma unused(inClientID, inOperationID, inIOBufferFrameSize, inIOCycleInfo, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
