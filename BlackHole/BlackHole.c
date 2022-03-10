@@ -2073,12 +2073,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                                     theNumberItemsToFetch = numberOfObjects;
                                 }
                                 
-                                if (kDevice_HasInput)
+                                for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
                                 {
-                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-                                    {
-                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
-                                    }
+                                    ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
                                 }
                                 
                             }
@@ -2094,12 +2091,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                                     theNumberItemsToFetch = numberOfObjects;
                                 }
                                 
-                                if (kDevice_HasOutput)
+                                for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
                                 {
-                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-                                    {
-                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
-                                    }
+                                    ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
                                 }
                                 
                             }
@@ -2158,12 +2152,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                                     theNumberItemsToFetch = numberOfObjects;
                                 }
                                 
-                                if (kDevice2_HasInput)
+                                for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
                                 {
-                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-                                    {
-                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
-                                    }
+                                    ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
                                 }
                                 
                             }
@@ -2179,12 +2170,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                                     theNumberItemsToFetch = numberOfObjects;
                                 }
                                 
-                                if (kDevice2_HasOutput)
+                                for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
                                 {
-                                    for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-                                    {
-                                        ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
-                                    }
+                                    ((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
                                 }
                                 
                             }
@@ -2400,12 +2388,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                                     theNumberItemsToFetch = numberOfOwnedObjects;
                                 }
                                 
-                                else if (kDevice_HasInput)
+                                if (theNumberItemsToFetch > 0)
                                 {
-                                    if (theNumberItemsToFetch > 0)
-                                    {
-                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
-                                    }
+                                    ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
                                 }
                                 
                             }
@@ -2421,12 +2406,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                                     theNumberItemsToFetch = numberOfOwnedObjects;
                                 }
                                 
-                                else if (kDevice_HasInput)
+                                if (theNumberItemsToFetch > 0)
                                 {
-                                    if (theNumberItemsToFetch > 0)
-                                    {
-                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
-                                    }
+                                    ((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
                                 }
                                 
                             }
@@ -2491,12 +2473,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                                     theNumberItemsToFetch = numberOfObjects;
                                 }
                                 
-                                else if (kDevice2_HasInput)
+                                if (theNumberItemsToFetch > 0)
                                 {
-                                    if (theNumberItemsToFetch > 0)
-                                    {
-                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
-                                    }
+                                    ((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
                                 }
                                 
                             }
@@ -2512,12 +2491,9 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                                     theNumberItemsToFetch = numberOfObjects;
                                 }
                                 
-                                else if (kDevice2_HasInput)
+                                if (theNumberItemsToFetch > 0)
                                 {
-                                    if (theNumberItemsToFetch > 0)
-                                    {
-                                        ((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
-                                    }
+                                    ((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
                                 }
                                 
                             }

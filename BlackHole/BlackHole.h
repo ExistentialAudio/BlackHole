@@ -142,7 +142,7 @@ enum
 #define                             kDriver_Name_Format                 "%ich"
 #define                             kBox_UID                            kDriver_Name kDriver_Name_Format "_UID"
 #define                             kDevice_UID                         kDriver_Name kDriver_Name_Format "_UID"
-#define                             kDevice2_UID                        kDriver_Name kDriver_Name_Format "2_UID"
+#define                             kDevice2_UID                        kDriver_Name kDriver_Name_Format "Hidden_UID"
 #define                             kDevice_ModelUID                    kDriver_Name kDriver_Name_Format "_ModelUID"
 #else
 #define                             kBox_UID                            kDriver_Name "_UID"
@@ -181,16 +181,20 @@ static bool                         gMute_Master_Value                  = false;
 #endif
 
 #ifndef kDevice2_Name
-#define                             kDevice2_Name                       kDriver_Name " %ich2"
+#define                             kDevice2_Name                       kDriver_Name " %ich Hidden"
 #endif
+
+
 
 #ifndef kDevice_IsHidden
 #define                             kDevice_IsHidden                    false
 #endif
 
 #ifndef kDevice2_IsHidden
-#define                             kDevice2_IsHidden                   true
+#define                             kDevice2_IsHidden                   false
 #endif
+
+
 
 #ifndef kDevice_HasInput
 #define                             kDevice_HasInput                    true
@@ -201,12 +205,14 @@ static bool                         gMute_Master_Value                  = false;
 #endif
 
 #ifndef kDevice2_HasInput
-#define                             kDevice2_HasInput                    true
+#define                             kDevice2_HasInput                   true
 #endif
 
 #ifndef kDevice2_HasOutput
-#define                             kDevice2_HasOutput                   true
+#define                             kDevice2_HasOutput                  true
 #endif
+
+
 
 #ifndef kManufacturer_Name
 #define                             kManufacturer_Name                  "Existential Audio Inc."
