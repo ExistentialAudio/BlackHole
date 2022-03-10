@@ -34,18 +34,18 @@
 
     #define    DebugMsg(inFormat, ...)    syslog(LOG_NOTICE, inFormat, ## __VA_ARGS__)
 
-    #define    FailIf(inCondition, inHandler, inMessage)                                    \
+    #define    FailIf(inCondition, inHandler, inMessage)                           \
     if(inCondition)                                                                \
-    {                                                                            \
-        DebugMsg(inMessage);                                                    \
+    {                                                                              \
+        DebugMsg(inMessage);                                                       \
         goto inHandler;                                                            \
     }
 
-    #define    FailWithAction(inCondition, inAction, inHandler, inMessage)                    \
+    #define    FailWithAction(inCondition, inAction, inHandler, inMessage)         \
     if(inCondition)                                                                \
-    {                                                                            \
-        DebugMsg(inMessage);                                                    \
-        { inAction; }                                                            \
+    {                                                                              \
+        DebugMsg(inMessage);                                                       \
+        { inAction; }                                                              \
         goto inHandler;                                                            \
         }
 
@@ -53,17 +53,17 @@
 
     #define    DebugMsg(inFormat, ...)
 
-    #define    FailIf(inCondition, inHandler, inMessage)                                    \
+    #define    FailIf(inCondition, inHandler, inMessage)                           \
     if(inCondition)                                                                \
-    {                                                                            \
-    goto inHandler;                                                            \
+    {                                                                              \
+    goto inHandler;                                                                \
     }
 
-    #define    FailWithAction(inCondition, inAction, inHandler, inMessage)                    \
+    #define    FailWithAction(inCondition, inAction, inHandler, inMessage)         \
     if(inCondition)                                                                \
-    {                                                                            \
-    { inAction; }                                                            \
-    goto inHandler;                                                            \
+    {                                                                              \
+    { inAction; }                                                                  \
+    goto inHandler;                                                                \
     }
 
 #endif
