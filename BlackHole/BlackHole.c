@@ -2299,7 +2299,20 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 		case kAudioDevicePropertyIsHidden:
 			//	This returns whether or not the device is visible to clients.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyIsHidden for the device");
-			*((UInt32*)outData) = 0;
+            
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    *((UInt32*)outData) = kDevice_IsHidden;
+                    break;
+                
+                case kObjectID2_Device:
+                    *((UInt32*)outData) = kDevice2_IsHidden;
+                    break;
+                    
+                default:
+                    *((UInt32*)outData) = 0;
+                    break;
+            }
 			*outDataSize = sizeof(UInt32);
 			break;
 
