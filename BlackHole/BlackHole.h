@@ -112,7 +112,7 @@ enum
     kObjectID_Stream_Output             = 7,
     kObjectID_Volume_Output_Master      = 8,
     kObjectID_Mute_Output_Master        = 9,
-    kObjectID2_Device                   = 10,
+    kObjectID_Device2                   = 10,
 };
 
 //    Declare the stuff that tracks the state of the plug-in, the device and its sub-objects.
@@ -142,11 +142,12 @@ enum
 #define                             kDriver_Name_Format                 "%ich"
 #define                             kBox_UID                            kDriver_Name kDriver_Name_Format "_UID"
 #define                             kDevice_UID                         kDriver_Name kDriver_Name_Format "_UID"
-#define                             kDevice2_UID                        kDriver_Name kDriver_Name_Format "Hidden_UID"
+#define                             kDevice2_UID                        kDriver_Name kDriver_Name_Format "_2_UID"
 #define                             kDevice_ModelUID                    kDriver_Name kDriver_Name_Format "_ModelUID"
 #else
 #define                             kBox_UID                            kDriver_Name "_UID"
 #define                             kDevice_UID                         kDriver_Name "_UID"
+#define                             kDevice2_UID                        kDriver_Name "_2_UID"
 #define                             kDevice_ModelUID                    kDriver_Name "_ModelUID"
 #endif
 
@@ -181,7 +182,7 @@ static bool                         gMute_Master_Value                  = false;
 #endif
 
 #ifndef kDevice2_Name
-#define                             kDevice2_Name                       kDriver_Name " %ich Hidden"
+#define                             kDevice2_Name                       kDriver_Name " %ich 2"
 #endif
 
 
@@ -191,7 +192,7 @@ static bool                         gMute_Master_Value                  = false;
 #endif
 
 #ifndef kDevice2_IsHidden
-#define                             kDevice2_IsHidden                   false
+#define                             kDevice2_IsHidden                   true
 #endif
 
 
