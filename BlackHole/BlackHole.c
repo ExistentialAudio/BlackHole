@@ -2722,10 +2722,6 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                 case kObjectID_Device2:
                     *((UInt32*)outData) = kDevice2_IsHidden;
                     break;
-                    
-                default:
-                    *((UInt32*)outData) = 0;
-                    break;
             }
 			*outDataSize = sizeof(UInt32);
 			break;
