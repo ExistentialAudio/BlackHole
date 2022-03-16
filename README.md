@@ -27,7 +27,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - Customizable to 256+ audio channels.
 - Supports 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, and 192kHz sample rates.
 - No driver latency. 
-- Compatible with macOS Mavericks (10.9) to macOS Big Sur (11).
+- Compatible with macOS Mavericks (10.9) and up.
 - Built for Intel and Apple Silicon.
 
 ![Image of BlackHole Audio Driver](Images/BlackHole.png)
@@ -43,15 +43,17 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 - 2ch: `brew install blackhole-2ch`
 - 16ch: `brew install blackhole-16ch`
+- 64ch: `brew install blackhole-16ch`
 
 ## Uninstallation Instructions
 ### Option 1: Use Uninstaller
 - [Download BlackHole2ch Uninstaller](https://existential.audio/downloads/BlackHole2chUninstaller.pkg)
 - [Download BlackHole16ch Uninstaller](https://existential.audio/downloads/BlackHole16chUninstaller.pkg)
+- [Download BlackHole64ch Uninstaller](https://existential.audio/downloads/BlackHole64chUninstaller.pkg)
 
 ### Option 2: Manually Uninstall
 
-1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library` and be sure to replace `X` with either `2` or `16`
+1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library` and be sure to replace `X` with either `2`, `16`, or `64`
 2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 For more specific details [visit the wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
