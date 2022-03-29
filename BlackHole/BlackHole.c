@@ -4326,7 +4326,14 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     // From Application to BlackHole
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
-
+        
+        // Overload error.
+        if (inIOCycleInfo->mCurrentTime.mSampleTime > inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize + kLatency_Frame_Size)
+        {
+            DebugMsg("BlackHole overload error. kAudioServerPlugInIOOperationWriteMix was unable to complete opperation before the deadline. Try increasing the buffer frame size.");
+            return kAudioHardwareUnspecifiedError;
+        }
+        
         
         // Copy the buffers.
         memcpy(gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, ioMainBuffer, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
