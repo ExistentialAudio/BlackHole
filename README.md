@@ -27,7 +27,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - Customizable to 256+ audio channels.
 - Supports 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, and 192kHz sample rates.
 - No driver latency. 
-- Compatible with macOS Mavericks (10.9) to macOS Big Sur (11).
+- Compatible with macOS Mavericks (10.9) and newer. 
 - Built for Intel and Apple Silicon.
 
 ![Image of BlackHole Audio Driver](Images/BlackHole.png)
