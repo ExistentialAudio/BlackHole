@@ -9,8 +9,6 @@
 #ifndef BlackHole_h
 #define BlackHole_h
 
-#endif /* BlackHole_h */
-
 #include <CoreAudio/AudioServerPlugIn.h>
 #include <dispatch/dispatch.h>
 #include <mach/mach_time.h>
@@ -254,3 +252,5 @@ static AudioServerPlugInDriverInterface    gAudioServerPlugInDriverInterface =
 };
 static AudioServerPlugInDriverInterface*    gAudioServerPlugInDriverInterfacePtr    = &gAudioServerPlugInDriverInterface;
 static AudioServerPlugInDriverRef            gAudioServerPlugInDriverRef                = &gAudioServerPlugInDriverInterfacePtr;
+
+#endif /* BlackHole_h */
