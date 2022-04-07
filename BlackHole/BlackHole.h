@@ -104,14 +104,26 @@
 enum
 {
     kObjectID_PlugIn                    = kAudioObjectPlugInObject,
-    kObjectID_Box                        = 2,
+    kObjectID_Box                       = 2,
     kObjectID_Device                    = 3,
-    kObjectID_Stream_Input                = 4,
-    kObjectID_Volume_Input_Master        = 5,
-    kObjectID_Mute_Input_Master            = 6,
-    kObjectID_Stream_Output                = 7,
-    kObjectID_Volume_Output_Master        = 8,
+    kObjectID_Stream_Input              = 4,
+    kObjectID_Volume_Input_Master       = 5,
+    kObjectID_Mute_Input_Master         = 6,
+    kObjectID_Stream_Output             = 7,
+    kObjectID_Volume_Output_Master      = 8,
     kObjectID_Mute_Output_Master        = 9,
+};
+
+enum ObjectType
+{
+    kObjectType_Stream,
+    kObjectType_Control
+};
+
+struct ObjectInfo {
+    AudioObjectID id;
+    enum ObjectType type;
+    AudioObjectPropertyScope scope;
 };
 
 //    Declare the stuff that tracks the state of the plug-in, the device and its sub-objects.
@@ -119,7 +131,6 @@ enum
 //    multiple devices were supported, this state would need to be encapsulated in one or more structs
 //    so that each object's state can be tracked individually.
 //    Note also that we share a single mutex across all objects to be thread safe for the same reason.
-
 
 #define                             kPlugIn_BundleID                    "audio.existential.BlackHole2ch"
 static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
@@ -148,6 +159,17 @@ static const Float32                kVolume_MinDB                       = -64.0;
 static const Float32                kVolume_MaxDB                       = 0.0;
 static Float32                      gVolume_Master_Value                = 1.0;
 static bool                         gMute_Master_Value                  = false;
+
+static struct ObjectInfo            kDevice_ObjectList[]                = {
+    { kObjectID_Stream_Input,           kObjectType_Stream,     kAudioObjectPropertyScopeInput  },
+    { kObjectID_Volume_Input_Master,    kObjectType_Control,    kAudioObjectPropertyScopeInput  },
+    { kObjectID_Mute_Input_Master,      kObjectType_Control,    kAudioObjectPropertyScopeInput  },
+    { kObjectID_Stream_Output,          kObjectType_Stream,     kAudioObjectPropertyScopeOutput },
+    { kObjectID_Volume_Output_Master,   kObjectType_Control,    kAudioObjectPropertyScopeOutput },
+    { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput }
+};
+
+static const UInt32                 kDevice_ObjectListSize              = sizeof(kDevice_ObjectList) / sizeof(struct ObjectInfo);
 
 #define                             kDevice_Name                        "BlackHole %ich"
 #define                             kManufacturer_Name                  "Existential Audio Inc."
