@@ -147,6 +147,23 @@ static const Float32                kVolume_MaxDB                       = 0.0;
 static Float32                      gVolume_Master_Value                = 1.0;
 static bool                         gMute_Master_Value                  = false;
 
+static Float64                      kDevice_SampleRates[]               = {
+                                                                              8000,
+                                                                             16000,
+                                                                             44100,
+                                                                             48000,
+                                                                             88200,
+                                                                             96000,
+                                                                            176400,
+                                                                            192000,
+                                                                            352800,
+                                                                            384000,
+                                                                            705600,
+                                                                            768000
+                                                                           };
+
+static const UInt32                 kDevice_SampleRatesSize             = sizeof(kDevice_SampleRates) / sizeof(Float64);
+
 #define                             kDevice_Name                        "BlackHole %ich"
 #define                             kManufacturer_Name                  "Existential Audio Inc."
 
