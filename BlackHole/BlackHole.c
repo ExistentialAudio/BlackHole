@@ -1400,9 +1400,16 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 			pthread_mutex_lock(&gPlugIn_StateMutex);
 			if(gBox_Acquired)
 			{
-				FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioBoxPropertyDeviceList for the box");
-				*((AudioObjectID*)outData) = kObjectID_Device;
-				*outDataSize = sizeof(AudioObjectID);
+                if(inDataSize < sizeof(AudioObjectID))
+                {
+                    theAnswer = kAudioHardwareBadPropertySizeError;
+                    *outDataSize = 0;
+                }
+                else
+                {
+                    *((AudioObjectID*)outData) = kObjectID_Device;
+                    *outDataSize = sizeof(AudioObjectID);
+                }
 			}
 			else
 			{
