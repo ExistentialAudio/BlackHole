@@ -85,6 +85,19 @@ static UInt32 minimum(UInt32 a, UInt32 b) {
     return a < b ? a : b;
 }
 
+static bool is_valid_sample_rate(Float64 sample_rate)
+{
+    for(UInt32 i = 0; i < kDevice_SampleRatesSize; i++)
+    {
+        if (sample_rate == kDevice_SampleRates[i])
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 #pragma mark Factory
 
 void*	BlackHole_Create(CFAllocatorRef inAllocator, CFUUIDRef inRequestedTypeUUID)
@@ -369,18 +382,7 @@ static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriv
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad driver reference");
 	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad device ID");
-	FailWithAction((inChangeAction != 44100)
-                   && (inChangeAction != 48000)
-                   && (inChangeAction != 88200)
-                   && (inChangeAction != 96000)
-                   && (inChangeAction != 176400)
-                   && (inChangeAction != 192000)
-                   && (inChangeAction != 352800)
-                   && (inChangeAction != 384000)
-                   && (inChangeAction != 705600)
-                   && (inChangeAction != 768000)
-                   && (inChangeAction != 8000)
-                   && (inChangeAction != 16000),
+	FailWithAction(!is_valid_sample_rate(inChangeAction),
                    theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad sample rate");
 	
 	//	lock the state mutex
@@ -952,7 +954,7 @@ static OSStatus	BlackHole_GetPlugInPropertyData(AudioServerPlugInDriverRef inDri
 			//	the object ID to return.
 			{
 				FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: not enough space for the return value of kAudioPlugInPropertyTranslateUIDToBox");
-				FailWithAction(inQualifierDataSize == sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToBox");
+				FailWithAction(inQualifierDataSize != sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToBox");
 				FailWithAction(inQualifierData == NULL, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: no qualifier for kAudioPlugInPropertyTranslateUIDToBox");
 				CFStringRef formattedString = CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), kNumber_Of_Channels);
 				if(CFStringCompare(*((CFStringRef*)inQualifierData), formattedString, 0) == kCFCompareEqualTo)
@@ -999,7 +1001,7 @@ static OSStatus	BlackHole_GetPlugInPropertyData(AudioServerPlugInDriverRef inDri
 			//	the object ID to return.
 			{
 				FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: not enough space for the return value of kAudioPlugInPropertyTranslateUIDToDevice");
-				FailWithAction(inQualifierDataSize == sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToDevice");
+				FailWithAction(inQualifierDataSize != sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToDevice");
 				FailWithAction(inQualifierData == NULL, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: no qualifier for kAudioPlugInPropertyTranslateUIDToDevice");
 				CFStringRef formattedString = CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), kNumber_Of_Channels);
 				if(CFStringCompare(*((CFStringRef*)inQualifierData), formattedString, 0) == kCFCompareEqualTo)
@@ -1436,9 +1438,16 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 			pthread_mutex_lock(&gPlugIn_StateMutex);
 			if(gBox_Acquired)
 			{
-				FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioBoxPropertyDeviceList for the box");
-				*((AudioObjectID*)outData) = kObjectID_Device;
-				*outDataSize = sizeof(AudioObjectID);
+                if(inDataSize < sizeof(AudioObjectID))
+                {
+                    theAnswer = kAudioHardwareBadPropertySizeError;
+                    *outDataSize = 0;
+                }
+                else
+                {
+                    *((AudioObjectID*)outData) = kObjectID_Device;
+                    *outDataSize = sizeof(AudioObjectID);
+                }
 			}
 			else
 			{
@@ -1778,7 +1787,7 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 
 		case kAudioDevicePropertyAvailableNominalSampleRates:
-			*outDataSize = 6 * sizeof(AudioValueRange);
+			*outDataSize = kDevice_SampleRatesSize * sizeof(AudioValueRange);
 			break;
 		
 		case kAudioDevicePropertyIsHidden:
@@ -2071,73 +2080,18 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			theNumberItemsToFetch = inDataSize / sizeof(AudioValueRange);
 			
 			//	clamp it to the number of items we have
-			if(theNumberItemsToFetch > 12)
+			if(theNumberItemsToFetch > kDevice_SampleRatesSize)
 			{
-				theNumberItemsToFetch = 12;
+				theNumberItemsToFetch = kDevice_SampleRatesSize;
 			}
 			
-			//	fill out the return array
-			if(theNumberItemsToFetch > 0)
-			{
-				((AudioValueRange*)outData)[0].mMinimum = 44100.0;
-				((AudioValueRange*)outData)[0].mMaximum = 44100.0;
-			}
-			if(theNumberItemsToFetch > 1)
-			{
-				((AudioValueRange*)outData)[1].mMinimum = 48000.0;
-				((AudioValueRange*)outData)[1].mMaximum = 48000.0;
-			}
-            if(theNumberItemsToFetch > 2)
+            //	fill out the return array
+            for(UInt32 i = 0; i < theNumberItemsToFetch; i++)
             {
-                ((AudioValueRange*)outData)[2].mMinimum = 88200.0;
-                ((AudioValueRange*)outData)[2].mMaximum = 88200.0;
+                ((AudioValueRange*)outData)[i].mMinimum = kDevice_SampleRates[i];
+                ((AudioValueRange*)outData)[i].mMaximum = kDevice_SampleRates[i];
             }
-            if(theNumberItemsToFetch > 3)
-            {
-                ((AudioValueRange*)outData)[3].mMinimum = 96000.0;
-                ((AudioValueRange*)outData)[3].mMaximum = 96000.0;
-            }
-            if(theNumberItemsToFetch > 4)
-            {
-                ((AudioValueRange*)outData)[4].mMinimum = 176400.0;
-                ((AudioValueRange*)outData)[4].mMaximum = 176400.0;
-            }
-            if(theNumberItemsToFetch > 5)
-            {
-                ((AudioValueRange*)outData)[5].mMinimum = 192000.0;
-                ((AudioValueRange*)outData)[5].mMaximum = 192000.0;
-            }
-            if(theNumberItemsToFetch > 6)
-            {
-                ((AudioValueRange*)outData)[6].mMinimum = 352800.0;
-                ((AudioValueRange*)outData)[6].mMaximum = 352800.0;
-            }
-            if(theNumberItemsToFetch > 7)
-            {
-                ((AudioValueRange*)outData)[7].mMinimum = 384000.0;
-                ((AudioValueRange*)outData)[7].mMaximum = 384000.0;
-            }
-            if(theNumberItemsToFetch > 8)
-            {
-                ((AudioValueRange*)outData)[8].mMinimum = 705600.0;
-                ((AudioValueRange*)outData)[8].mMaximum = 705600.0;
-            }
-            if(theNumberItemsToFetch > 9)
-            {
-                ((AudioValueRange*)outData)[9].mMinimum = 768000.0;
-                ((AudioValueRange*)outData)[9].mMaximum = 768000.0;
-            }
-            if(theNumberItemsToFetch > 10)
-            {
-                ((AudioValueRange*)outData)[10].mMinimum = 8000.0;
-                ((AudioValueRange*)outData)[10].mMaximum = 8000.0;
-            }
-            if(theNumberItemsToFetch > 11)
-            {
-                ((AudioValueRange*)outData)[11].mMinimum = 16000.0;
-                ((AudioValueRange*)outData)[11].mMaximum = 16000.0;
-            }
-			
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioValueRange);
 			break;
@@ -2240,7 +2194,7 @@ static OSStatus	BlackHole_SetDevicePropertyData(AudioServerPlugInDriverRef inDri
 
 			//	check the arguments
 			FailWithAction(inDataSize != sizeof(Float64), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetDevicePropertyData: wrong size for the data for kAudioDevicePropertyNominalSampleRate");
-			FailWithAction((*((const Float64*)inData) != 44100.0) && (*((const Float64*)inData) != 48000.0) && (*((const Float64*)inData) != 88200.0) && (*((const Float64*)inData) != 96000.0) && (*((const Float64*)inData) != 176400.0) && (*((const Float64*)inData) != 192000.0) && (*((const Float64*)inData) != 352800.0) && (*((const Float64*)inData) != 384000.0) && (*((const Float64*)inData) != 705600.0) && (*((const Float64*)inData) != 768000.0) && (*((const Float64*)inData) != 8000.0) && (*((const Float64*)inData) != 16000.0), theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetDevicePropertyData: unsupported value for kAudioDevicePropertyNominalSampleRate");
+			FailWithAction(!is_valid_sample_rate(*(const Float64*)inData), theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetDevicePropertyData: unsupported value for kAudioDevicePropertyNominalSampleRate");
 			
 			//	make sure that the new value is different than the old value
 			pthread_mutex_lock(&gPlugIn_StateMutex);
@@ -2418,7 +2372,7 @@ static OSStatus	BlackHole_GetStreamPropertyDataSize(AudioServerPlugInDriverRef i
 
 		case kAudioStreamPropertyAvailableVirtualFormats:
 		case kAudioStreamPropertyAvailablePhysicalFormats:
-			*outDataSize = 12 * sizeof(AudioStreamRangedDescription);
+			*outDataSize = kDevice_SampleRatesSize * sizeof(AudioStreamRangedDescription);
 			break;
 
 		default:
@@ -2554,168 +2508,26 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
 			theNumberItemsToFetch = inDataSize / sizeof(AudioStreamRangedDescription);
 			
 			//	clamp it to the number of items we have
-			if(theNumberItemsToFetch > 12)
+			if(theNumberItemsToFetch > kDevice_SampleRatesSize)
 			{
-				theNumberItemsToFetch = 12;
+				theNumberItemsToFetch = kDevice_SampleRatesSize;
 			}
-			
-			//	fill out the return array
-			if(theNumberItemsToFetch > 0)
-			{
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mSampleRate = 44100.0;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[0].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[0].mSampleRateRange.mMinimum = 44100.0;
-                ((AudioStreamRangedDescription*)outData)[0].mSampleRateRange.mMaximum = 44100.0;
-			}
-			if(theNumberItemsToFetch > 1)
-			{
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mSampleRate = 48000.0;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mFormatID = kAudioFormatLinearPCM;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mFramesPerPacket = 1;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-				((AudioStreamRangedDescription*)outData)[1].mFormat.mBitsPerChannel = kBits_Per_Channel;
-				((AudioStreamRangedDescription*)outData)[1].mSampleRateRange.mMinimum = 48000.0;
-				((AudioStreamRangedDescription*)outData)[1].mSampleRateRange.mMaximum = 48000.0;
-			}
-            if(theNumberItemsToFetch > 2)
+
+            //	fill out the return array
+            for(UInt32 i = 0; i < theNumberItemsToFetch; i++)
             {
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mSampleRate = 88200.0;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[2].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[2].mSampleRateRange.mMinimum = 88200.0;
-                ((AudioStreamRangedDescription*)outData)[2].mSampleRateRange.mMaximum = 88200.0;
+                ((AudioStreamRangedDescription*)outData)[i].mFormat.mSampleRate = kDevice_SampleRates[i];
+                ((AudioStreamRangedDescription*)outData)[i].mFormat.mFormatID = kAudioFormatLinearPCM;
+                ((AudioStreamRangedDescription*)outData)[i].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+                ((AudioStreamRangedDescription*)outData)[i].mFormat.mBytesPerPacket = kBytes_Per_Frame;
+                ((AudioStreamRangedDescription*)outData)[i].mFormat.mFramesPerPacket = 1;
+                ((AudioStreamRangedDescription*)outData)[i].mFormat.mBytesPerFrame = kBytes_Per_Frame;
+                ((AudioStreamRangedDescription*)outData)[i].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
+                ((AudioStreamRangedDescription*)outData)[i].mFormat.mBitsPerChannel = kBits_Per_Channel;
+                ((AudioStreamRangedDescription*)outData)[i].mSampleRateRange.mMinimum = kDevice_SampleRates[i];
+                ((AudioStreamRangedDescription*)outData)[i].mSampleRateRange.mMaximum = kDevice_SampleRates[i];
             }
-            if(theNumberItemsToFetch > 3)
-            {
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mSampleRate = 96000.0;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[3].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[3].mSampleRateRange.mMinimum = 96000.0;
-                ((AudioStreamRangedDescription*)outData)[3].mSampleRateRange.mMaximum = 96000.0;
-            }
-            if(theNumberItemsToFetch > 4)
-            {
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mSampleRate = 176400.0;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[4].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[4].mSampleRateRange.mMinimum = 176400.0;
-                ((AudioStreamRangedDescription*)outData)[4].mSampleRateRange.mMaximum = 176400.0;
-            }
-            if(theNumberItemsToFetch > 5)
-            {
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mSampleRate = 192000.0;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[5].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[5].mSampleRateRange.mMinimum = 192000.0;
-                ((AudioStreamRangedDescription*)outData)[5].mSampleRateRange.mMaximum = 192000.0;
-            }
-            if(theNumberItemsToFetch > 6)
-            {
-                ((AudioStreamRangedDescription*)outData)[6].mFormat.mSampleRate = 352800.0;
-                ((AudioStreamRangedDescription*)outData)[6].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[6].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[6].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[6].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[6].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[6].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[6].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[6].mSampleRateRange.mMinimum = 352800.0;
-                ((AudioStreamRangedDescription*)outData)[6].mSampleRateRange.mMaximum = 352800.0;
-            }
-            if(theNumberItemsToFetch > 7)
-            {
-                ((AudioStreamRangedDescription*)outData)[7].mFormat.mSampleRate = 384000.0;
-                ((AudioStreamRangedDescription*)outData)[7].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[7].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[7].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[7].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[7].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[7].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[7].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[7].mSampleRateRange.mMinimum = 384000.0;
-                ((AudioStreamRangedDescription*)outData)[7].mSampleRateRange.mMaximum = 384000.0;
-            }
-            if(theNumberItemsToFetch > 8)
-            {
-                ((AudioStreamRangedDescription*)outData)[8].mFormat.mSampleRate = 705600.0;
-                ((AudioStreamRangedDescription*)outData)[8].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[8].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[8].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[8].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[8].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[8].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[8].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[8].mSampleRateRange.mMinimum = 705600.0;
-                ((AudioStreamRangedDescription*)outData)[8].mSampleRateRange.mMaximum = 705600.0;
-            }
-            if(theNumberItemsToFetch > 9)
-            {
-                ((AudioStreamRangedDescription*)outData)[9].mFormat.mSampleRate = 768000.0;
-                ((AudioStreamRangedDescription*)outData)[9].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[9].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[9].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[9].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[9].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[9].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[9].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[9].mSampleRateRange.mMinimum = 768000.0;
-                ((AudioStreamRangedDescription*)outData)[9].mSampleRateRange.mMaximum = 768000.0;
-            }
-            if(theNumberItemsToFetch > 10)
-            {
-                ((AudioStreamRangedDescription*)outData)[10].mFormat.mSampleRate = 8000.0;
-                ((AudioStreamRangedDescription*)outData)[10].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[10].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[10].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[10].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[10].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[10].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[10].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[10].mSampleRateRange.mMinimum = 8000.0;
-                ((AudioStreamRangedDescription*)outData)[10].mSampleRateRange.mMaximum = 8000.0;
-            }
-            if(theNumberItemsToFetch > 11)
-            {
-                ((AudioStreamRangedDescription*)outData)[11].mFormat.mSampleRate = 16000.0;
-                ((AudioStreamRangedDescription*)outData)[11].mFormat.mFormatID = kAudioFormatLinearPCM;
-                ((AudioStreamRangedDescription*)outData)[11].mFormat.mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                ((AudioStreamRangedDescription*)outData)[11].mFormat.mBytesPerPacket = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[11].mFormat.mFramesPerPacket = 1;
-                ((AudioStreamRangedDescription*)outData)[11].mFormat.mBytesPerFrame = kBytes_Per_Frame;
-                ((AudioStreamRangedDescription*)outData)[11].mFormat.mChannelsPerFrame = kNumber_Of_Channels;
-                ((AudioStreamRangedDescription*)outData)[11].mFormat.mBitsPerChannel = kBits_Per_Channel;
-                ((AudioStreamRangedDescription*)outData)[11].mSampleRateRange.mMinimum = 16000.0;
-                ((AudioStreamRangedDescription*)outData)[11].mSampleRateRange.mMaximum = 16000.0;
-            }
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioStreamRangedDescription);
 			break;
@@ -2797,7 +2609,7 @@ static OSStatus	BlackHole_SetStreamPropertyData(AudioServerPlugInDriverRef inDri
 			FailWithAction(((const AudioStreamBasicDescription*)inData)->mBytesPerFrame != kBytes_Per_Frame, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported bytes per frame for kAudioStreamPropertyPhysicalFormat");
 			FailWithAction(((const AudioStreamBasicDescription*)inData)->mChannelsPerFrame != kNumber_Of_Channels, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported channels per frame for kAudioStreamPropertyPhysicalFormat");
 			FailWithAction(((const AudioStreamBasicDescription*)inData)->mBitsPerChannel != kBits_Per_Channel, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported bits per channel for kAudioStreamPropertyPhysicalFormat");
-			FailWithAction((((const AudioStreamBasicDescription*)inData)->mSampleRate != 44100.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 48000.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 88200.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 96000.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 176400.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 192000.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 352800.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 384000.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 705600.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 768000.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 8000.0) && (((const AudioStreamBasicDescription*)inData)->mSampleRate != 16000.0), theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetStreamPropertyData: unsupported sample rate for kAudioStreamPropertyPhysicalFormat");
+			FailWithAction(!is_valid_sample_rate(((const AudioStreamBasicDescription*)inData)->mSampleRate), theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetStreamPropertyData: unsupported sample rate for kAudioStreamPropertyPhysicalFormat");
 			
 			//	If we made it this far, the requested format is something we support, so make sure the sample rate is actually different
 			pthread_mutex_lock(&gPlugIn_StateMutex);
@@ -3150,7 +2962,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					//	Note that we need to take the state lock to examine the value.
 					FailWithAction(inDataSize < sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioLevelControlPropertyScalarValue for the volume control");
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					*((Float32*)outData) = volume_to_scalar((inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Master_Value : gVolume_Master_Value);
+					*((Float32*)outData) = volume_to_scalar(gVolume_Master_Value);
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					*outDataSize = sizeof(Float32);
 					break;
@@ -3160,7 +2972,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					//	Note that we need to take the state lock to examine the value.
 					FailWithAction(inDataSize < sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioLevelControlPropertyDecibelValue for the volume control");
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					*((Float32*)outData) = (inObjectID == kObjectID_Volume_Input_Master) ? gVolume_Master_Value : gVolume_Master_Value;
+					*((Float32*)outData) = gVolume_Master_Value;
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					*((Float32*)outData) = volume_to_decibel(*((Float32*)outData));
 					
@@ -3279,7 +3091,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					//	Note that we need to take the state lock to examine this value.
 					FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioBooleanControlPropertyValue for the mute control");
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					*((UInt32*)outData) = (inObjectID == kObjectID_Mute_Input_Master) ? (gMute_Master_Value ? 1 : 0) : (gMute_Master_Value ? 1 : 0);
+                    *((UInt32*)outData) = gMute_Master_Value ? 1 : 0;
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					*outDataSize = sizeof(UInt32);
 					break;
@@ -3339,34 +3151,17 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 						theNewVolume = 1.0;
 					}
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					if(inObjectID == kObjectID_Volume_Input_Master)
-					{
-						if(gVolume_Master_Value != theNewVolume)
-						{
-							gVolume_Master_Value = theNewVolume;
-							*outNumberPropertiesChanged = 2;
-							outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
-							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
-							outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
-							outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
-						}
-					}
-					else
-					{
-						if(gVolume_Master_Value != theNewVolume)
-						{
-							gVolume_Master_Value = theNewVolume;
-							*outNumberPropertiesChanged = 2;
-							outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
-							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
-							outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
-							outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
-						}
-					}
+                    if(gVolume_Master_Value != theNewVolume)
+                    {
+                        gVolume_Master_Value = theNewVolume;
+                        *outNumberPropertiesChanged = 2;
+                        outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
+                        outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
+                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
+                        outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
+                        outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
+                        outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
+                    }
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					break;
 				
@@ -3386,34 +3181,17 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					}
 					theNewVolume = volume_from_decibel(theNewVolume);
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					if(inObjectID == kObjectID_Volume_Input_Master)
-					{
-						if(gVolume_Master_Value != theNewVolume)
-						{
-							gVolume_Master_Value = theNewVolume;
-							*outNumberPropertiesChanged = 2;
-							outChangedAddresses[0].mSelector = gVolume_Master_Value;
-							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
-							outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
-							outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
-						}
-					}
-					else
-					{
-						if(gVolume_Master_Value != theNewVolume)
-						{
-							gVolume_Master_Value = theNewVolume;
-							*outNumberPropertiesChanged = 2;
-							outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
-							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
-							outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
-							outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
-						}
-					}
+                    if(gVolume_Master_Value != theNewVolume)
+                    {
+                        gVolume_Master_Value = theNewVolume;
+                        *outNumberPropertiesChanged = 2;
+                        outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
+                        outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
+                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
+                        outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
+                        outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
+                        outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
+                    }
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					break;
 				
@@ -3430,28 +3208,14 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 				case kAudioBooleanControlPropertyValue:
 					FailWithAction(inDataSize != sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetControlPropertyData: wrong size for the data for kAudioBooleanControlPropertyValue");
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					if(inObjectID == kObjectID_Mute_Input_Master)
-					{
-						if(gMute_Master_Value != (*((const UInt32*)inData) != 0))
-						{
-							gMute_Master_Value = *((const UInt32*)inData) != 0;
-							*outNumberPropertiesChanged = 1;
-							outChangedAddresses[0].mSelector = kAudioBooleanControlPropertyValue;
-							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
-						}
-					}
-					else
-					{
-						if(gMute_Master_Value != (*((const UInt32*)inData) != 0))
-						{
-							gMute_Master_Value = *((const UInt32*)inData) != 0;
-							*outNumberPropertiesChanged = 1;
-							outChangedAddresses[0].mSelector = kAudioBooleanControlPropertyValue;
-							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
-						}
-					}
+                    if(gMute_Master_Value != (*((const UInt32*)inData) != 0))
+                    {
+                        gMute_Master_Value = *((const UInt32*)inData) != 0;
+                        *outNumberPropertiesChanged = 1;
+                        outChangedAddresses[0].mSelector = kAudioBooleanControlPropertyValue;
+                        outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
+                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
+                    }
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					break;
 				

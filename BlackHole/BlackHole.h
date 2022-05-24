@@ -9,8 +9,6 @@
 #ifndef BlackHole_h
 #define BlackHole_h
 
-#endif /* BlackHole_h */
-
 #include <CoreAudio/AudioServerPlugIn.h>
 #include <dispatch/dispatch.h>
 #include <mach/mach_time.h>
@@ -171,6 +169,23 @@ static struct ObjectInfo            kDevice_ObjectList[]                = {
 
 static const UInt32                 kDevice_ObjectListSize              = sizeof(kDevice_ObjectList) / sizeof(struct ObjectInfo);
 
+static Float64                      kDevice_SampleRates[]               = {
+                                                                              8000,
+                                                                             16000,
+                                                                             44100,
+                                                                             48000,
+                                                                             88200,
+                                                                             96000,
+                                                                            176400,
+                                                                            192000,
+                                                                            352800,
+                                                                            384000,
+                                                                            705600,
+                                                                            768000
+                                                                           };
+
+static const UInt32                 kDevice_SampleRatesSize             = sizeof(kDevice_SampleRates) / sizeof(Float64);
+
 #define                             kDevice_Name                        "BlackHole %ich"
 #define                             kManufacturer_Name                  "Existential Audio Inc."
 
@@ -276,3 +291,5 @@ static AudioServerPlugInDriverInterface    gAudioServerPlugInDriverInterface =
 };
 static AudioServerPlugInDriverInterface*    gAudioServerPlugInDriverInterfacePtr    = &gAudioServerPlugInDriverInterface;
 static AudioServerPlugInDriverRef            gAudioServerPlugInDriverRef                = &gAudioServerPlugInDriverInterfacePtr;
+
+#endif /* BlackHole_h */
