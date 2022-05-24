@@ -46,6 +46,45 @@ static Float32 volume_from_scalar(Float32 scalar)
 	return volume_from_decibel(decibel);
 }
 
+static UInt32 device_object_list_size(AudioObjectPropertyScope scope) {
+    if (scope == kAudioObjectPropertyScopeGlobal)
+    {
+        return kDevice_ObjectListSize;
+    }
+
+    UInt32 count = 0;
+    for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
+    {
+        count += (kDevice_ObjectList[i].scope == scope);
+    }
+
+    return count;
+}
+
+static UInt32 device_stream_list_size(AudioObjectPropertyScope scope) {
+    UInt32 count = 0;
+    for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
+    {
+        count += (kDevice_ObjectList[i].type == kObjectType_Stream && (kDevice_ObjectList[i].scope == scope || scope == kAudioObjectPropertyScopeGlobal));
+    }
+
+    return count;
+}
+
+static UInt32 device_control_list_size() {
+    UInt32 count = 0;
+    for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
+    {
+        count += (kDevice_ObjectList[i].type == kObjectType_Control);
+    }
+
+    return count;
+}
+
+static UInt32 minimum(UInt32 a, UInt32 b) {
+    return a < b ? a : b;
+}
+
 static bool is_valid_sample_rate(Float64 sample_rate)
 {
     for(UInt32 i = 0; i < kDevice_SampleRatesSize; i++)
@@ -58,7 +97,6 @@ static bool is_valid_sample_rate(Float64 sample_rate)
 
     return false;
 }
-
 
 #pragma mark Factory
 
@@ -1689,20 +1727,7 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 			
 		case kAudioObjectPropertyOwnedObjects:
-			switch(inAddress->mScope)
-			{
-				case kAudioObjectPropertyScopeGlobal:
-					*outDataSize = 8 * sizeof(AudioObjectID);
-					break;
-					
-				case kAudioObjectPropertyScopeInput:
-					*outDataSize = 4 * sizeof(AudioObjectID);
-					break;
-					
-				case kAudioObjectPropertyScopeOutput:
-					*outDataSize = 4 * sizeof(AudioObjectID);
-					break;
-			};
+            *outDataSize = device_object_list_size(inAddress->mScope) * sizeof(AudioObjectID);
 			break;
 
 		case kAudioDevicePropertyDeviceUID:
@@ -1746,24 +1771,11 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 
 		case kAudioDevicePropertyStreams:
-			switch(inAddress->mScope)
-			{
-				case kAudioObjectPropertyScopeGlobal:
-					*outDataSize = 2 * sizeof(AudioObjectID);
-					break;
-					
-				case kAudioObjectPropertyScopeInput:
-					*outDataSize = 1 * sizeof(AudioObjectID);
-					break;
-					
-				case kAudioObjectPropertyScopeOutput:
-					*outDataSize = 1 * sizeof(AudioObjectID);
-					break;
-			};
+            *outDataSize = device_stream_list_size(inAddress->mScope) * sizeof(AudioObjectID);
 			break;
 
 		case kAudioObjectPropertyControlList:
-			*outDataSize = 6 * sizeof(AudioObjectID);
+            *outDataSize = device_control_list_size() * sizeof(AudioObjectID);
 			break;
 
 		case kAudioDevicePropertySafetyOffset:
@@ -1869,55 +1881,17 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	Calculate the number of items that have been requested. Note that this
 			//	number is allowed to be smaller than the actual size of the list. In such
 			//	case, only that number of items will be returned
-			theNumberItemsToFetch = inDataSize / sizeof(AudioObjectID);
-			
-			//	The device owns its streams and controls. Note that what is returned here
-			//	depends on the scope requested.
-			switch(inAddress->mScope)
-			{
-				case kAudioObjectPropertyScopeGlobal:
-					//	global scope means return all objects
-					if(theNumberItemsToFetch > 6)
-					{
-						theNumberItemsToFetch = 6;
-					}
-					
-					//	fill out the list with as many objects as requested, which is everything
-					for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-					{
-						((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
-					}
-					break;
-					
-				case kAudioObjectPropertyScopeInput:
-					//	input scope means just the objects on the input side
-					if(theNumberItemsToFetch > 3)
-					{
-						theNumberItemsToFetch = 3;
-					}
-					
-					//	fill out the list with the right objects
-					for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-					{
-						((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Input + theItemIndex;
-					}
-					break;
-					
-				case kAudioObjectPropertyScopeOutput:
-					//	output scope means just the objects on the output side
-					if(theNumberItemsToFetch > 3)
-					{
-						theNumberItemsToFetch = 3;
-					}
-					
-					//	fill out the list with the right objects
-					for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-					{
-						((AudioObjectID*)outData)[theItemIndex] = kObjectID_Stream_Output + theItemIndex;
-					}
-					break;
-			};
-			
+            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_object_list_size(inAddress->mScope));
+
+            //    fill out the list with the right objects
+            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+            {
+                if (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal)
+                {
+                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                }
+            }
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
@@ -2042,58 +2016,18 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	Calculate the number of items that have been requested. Note that this
 			//	number is allowed to be smaller than the actual size of the list. In such
 			//	case, only that number of items will be returned
-			theNumberItemsToFetch = inDataSize / sizeof(AudioObjectID);
-			
-			//	Note that what is returned here depends on the scope requested.
-			switch(inAddress->mScope)
-			{
-				case kAudioObjectPropertyScopeGlobal:
-					//	global scope means return all streams
-					if(theNumberItemsToFetch > 2)
-					{
-						theNumberItemsToFetch = 2;
-					}
-					
-					//	fill out the list with as many objects as requested
-					if(theNumberItemsToFetch > 0)
-					{
-						((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
-					}
-					if(theNumberItemsToFetch > 1)
-					{
-						((AudioObjectID*)outData)[1] = kObjectID_Stream_Output;
-					}
-					break;
-					
-				case kAudioObjectPropertyScopeInput:
-					//	input scope means just the objects on the input side
-					if(theNumberItemsToFetch > 1)
-					{
-						theNumberItemsToFetch = 1;
-					}
-					
-					//	fill out the list with as many objects as requested
-					if(theNumberItemsToFetch > 0)
-					{
-						((AudioObjectID*)outData)[0] = kObjectID_Stream_Input;
-					}
-					break;
-					
-				case kAudioObjectPropertyScopeOutput:
-					//	output scope means just the objects on the output side
-					if(theNumberItemsToFetch > 1)
-					{
-						theNumberItemsToFetch = 1;
-					}
-					
-					//	fill out the list with as many objects as requested
-					if(theNumberItemsToFetch > 0)
-					{
-						((AudioObjectID*)outData)[0] = kObjectID_Stream_Output;
-					}
-					break;
-			};
-			
+            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_stream_list_size(inAddress->mScope));
+
+            //    fill out the list with as many objects as requested
+            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+            {
+                if ((kDevice_ObjectList[i].type == kObjectType_Stream) &&
+                    (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal))
+                {
+                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                }
+            }
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
@@ -2102,25 +2036,17 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	Calculate the number of items that have been requested. Note that this
 			//	number is allowed to be smaller than the actual size of the list. In such
 			//	case, only that number of items will be returned
-			theNumberItemsToFetch = inDataSize / sizeof(AudioObjectID);
-			if(theNumberItemsToFetch > 4)
-			{
-				theNumberItemsToFetch = 4;
-			}
-			
-			//	fill out the list with as many objects as requested, which is everything
-			for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
-			{
-				if(theItemIndex < 2)
-				{
-					((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Input_Master + theItemIndex;
-				}
-				else
-				{
-					((AudioObjectID*)outData)[theItemIndex] = kObjectID_Volume_Output_Master + (theItemIndex - 2);
-				}
-			}
-			
+            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_control_list_size());
+
+            //    fill out the list with as many objects as requested
+            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+            {
+                if (kDevice_ObjectList[i].type == kObjectType_Control)
+                {
+                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                }
+            }
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
