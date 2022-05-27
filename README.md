@@ -77,6 +77,9 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki#advanced-cus
 ### Reaper
 - Reaper to Zoom by Noah Liebman (https://noahliebman.net/2020/12/telephone-colophon-or-how-i-overengineered-my-call-audio/)
 
+### Java
+- Capture microphone and audio file input to BlackHole and use in any voice chat application to act as a soundboard (https://github.com/sethmachine/universal-sound-board)
+
 ### Record System Audio
 1. [Setup Multi-output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
 2. In `Audio Midi Setup`->`Audio Devices` Right-click on the newly created Multi-output and select "Use This Device For Sound Output"
