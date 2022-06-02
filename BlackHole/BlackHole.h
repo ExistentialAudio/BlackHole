@@ -32,18 +32,18 @@
 
     #define    DebugMsg(inFormat, ...)    syslog(LOG_NOTICE, inFormat, ## __VA_ARGS__)
 
-    #define    FailIf(inCondition, inHandler, inMessage)                                    \
+    #define    FailIf(inCondition, inHandler, inMessage)                           \
     if(inCondition)                                                                \
-    {                                                                            \
-        DebugMsg(inMessage);                                                    \
+    {                                                                              \
+        DebugMsg(inMessage);                                                       \
         goto inHandler;                                                            \
     }
 
-    #define    FailWithAction(inCondition, inAction, inHandler, inMessage)                    \
+    #define    FailWithAction(inCondition, inAction, inHandler, inMessage)         \
     if(inCondition)                                                                \
-    {                                                                            \
-        DebugMsg(inMessage);                                                    \
-        { inAction; }                                                            \
+    {                                                                              \
+        DebugMsg(inMessage);                                                       \
+        { inAction; }                                                              \
         goto inHandler;                                                            \
         }
 
@@ -51,17 +51,17 @@
 
     #define    DebugMsg(inFormat, ...)
 
-    #define    FailIf(inCondition, inHandler, inMessage)                                    \
+    #define    FailIf(inCondition, inHandler, inMessage)                           \
     if(inCondition)                                                                \
-    {                                                                            \
-    goto inHandler;                                                            \
+    {                                                                              \
+    goto inHandler;                                                                \
     }
 
-    #define    FailWithAction(inCondition, inAction, inHandler, inMessage)                    \
+    #define    FailWithAction(inCondition, inAction, inHandler, inMessage)         \
     if(inCondition)                                                                \
-    {                                                                            \
-    { inAction; }                                                            \
-    goto inHandler;                                                            \
+    {                                                                              \
+    { inAction; }                                                                  \
+    goto inHandler;                                                                \
     }
 
 #endif
@@ -110,6 +110,7 @@ enum
     kObjectID_Stream_Output             = 7,
     kObjectID_Volume_Output_Master      = 8,
     kObjectID_Mute_Output_Master        = 9,
+    kObjectID_Device2                   = 10,
 };
 
 enum ObjectType
@@ -130,17 +131,45 @@ struct ObjectInfo {
 //    so that each object's state can be tracked individually.
 //    Note also that we share a single mutex across all objects to be thread safe for the same reason.
 
+
+#ifndef kDriver_Name
+#define                             kDriver_Name                        "BlackHole"
+#endif
+
+#ifndef kPlugIn_BundleID
 #define                             kPlugIn_BundleID                    "audio.existential.BlackHole2ch"
+#endif
+
+#ifndef kPlugIn_Icon
+#define                             kPlugIn_Icon                        "BlackHole.icns"
+#endif
+
+#ifndef kHas_Driver_Name_Format
+#define                             kHas_Driver_Name_Format             true
+#endif
+
+#if kHas_Driver_Name_Format
+#define                             kDriver_Name_Format                 "%ich"
+#define                             kBox_UID                            kDriver_Name kDriver_Name_Format "_UID"
+#define                             kDevice_UID                         kDriver_Name kDriver_Name_Format "_UID"
+#define                             kDevice2_UID                        kDriver_Name kDriver_Name_Format "_2_UID"
+#define                             kDevice_ModelUID                    kDriver_Name kDriver_Name_Format "_ModelUID"
+#else
+#define                             kBox_UID                            kDriver_Name "_UID"
+#define                             kDevice_UID                         kDriver_Name "_UID"
+#define                             kDevice2_UID                        kDriver_Name "_2_UID"
+#define                             kDevice_ModelUID                    kDriver_Name "_ModelUID"
+#endif
+
 static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
 static UInt32                       gPlugIn_RefCount                    = 0;
 static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
 
-#define                             kBox_UID                            "BlackHole%ich_UID"
+
 static CFStringRef                  gBox_Name                           = NULL;
 static Boolean                      gBox_Acquired                       = true;
 
-#define                             kDevice_UID                         "BlackHole%ich_UID"
-#define                             kDevice_ModelUID                    "BlackHole%ich_ModelUID"
+
 static pthread_mutex_t              gDevice_IOMutex                     = PTHREAD_MUTEX_INITIALIZER;
 static Float64                      gDevice_SampleRate                  = 44100.0;
 static UInt64                       gDevice_IOIsRunning                 = 0;
@@ -186,11 +215,54 @@ static Float64                      kDevice_SampleRates[]               = {
 
 static const UInt32                 kDevice_SampleRatesSize             = sizeof(kDevice_SampleRates) / sizeof(Float64);
 
-#define                             kDevice_Name                        "BlackHole %ich"
+#ifndef kDevice_Name
+#define                             kDevice_Name                        kDriver_Name " %ich"
+#endif
+
+#ifndef kDevice2_Name
+#define                             kDevice2_Name                       kDriver_Name " %ich 2"
+#endif
+
+
+
+#ifndef kDevice_IsHidden
+#define                             kDevice_IsHidden                    false
+#endif
+
+#ifndef kDevice2_IsHidden
+#define                             kDevice2_IsHidden                   true
+#endif
+
+
+
+#ifndef kDevice_HasInput
+#define                             kDevice_HasInput                    true
+#endif
+
+#ifndef kDevice_HasOutput
+#define                             kDevice_HasOutput                   true
+#endif
+
+#ifndef kDevice2_HasInput
+#define                             kDevice2_HasInput                   true
+#endif
+
+#ifndef kDevice2_HasOutput
+#define                             kDevice2_HasOutput                  true
+#endif
+
+
+
+#ifndef kManufacturer_Name
 #define                             kManufacturer_Name                  "Existential Audio Inc."
+#endif
 
 #define                             kLatency_Frame_Size                 0
+
+#ifndef kNumber_Of_Channels
 #define                             kNumber_Of_Channels                 2
+#endif
+
 #define                             kBits_Per_Channel                   32
 #define                             kBytes_Per_Channel                  (kBits_Per_Channel/ 8)
 #define                             kBytes_Per_Frame                    (kNumber_Of_Channels * kBytes_Per_Channel)

@@ -15,6 +15,22 @@
 //	System Includes
 #include "BlackHole.h"
 
+#define RETURN_FORMATTED_STRING(_string_fmt)                          \
+if(kHas_Driver_Name_Format)                                           \
+{                                                                     \
+	return CFStringCreateWithFormat(NULL, NULL, CFSTR(_string_fmt), kNumber_Of_Channels); \
+}                                                                     \
+else                                                                  \
+{                                                                     \
+	return CFStringCreateWithCString(NULL, _string_fmt, kCFStringEncodingUTF8); \
+}
+
+static CFStringRef get_box_uid()          { RETURN_FORMATTED_STRING(kBox_UID) }
+static CFStringRef get_device_uid()       { RETURN_FORMATTED_STRING(kDevice_UID) }
+static CFStringRef get_device_name()      { RETURN_FORMATTED_STRING(kDevice_Name) }
+static CFStringRef get_device2_uid()       { RETURN_FORMATTED_STRING(kDevice2_UID) }
+static CFStringRef get_device2_name()      { RETURN_FORMATTED_STRING(kDevice2_Name) }
+static CFStringRef get_device_model_uid() { RETURN_FORMATTED_STRING(kDevice_ModelUID) }
 
 // Volume conversions
 
@@ -333,7 +349,7 @@ static OSStatus	BlackHole_AddDeviceClient(AudioServerPlugInDriverRef inDriver, A
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_AddDeviceClient: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_AddDeviceClient: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_AddDeviceClient: bad device ID");
 
 Done:
 	return theAnswer;
@@ -352,7 +368,7 @@ static OSStatus	BlackHole_RemoveDeviceClient(AudioServerPlugInDriverRef inDriver
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_RemoveDeviceClient: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_RemoveDeviceClient: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_RemoveDeviceClient: bad device ID");
 
 Done:
 	return theAnswer;
@@ -381,9 +397,9 @@ static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriv
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad device ID");
-	FailWithAction(!is_valid_sample_rate(inChangeAction),
-                   theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad sample rate");
+    FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad device ID");
+    FailWithAction(!is_valid_sample_rate(inChangeAction), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad sample rate");
+                   
 	
 	//	lock the state mutex
 	pthread_mutex_lock(&gPlugIn_StateMutex);
@@ -421,7 +437,7 @@ static OSStatus	BlackHole_AbortDeviceConfigurationChange(AudioServerPlugInDriver
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad device ID");
 
 Done:
 	return theAnswer;
@@ -454,6 +470,7 @@ static Boolean	BlackHole_HasProperty(AudioServerPlugInDriverRef inDriver, AudioO
 			break;
 		
 		case kObjectID_Device:
+        case kObjectID_Device2:
 			theAnswer = BlackHole_HasDeviceProperty(inDriver, inObjectID, inClientProcessID, inAddress);
 			break;
 		
@@ -501,6 +518,7 @@ static OSStatus	BlackHole_IsPropertySettable(AudioServerPlugInDriverRef inDriver
 			break;
 		
 		case kObjectID_Device:
+        case kObjectID_Device2:
 			theAnswer = BlackHole_IsDevicePropertySettable(inDriver, inObjectID, inClientProcessID, inAddress, outIsSettable);
 			break;
 		
@@ -551,6 +569,7 @@ static OSStatus	BlackHole_GetPropertyDataSize(AudioServerPlugInDriverRef inDrive
 			break;
 		
 		case kObjectID_Device:
+        case kObjectID_Device2:
 			theAnswer = BlackHole_GetDevicePropertyDataSize(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, outDataSize);
 			break;
 		
@@ -602,6 +621,7 @@ static OSStatus	BlackHole_GetPropertyData(AudioServerPlugInDriverRef inDriver, A
 			break;
 		
 		case kObjectID_Device:
+        case kObjectID_Device2:
 			theAnswer = BlackHole_GetDevicePropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, outDataSize, outData);
 			break;
 		
@@ -651,6 +671,7 @@ static OSStatus	BlackHole_SetPropertyData(AudioServerPlugInDriverRef inDriver, A
 			break;
 		
 		case kObjectID_Device:
+        case kObjectID_Device2:
 			theAnswer = BlackHole_SetDevicePropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData, &theNumberPropertiesChanged, theChangedAddresses);
 			break;
 		
@@ -822,7 +843,7 @@ static OSStatus	BlackHole_GetPlugInPropertyDataSize(AudioServerPlugInDriverRef i
 		case kAudioPlugInPropertyDeviceList:
 			if(gBox_Acquired)
 			{
-				*outDataSize = sizeof(AudioClassID);
+				*outDataSize = sizeof(AudioClassID)*2;
 			}
 			else
 			{
@@ -952,10 +973,14 @@ static OSStatus	BlackHole_GetPlugInPropertyData(AudioServerPlugInDriverRef inDri
 			//	just the one box. Note that it is not an error if the string in the
 			//	qualifier doesn't match any devices. In such case, kAudioObjectUnknown is
 			//	the object ID to return.
+			FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: not enough space for the return value of kAudioPlugInPropertyTranslateUIDToBox");
+			FailWithAction(inQualifierDataSize == sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToBox");
+			FailWithAction(inQualifierData == NULL, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: no qualifier for kAudioPlugInPropertyTranslateUIDToBox");
+
+			CFStringRef boxUID = get_box_uid();
+
+			if(CFStringCompare(*((CFStringRef*)inQualifierData), boxUID, 0) == kCFCompareEqualTo)
 			{
-				FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: not enough space for the return value of kAudioPlugInPropertyTranslateUIDToBox");
-				FailWithAction(inQualifierDataSize != sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToBox");
-				FailWithAction(inQualifierData == NULL, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: no qualifier for kAudioPlugInPropertyTranslateUIDToBox");
 				CFStringRef formattedString = CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), kNumber_Of_Channels);
 				if(CFStringCompare(*((CFStringRef*)inQualifierData), formattedString, 0) == kCFCompareEqualTo)
 				{
@@ -967,7 +992,15 @@ static OSStatus	BlackHole_GetPlugInPropertyData(AudioServerPlugInDriverRef inDri
 				}
 				*outDataSize = sizeof(AudioObjectID);
 				CFRelease(formattedString);
+
+				*((AudioObjectID*)outData) = kObjectID_Box;
 			}
+			else
+			{
+				*((AudioObjectID*)outData) = kAudioObjectUnknown;
+			}
+			*outDataSize = sizeof(AudioObjectID);
+			CFRelease(boxUID);
 			break;
 			
 		case kAudioPlugInPropertyDeviceList:
@@ -978,16 +1011,21 @@ static OSStatus	BlackHole_GetPlugInPropertyData(AudioServerPlugInDriverRef inDri
 			
 			//	Clamp that to the number of devices this driver implements (which is just 1 if the
 			//	box has been acquired)
-			if(theNumberItemsToFetch > (gBox_Acquired ? 1 : 0))
+			if(theNumberItemsToFetch > (gBox_Acquired ? 2 : 0))
 			{
-				theNumberItemsToFetch = (gBox_Acquired ? 1 : 0);
+				theNumberItemsToFetch = (gBox_Acquired ? 2 : 0);
 			}
 			
 			//	Write the devices' object IDs into the return value
-			if(theNumberItemsToFetch > 0)
+			if(theNumberItemsToFetch > 1)
 			{
 				((AudioObjectID*)outData)[0] = kObjectID_Device;
+                ((AudioObjectID*)outData)[1] = kObjectID_Device2;
 			}
+            else if(theNumberItemsToFetch > 0)
+            {
+                ((AudioObjectID*)outData)[0] = kObjectID_Device;
+            }
 			
 			//	Return how many bytes we wrote to
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioClassID);
@@ -999,22 +1037,30 @@ static OSStatus	BlackHole_GetPlugInPropertyData(AudioServerPlugInDriverRef inDri
 			//	just the one device. Note that it is not an error if the string in the
 			//	qualifier doesn't match any devices. In such case, kAudioObjectUnknown is
 			//	the object ID to return.
+			FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: not enough space for the return value of kAudioPlugInPropertyTranslateUIDToDevice");
+			FailWithAction(inQualifierDataSize == sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToDevice");
+			FailWithAction(inQualifierData == NULL, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: no qualifier for kAudioPlugInPropertyTranslateUIDToDevice");
+            
+            
+			
+			CFStringRef deviceUID = get_device_uid();
+            CFStringRef device2UID = get_device2_uid();
+
+			if(CFStringCompare(*((CFStringRef*)inQualifierData), deviceUID, 0) == kCFCompareEqualTo)
 			{
-				FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: not enough space for the return value of kAudioPlugInPropertyTranslateUIDToDevice");
-				FailWithAction(inQualifierDataSize != sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: the qualifier is the wrong size for kAudioPlugInPropertyTranslateUIDToDevice");
-				FailWithAction(inQualifierData == NULL, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetPlugInPropertyData: no qualifier for kAudioPlugInPropertyTranslateUIDToDevice");
-				CFStringRef formattedString = CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), kNumber_Of_Channels);
-				if(CFStringCompare(*((CFStringRef*)inQualifierData), formattedString, 0) == kCFCompareEqualTo)
-				{
-					*((AudioObjectID*)outData) = kObjectID_Device;
-				}
-				else
-				{
-					*((AudioObjectID*)outData) = kAudioObjectUnknown;
-				}
-				*outDataSize = sizeof(AudioObjectID);
-				CFRelease(formattedString);
+				*((AudioObjectID*)outData) = kObjectID_Device;
 			}
+            else if(CFStringCompare(*((CFStringRef*)inQualifierData), device2UID, 0) == kCFCompareEqualTo)
+            {
+                *((AudioObjectID*)outData) = kObjectID_Device2;
+            }
+			else
+			{
+				*((AudioObjectID*)outData) = kAudioObjectUnknown;
+			}
+			*outDataSize = sizeof(AudioObjectID);
+			CFRelease(deviceUID);
+            CFRelease(device2UID);
 			break;
 			
 		case kAudioPlugInPropertyResourceBundle:
@@ -1265,7 +1311,7 @@ static OSStatus	BlackHole_GetBoxPropertyDataSize(AudioServerPlugInDriverRef inDr
 		case kAudioBoxPropertyDeviceList:
 			{
 				pthread_mutex_lock(&gPlugIn_StateMutex);
-				*outDataSize = gBox_Acquired ? sizeof(AudioObjectID) : 0;
+				*outDataSize = gBox_Acquired ? sizeof(AudioObjectID) * 2 : 0;
 				pthread_mutex_unlock(&gPlugIn_StateMutex);
 			}
 			break;
@@ -1377,7 +1423,8 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 		case kAudioBoxPropertyBoxUID:
 			//	Boxes have UIDs the same as devices
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioObjectPropertyManufacturer for the box");
-			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kBox_UID), kNumber_Of_Channels);
+
+			*((CFStringRef*)outData) = get_box_uid();
 			break;
 			
 		case kAudioBoxPropertyTransportType:
@@ -1445,14 +1492,24 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
                 }
                 else
                 {
-                    *((AudioObjectID*)outData) = kObjectID_Device;
-                    *outDataSize = sizeof(AudioObjectID);
+                    if (inDataSize >= sizeof(AudioObjectID) * 2)
+                    {
+                        ((AudioObjectID*)outData)[0] = kObjectID_Device;
+                        ((AudioObjectID*)outData)[1] = kObjectID_Device2;
+                        *outDataSize = sizeof(AudioObjectID) * 2;
+                    }
+                    else
+                    {
+                        ((AudioObjectID*)outData)[0] = kObjectID_Device;
+                        *outDataSize = sizeof(AudioObjectID) * 1;
+                    }
                 }
 			}
 			else
 			{
 				*outDataSize = 0;
 			}
+            
 			pthread_mutex_unlock(&gPlugIn_StateMutex);
 			break;
 			
@@ -1580,7 +1637,7 @@ static Boolean	BlackHole_HasDeviceProperty(AudioServerPlugInDriverRef inDriver, 
 	//	check the arguments
 	FailIf(inDriver != gAudioServerPlugInDriverRef, Done, "BlackHole_HasDeviceProperty: bad driver reference");
 	FailIf(inAddress == NULL, Done, "BlackHole_HasDeviceProperty: no address");
-	FailIf(inObjectID != kObjectID_Device, Done, "BlackHole_HasDeviceProperty: not the device object");
+	FailIf(inObjectID != kObjectID_Device && inObjectID != kObjectID_Device2, Done, "BlackHole_HasDeviceProperty: not the device object");
 	
 	//	Note that for each object, this driver implements all the required properties plus a few
 	//	extras that are useful but not required. There is more detailed commentary about each
@@ -1638,7 +1695,7 @@ static OSStatus	BlackHole_IsDevicePropertySettable(AudioServerPlugInDriverRef in
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_IsDevicePropertySettable: bad driver reference");
 	FailWithAction(inAddress == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_IsDevicePropertySettable: no address");
 	FailWithAction(outIsSettable == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_IsDevicePropertySettable: no place to put the return value");
-	FailWithAction(inObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_IsDevicePropertySettable: not the device object");
+	FailWithAction(inObjectID != kObjectID_Device && inObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_IsDevicePropertySettable: not the device object");
 	
 	//	Note that for each object, this driver implements all the required properties plus a few
 	//	extras that are useful but not required. There is more detailed commentary about each
@@ -1699,7 +1756,7 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetDevicePropertyDataSize: bad driver reference");
 	FailWithAction(inAddress == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_GetDevicePropertyDataSize: no address");
 	FailWithAction(outDataSize == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_GetDevicePropertyDataSize: no place to put the return value");
-	FailWithAction(inObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetDevicePropertyDataSize: not the device object");
+	FailWithAction(inObjectID != kObjectID_Device && inObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetDevicePropertyDataSize: not the device object");
 	
 	//	Note that for each object, this driver implements all the required properties plus a few
 	//	extras that are useful but not required. There is more detailed commentary about each
@@ -1833,7 +1890,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 	FailWithAction(inAddress == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_GetDevicePropertyData: no address");
 	FailWithAction(outDataSize == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_GetDevicePropertyData: no place to put the return value size");
 	FailWithAction(outData == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_GetDevicePropertyData: no place to put the return value");
-	FailWithAction(inObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetDevicePropertyData: not the device object");
+	FailWithAction(inObjectID != kObjectID_Device && inObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetDevicePropertyData: not the device object");
 	
 	//	Note that for each object, this driver implements all the required properties plus a few
 	//	extras that are useful but not required.
@@ -1866,8 +1923,18 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 		case kAudioObjectPropertyName:
 			//	This is the human readable name of the device.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioObjectPropertyManufacturer for the device");
-			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_Name), kNumber_Of_Channels);
-			*outDataSize = sizeof(CFStringRef);
+            
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    *((CFStringRef*)outData) = get_device_name();
+                    *outDataSize = sizeof(CFStringRef);
+                    break;
+                    
+                case kObjectID_Device2:
+                    *((CFStringRef*)outData) = get_device2_name();
+                    *outDataSize = sizeof(CFStringRef);
+                    break;
+            }
 			break;
 			
 		case kAudioObjectPropertyManufacturer:
@@ -1891,7 +1958,6 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                     ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
                 }
             }
-
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
@@ -1901,8 +1967,20 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	audio device across boot sessions. Note that two instances of the same
 			//	device must have different values for this property.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyDeviceUID for the device");
-			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_UID), kNumber_Of_Channels);
-			*outDataSize = sizeof(CFStringRef);
+
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    *((CFStringRef*)outData) = get_device_uid();
+                    *outDataSize = sizeof(CFStringRef);
+                    break;
+                    
+                case kObjectID_Device2:
+                    *((CFStringRef*)outData) = get_device2_uid();
+                    *outDataSize = sizeof(CFStringRef);
+                    break;
+            }
+            
+
 			break;
 
 		case kAudioDevicePropertyModelUID:
@@ -1910,7 +1988,8 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	devices that are the same kind of device. Note that two instances of the
 			//	save device must have the same value for this property.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyModelUID for the device");
-			*((CFStringRef*)outData) = CFStringCreateWithFormat(NULL, NULL, CFSTR(kDevice_ModelUID), kNumber_Of_Channels);
+
+            *((CFStringRef*)outData) = get_device_model_uid();
 			*outDataSize = sizeof(CFStringRef);
 			break;
 
@@ -1946,7 +2025,16 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	Write the devices' object IDs into the return value
 			if(theNumberItemsToFetch > 0)
 			{
-				((AudioObjectID*)outData)[0] = kObjectID_Device;
+                switch (inObjectID) {
+                    case kObjectID_Device:
+                        ((AudioObjectID*)outData)[0] = kObjectID_Device;
+                        break;
+                        
+                    case kObjectID_Device2:
+                        ((AudioObjectID*)outData)[0] = kObjectID_Device2;
+                        break;
+                }
+				
 			}
 			
 			//	report how much we wrote
@@ -1967,7 +2055,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 
 		case kAudioDevicePropertyDeviceIsAlive:
 			//	This property returns whether or not the device is alive. Note that it is
-			//	note uncommon for a device to be dead but still momentarily availble in the
+			//	not uncommon for a device to be dead but still momentarily availble in the
 			//	device list. In the case of this device, it will always be alive.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyDeviceIsAlive for the device");
 			*((UInt32*)outData) = 1;
@@ -2036,6 +2124,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	Calculate the number of items that have been requested. Note that this
 			//	number is allowed to be smaller than the actual size of the list. In such
 			//	case, only that number of items will be returned
+
             theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_control_list_size());
 
             //    fill out the list with as many objects as requested
@@ -2046,7 +2135,6 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                     ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
                 }
             }
-
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
@@ -2099,7 +2187,16 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 		case kAudioDevicePropertyIsHidden:
 			//	This returns whether or not the device is visible to clients.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyIsHidden for the device");
-			*((UInt32*)outData) = 0;
+            
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    *((UInt32*)outData) = kDevice_IsHidden;
+                    break;
+                
+                case kObjectID_Device2:
+                    *((UInt32*)outData) = kDevice2_IsHidden;
+                    break;
+            }
 			*outDataSize = sizeof(UInt32);
 			break;
 
@@ -2148,7 +2245,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 				FailWithAction(inDataSize < sizeof(CFURLRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyDeviceUID for the device");
 				CFBundleRef theBundle = CFBundleGetBundleWithIdentifier(CFSTR(kPlugIn_BundleID));
 				FailWithAction(theBundle == NULL, theAnswer = kAudioHardwareUnspecifiedError, Done, "BlackHole_GetDevicePropertyData: could not get the plug-in bundle for kAudioDevicePropertyIcon");
-				CFURLRef theURL = CFBundleCopyResourceURL(theBundle, CFSTR("BlackHole.icns"), NULL, NULL);
+				CFURLRef theURL = CFBundleCopyResourceURL(theBundle, CFSTR(kPlugIn_Icon), NULL, NULL);
 				FailWithAction(theURL == NULL, theAnswer = kAudioHardwareUnspecifiedError, Done, "BlackHole_GetDevicePropertyData: could not get the URL for kAudioDevicePropertyIcon");
 				*((CFURLRef*)outData) = theURL;
 				*outDataSize = sizeof(CFURLRef);
@@ -2178,7 +2275,7 @@ static OSStatus	BlackHole_SetDevicePropertyData(AudioServerPlugInDriverRef inDri
 	FailWithAction(inAddress == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetDevicePropertyData: no address");
 	FailWithAction(outNumberPropertiesChanged == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetDevicePropertyData: no place to return the number of properties that changed");
 	FailWithAction(outChangedAddresses == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetDevicePropertyData: no place to return the properties that changed");
-	FailWithAction(inObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_SetDevicePropertyData: not the device object");
+	FailWithAction(inObjectID != kObjectID_Device && inObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_SetDevicePropertyData: not the device object");
 	
 	//	initialize the returned number of changed properties
 	*outNumberPropertiesChanged = 0;
@@ -3243,15 +3340,17 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 	//	important to note that multiple clients can have IO running on the device at the same time.
 	//	So, work only needs to be done when the first client starts. All subsequent starts simply
 	//	increment the counter.
+    
+    DebugMsg("BlackHole_StartIO");
 	
-	#pragma unused(inClientID)
+	#pragma unused(inClientID, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_StartIO: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_StartIO: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_StartIO: bad device ID");
 
 	//	we need to hold the state lock
 	pthread_mutex_lock(&gPlugIn_StateMutex);
@@ -3291,14 +3390,14 @@ static OSStatus	BlackHole_StopIO(AudioServerPlugInDriverRef inDriver, AudioObjec
 	//	This call tells the device that the client has stopped IO. The driver can stop the hardware
 	//	once all clients have stopped.
 	
-	#pragma unused(inClientID)
+	#pragma unused(inClientID, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_StopIO: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_StopIO: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_StopIO: bad device ID");
 
 	//	we need to hold the state lock
 	pthread_mutex_lock(&gPlugIn_StateMutex);
@@ -3339,7 +3438,7 @@ static OSStatus	BlackHole_GetZeroTimeStamp(AudioServerPlugInDriverRef inDriver, 
 	//	For this device, the zero time stamps' sample time increments every kDevice_RingBufferSize
 	//	frames and the host time increments by kDevice_RingBufferSize * gDevice_HostTicksPerFrame.
 	
-	#pragma unused(inClientID)
+	#pragma unused(inClientID, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
@@ -3350,7 +3449,7 @@ static OSStatus	BlackHole_GetZeroTimeStamp(AudioServerPlugInDriverRef inDriver, 
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetZeroTimeStamp: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetZeroTimeStamp: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetZeroTimeStamp: bad device ID");
 
 	//	we need to hold the locks
 	pthread_mutex_lock(&gDevice_IOMutex);
@@ -3390,14 +3489,14 @@ static OSStatus	BlackHole_WillDoIOOperation(AudioServerPlugInDriverRef inDriver,
 	//	This method returns whether or not the device will do a given IO operation. For this device,
 	//	we only support reading input data and writing output data.
 	
-	#pragma unused(inClientID)
+	#pragma unused(inClientID, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_WillDoIOOperation: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_WillDoIOOperation: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_WillDoIOOperation: bad device ID");
 
 	//	figure out if we support the operation
 	bool willDo = false;
@@ -3435,14 +3534,14 @@ static OSStatus	BlackHole_BeginIOOperation(AudioServerPlugInDriverRef inDriver, 
 	//	This is called at the beginning of an IO operation. This device doesn't do anything, so just
 	//	check the arguments and return.
 	
-	#pragma unused(inClientID, inOperationID, inIOBufferFrameSize, inIOCycleInfo)
+	#pragma unused(inClientID, inOperationID, inIOBufferFrameSize, inIOCycleInfo, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_BeginIOOperation: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_BeginIOOperation: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_BeginIOOperation: bad device ID");
 
 Done:
 	return theAnswer;
@@ -3452,14 +3551,14 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
 {
 	//	This is called to actually perform a given operation. 
 	
-	#pragma unused(inClientID, inIOCycleInfo, ioSecondaryBuffer)
+	#pragma unused(inClientID, inIOCycleInfo, ioSecondaryBuffer, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad device ID");
 	FailWithAction((inStreamObjectID != kObjectID_Stream_Input) && (inStreamObjectID != kObjectID_Stream_Output), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_DoIOOperation: bad stream ID");
 
     // Calculate the ring buffer offsets and splits.
@@ -3500,27 +3599,33 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         else
         {
             // Copy the buffers.
-            cblas_scopy(firstPartFrameSize * kNumber_Of_Channels, gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, 1, ioMainBuffer, 1);
-            cblas_scopy(secondPartFrameSize * kNumber_Of_Channels, gRingBuffer, 1, (Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, 1);
-
+            memcpy(ioMainBuffer, gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+            memcpy((Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+            
             // Finally we'll apply the output volume to the buffer.
             vDSP_vsmul(ioMainBuffer, 1, &gVolume_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
         }
-        
-
     }
     
     // From Application to BlackHole
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
-        // Save the last output time.
-        lastOutputSampleTime= inIOCycleInfo->mOutputTime.mSampleTime;
-        isBufferClear = false;
+        
+        // Overload error.
+        if (inIOCycleInfo->mCurrentTime.mSampleTime > inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize + kLatency_Frame_Size)
+        {
+            DebugMsg("BlackHole overload error. kAudioServerPlugInIOOperationWriteMix was unable to complete opperation before the deadline. Try increasing the buffer frame size.");
+            return kAudioHardwareUnspecifiedError;
+        }
+        
         
         // Copy the buffers.
-        cblas_scopy(firstPartFrameSize * kNumber_Of_Channels, ioMainBuffer, 1, gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, 1);
-        cblas_scopy(secondPartFrameSize * kNumber_Of_Channels, (Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, 1, gRingBuffer, 1);
+        memcpy(gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, ioMainBuffer, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+        memcpy(gRingBuffer, (Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
         
+        // Save the last output time.
+        lastOutputSampleTime = inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize;
+        isBufferClear = false;
     }
 
 Done:
@@ -3532,14 +3637,14 @@ static OSStatus	BlackHole_EndIOOperation(AudioServerPlugInDriverRef inDriver, Au
 	//	This is called at the end of an IO operation. This device doesn't do anything, so just check
 	//	the arguments and return.
 	
-	#pragma unused(inClientID, inOperationID, inIOBufferFrameSize, inIOCycleInfo)
+	#pragma unused(inClientID, inOperationID, inIOBufferFrameSize, inIOCycleInfo, inDeviceObjectID)
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_EndIOOperation: bad driver reference");
-	FailWithAction(inDeviceObjectID != kObjectID_Device, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_EndIOOperation: bad device ID");
+	FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_EndIOOperation: bad device ID");
 
 Done:
 	return theAnswer;
