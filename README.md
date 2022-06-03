@@ -78,7 +78,7 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki#advanced-cus
 - [GarageBand to Zoom](https://existential.audio/howto/StreamFromGarageBandToZoom.php)
 
 ### Reaper
-- Reaper to Zoom by Noah Liebman (https://noahliebman.net/2020/12/telephone-colophon-or-how-i-overengineered-my-call-audio/)
+- [Reaper to Zoom](https://noahliebman.net/2020/12/telephone-colophon-or-how-i-overengineered-my-call-audio/) by Noah Liebman
 
 ### Record System Audio
 1. [Setup Multi-output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
