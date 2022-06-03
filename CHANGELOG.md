@@ -17,10 +17,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Hidden duplicate device.
 - Ability to easily modify device streams. 
-
-
-## [0.3.1] - Unreleased
-### Changed
 - Fix potential memory leak.
 - Fix dropouts when experiencing minor loads. 
 
