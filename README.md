@@ -23,7 +23,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
 
 ## Features
-- Builds 2, 16, 64, 128, 245 audio channels versions.
+- Builds 2, 16, 64, 128, 256 audio channels versions.
 - Customizable channel count, latency, hidden devices.
 - Customizable mirror device to allow for a hidden input or output.
 - Supports 8k, 16k, 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, 192kHz, 352.8kHz, 384kHz, 705.6kHz and 768kHz sample rates.

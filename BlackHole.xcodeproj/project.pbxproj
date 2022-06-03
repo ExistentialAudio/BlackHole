@@ -68,12 +68,13 @@
 		3D083806284A7BB000C69403 /* conclusion.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = conclusion.html; sourceTree = "<group>"; };
 		3D083807284A7BB000C69403 /* requirements.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = requirements.xml; sourceTree = "<group>"; };
 		3D083808284A7BB000C69403 /* welcome.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = welcome.html; sourceTree = "<group>"; };
-		3D083809284A7BB000C69403 /* distribution.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = distribution.xml; sourceTree = "<group>"; };
 		3D08380B284A7DE000C69403 /* BlackHole256ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole256ch.plist; sourceTree = "<group>"; };
 		3D08380C284A7DE100C69403 /* BlackHole64ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole64ch.plist; sourceTree = "<group>"; };
 		3D08380D284A7DE100C69403 /* BlackHole128ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole128ch.plist; sourceTree = "<group>"; };
 		3D08380E284A7DE100C69403 /* BlackHole2ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole2ch.plist; sourceTree = "<group>"; };
 		3D08380F284A7DE100C69403 /* BlackHole16ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole16ch.plist; sourceTree = "<group>"; };
+		3D08381A284AA8E400C69403 /* generate_distribution.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_distribution.sh; sourceTree = "<group>"; };
+		3D08381B284AA8EE00C69403 /* create_installer.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = create_installer.sh; sourceTree = "<group>"; };
 		3D6C8E45275E92B40030C104 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		3D89662D28499E1B002AB3F0 /* BlackHole16ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole16ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D89662F2849BF1A002AB3F0 /* VERSION */ = {isa = PBXFileReference; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
@@ -195,11 +196,12 @@
 		3D083805284A7BB000C69403 /* Installer */ = {
 			isa = PBXGroup;
 			children = (
+				3D08381B284AA8EE00C69403 /* create_installer.sh */,
+				3D08381A284AA8E400C69403 /* generate_distribution.sh */,
 				3D8966872849D45F002AB3F0 /* scripts */,
 				3D083806284A7BB000C69403 /* conclusion.html */,
 				3D083807284A7BB000C69403 /* requirements.xml */,
 				3D083808284A7BB000C69403 /* welcome.html */,
-				3D083809284A7BB000C69403 /* distribution.xml */,
 			);
 			path = Installer;
 			sourceTree = "<group>";
