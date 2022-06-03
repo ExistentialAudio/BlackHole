@@ -55,18 +55,24 @@
 		2DA8FA1515FEAAB000F04B50 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2DD7AA9915EC572000C67AE1 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		2DED183A15C357180091BE97 /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
+		3D083806284A7BB000C69403 /* conclusion.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = conclusion.html; sourceTree = "<group>"; };
+		3D083807284A7BB000C69403 /* requirements.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = requirements.xml; sourceTree = "<group>"; };
+		3D083808284A7BB000C69403 /* welcome.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = welcome.html; sourceTree = "<group>"; };
+		3D083809284A7BB000C69403 /* distribution.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = distribution.xml; sourceTree = "<group>"; };
+		3D08380B284A7DE000C69403 /* BlackHole256ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole256ch.plist; sourceTree = "<group>"; };
+		3D08380C284A7DE100C69403 /* BlackHole64ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole64ch.plist; sourceTree = "<group>"; };
+		3D08380D284A7DE100C69403 /* BlackHole128ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole128ch.plist; sourceTree = "<group>"; };
+		3D08380E284A7DE100C69403 /* BlackHole2ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole2ch.plist; sourceTree = "<group>"; };
+		3D08380F284A7DE100C69403 /* BlackHole16ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole16ch.plist; sourceTree = "<group>"; };
 		3D6C8E45275E92B40030C104 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		3D89662D28499E1B002AB3F0 /* BlackHole16ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole16ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D89662E28499E1B002AB3F0 /* BlackHole2ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = BlackHole2ch.plist; path = "/Volumes/Dropbox/Dropbox/Existential Audio/Products/Released/BlackHole/BlackHole/BlackHole2ch.plist"; sourceTree = "<absolute>"; };
 		3D89662F2849BF1A002AB3F0 /* VERSION */ = {isa = PBXFileReference; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
 		3D89664D2849C318002AB3F0 /* BlackHole2ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole2ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D89664E2849C318002AB3F0 /* BlackHole16ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = BlackHole16ch.plist; path = "/Volumes/Dropbox/Dropbox/Existential Audio/Products/Released/BlackHole/BlackHole/BlackHole16ch.plist"; sourceTree = "<absolute>"; };
 		3D8966612849CB29002AB3F0 /* BlackHole64ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole64ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D8966622849CB2A002AB3F0 /* BlackHole64ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = BlackHole64ch.plist; path = "/Volumes/Dropbox/Dropbox/Existential Audio/Products/Released/BlackHole/BlackHole/BlackHole64ch.plist"; sourceTree = "<absolute>"; };
 		3D8966732849CB2E002AB3F0 /* BlackHole128ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole128ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D8966742849CB2E002AB3F0 /* BlackHole128ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = BlackHole128ch.plist; path = "/Volumes/Dropbox/Dropbox/Existential Audio/Products/Released/BlackHole/BlackHole/BlackHole128ch.plist"; sourceTree = "<absolute>"; };
 		3D8966852849CB32002AB3F0 /* BlackHole256ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole256ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D8966862849CB32002AB3F0 /* BlackHole256ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = BlackHole256ch.plist; path = "/Volumes/Dropbox/Dropbox/Existential Audio/Products/Released/BlackHole/BlackHole/BlackHole256ch.plist"; sourceTree = "<absolute>"; };
+		3D8966882849D45F002AB3F0 /* postinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = postinstall; sourceTree = "<group>"; };
+		3D8966892849D45F002AB3F0 /* preinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = preinstall; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +132,11 @@
 		2D616EF015B8C82500D598BD /* BlackHole */ = {
 			isa = PBXGroup;
 			children = (
+				3D08380E284A7DE100C69403 /* BlackHole2ch.plist */,
+				3D08380F284A7DE100C69403 /* BlackHole16ch.plist */,
+				3D08380C284A7DE100C69403 /* BlackHole64ch.plist */,
+				3D08380D284A7DE100C69403 /* BlackHole128ch.plist */,
+				3D08380B284A7DE000C69403 /* BlackHole256ch.plist */,
 				03FDCAD9233F235500101681 /* BlackHole.icns */,
 				03FEA4BB233D27770005D277 /* BlackHole.h */,
 				2D616EF215B8C82500D598BD /* BlackHole.c */,
@@ -136,6 +147,7 @@
 		2D74779B1578162B00412279 = {
 			isa = PBXGroup;
 			children = (
+				3D083805284A7BB000C69403 /* Installer */,
 				3D89662F2849BF1A002AB3F0 /* VERSION */,
 				2DA8FA1515FEAAB000F04B50 /* README.md */,
 				03FDCADB233FAE0500101681 /* LICENSE */,
@@ -143,11 +155,6 @@
 				2D616EF015B8C82500D598BD /* BlackHole */,
 				2D7477AB1578168D00412279 /* Frameworks */,
 				2D7477AA1578168D00412279 /* Products */,
-				3D89662E28499E1B002AB3F0 /* BlackHole2ch.plist */,
-				3D89664E2849C318002AB3F0 /* BlackHole16ch.plist */,
-				3D8966622849CB2A002AB3F0 /* BlackHole64ch.plist */,
-				3D8966742849CB2E002AB3F0 /* BlackHole128ch.plist */,
-				3D8966862849CB32002AB3F0 /* BlackHole256ch.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -173,6 +180,27 @@
 				2DED183A15C357180091BE97 /* Kernel.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3D083805284A7BB000C69403 /* Installer */ = {
+			isa = PBXGroup;
+			children = (
+				3D8966872849D45F002AB3F0 /* scripts */,
+				3D083806284A7BB000C69403 /* conclusion.html */,
+				3D083807284A7BB000C69403 /* requirements.xml */,
+				3D083808284A7BB000C69403 /* welcome.html */,
+				3D083809284A7BB000C69403 /* distribution.xml */,
+			);
+			path = Installer;
+			sourceTree = "<group>";
+		};
+		3D8966872849D45F002AB3F0 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				3D8966882849D45F002AB3F0 /* postinstall */,
+				3D8966892849D45F002AB3F0 /* preinstall */,
+			);
+			path = scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -672,7 +700,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole16ch\\\"",
 					"kNumber_Of_Channels=16",
 				);
-				INFOPLIST_FILE = BlackHole16ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole16ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole16ch;
@@ -693,7 +721,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole16ch\\\"",
 					"kNumber_Of_Channels=16",
 				);
-				INFOPLIST_FILE = BlackHole16ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole16ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole16ch;
@@ -714,7 +742,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole16ch\\\"",
 					"kNumber_Of_Channels=16",
 				);
-				INFOPLIST_FILE = BlackHole16ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole16ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole16ch;
@@ -735,7 +763,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole2ch\\\"",
 					"kNumber_Of_Channels=2",
 				);
-				INFOPLIST_FILE = BlackHole2ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole2ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
@@ -756,7 +784,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole2ch\\\"",
 					"kNumber_Of_Channels=2",
 				);
-				INFOPLIST_FILE = BlackHole2ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole2ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
@@ -777,7 +805,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole2ch\\\"",
 					"kNumber_Of_Channels=2",
 				);
-				INFOPLIST_FILE = BlackHole2ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole2ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
@@ -798,7 +826,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole64ch\\\"",
 					"kNumber_Of_Channels=64",
 				);
-				INFOPLIST_FILE = BlackHole64ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole64ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole64ch;
@@ -819,7 +847,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole64ch\\\"",
 					"kNumber_Of_Channels=64",
 				);
-				INFOPLIST_FILE = BlackHole64ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole64ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole64ch;
@@ -840,7 +868,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole64ch\\\"",
 					"kNumber_Of_Channels=64",
 				);
-				INFOPLIST_FILE = BlackHole64ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole64ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole64ch;
@@ -861,7 +889,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole128ch\\\"",
 					"kNumber_Of_Channels=128",
 				);
-				INFOPLIST_FILE = BlackHole128ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole128ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole128ch;
@@ -882,7 +910,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole128ch\\\"",
 					"kNumber_Of_Channels=128",
 				);
-				INFOPLIST_FILE = BlackHole128ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole128ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole128ch;
@@ -903,7 +931,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole128ch\\\"",
 					"kNumber_Of_Channels=128",
 				);
-				INFOPLIST_FILE = BlackHole128ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole128ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole128ch;
@@ -924,7 +952,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole256ch\\\"",
 					"kNumber_Of_Channels=256",
 				);
-				INFOPLIST_FILE = BlackHole256ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole256ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole256ch;
@@ -945,7 +973,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole256ch\\\"",
 					"kNumber_Of_Channels=256",
 				);
-				INFOPLIST_FILE = BlackHole256ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole256ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole256ch;
@@ -966,7 +994,7 @@
 					"kPlugIn_BundleID=\\\"audio.existential.BlackHole256ch\\\"",
 					"kNumber_Of_Channels=256",
 				);
-				INFOPLIST_FILE = BlackHole256ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole256ch.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole256ch;
