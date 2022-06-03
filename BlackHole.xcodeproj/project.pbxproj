@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D083810284A7ED000C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
+		3D083811284A7ED800C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
+		3D083812284A7EEB00C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
+		3D083813284A7EF100C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
+		3D083814284A7EFE00C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
+		3D083815284A7F0000C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
+		3D083816284A7F0400C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
+		3D083817284A7F0A00C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
+		3D083818284A7F1200C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
+		3D083819284A7F1500C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
 		3D89662028499E1B002AB3F0 /* BlackHole.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D616EF215B8C82500D598BD /* BlackHole.c */; };
 		3D89662228499E1B002AB3F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6C8E45275E92B40030C104 /* Accelerate.framework */; };
 		3D89662328499E1B002AB3F0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477EC157823CF00412279 /* CoreAudio.framework */; };
@@ -351,6 +361,8 @@
 				3D89662628499E1B002AB3F0 /* LICENSE in Resources */,
 				3D89662728499E1B002AB3F0 /* BlackHole.icns in Resources */,
 				3D89662828499E1B002AB3F0 /* CHANGELOG.md in Resources */,
+				3D083816284A7F0400C69403 /* VERSION in Resources */,
+				3D083817284A7F0A00C69403 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +373,8 @@
 				3D8966462849C318002AB3F0 /* LICENSE in Resources */,
 				3D8966472849C318002AB3F0 /* BlackHole.icns in Resources */,
 				3D8966482849C318002AB3F0 /* CHANGELOG.md in Resources */,
+				3D083818284A7F1200C69403 /* VERSION in Resources */,
+				3D083819284A7F1500C69403 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +385,8 @@
 				3D89665A2849CB29002AB3F0 /* LICENSE in Resources */,
 				3D89665B2849CB29002AB3F0 /* BlackHole.icns in Resources */,
 				3D89665C2849CB29002AB3F0 /* CHANGELOG.md in Resources */,
+				3D083814284A7EFE00C69403 /* VERSION in Resources */,
+				3D083815284A7F0000C69403 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,6 +397,8 @@
 				3D89666C2849CB2E002AB3F0 /* LICENSE in Resources */,
 				3D89666D2849CB2E002AB3F0 /* BlackHole.icns in Resources */,
 				3D89666E2849CB2E002AB3F0 /* CHANGELOG.md in Resources */,
+				3D083812284A7EEB00C69403 /* VERSION in Resources */,
+				3D083813284A7EF100C69403 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +409,8 @@
 				3D89667E2849CB32002AB3F0 /* LICENSE in Resources */,
 				3D89667F2849CB32002AB3F0 /* BlackHole.icns in Resources */,
 				3D8966802849CB32002AB3F0 /* CHANGELOG.md in Resources */,
+				3D083810284A7ED000C69403 /* VERSION in Resources */,
+				3D083811284A7ED800C69403 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
