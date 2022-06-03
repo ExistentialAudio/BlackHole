@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D7477A81578168D00412279"
                BuildableName = "BlackHole.driver"
-               BlueprintName = "BlackHole"
+               BlueprintName = "BlackHole2ch"
                ReferencedContainer = "container:BlackHole.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -52,7 +52,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D7477A81578168D00412279"
             BuildableName = "BlackHole.driver"
-            BlueprintName = "BlackHole"
+            BlueprintName = "BlackHole2ch"
             ReferencedContainer = "container:BlackHole.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

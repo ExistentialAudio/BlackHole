@@ -161,60 +161,6 @@ struct ObjectInfo {
 #define                             kDevice_ModelUID                    kDriver_Name "_ModelUID"
 #endif
 
-static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
-static UInt32                       gPlugIn_RefCount                    = 0;
-static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
-
-
-static CFStringRef                  gBox_Name                           = NULL;
-static Boolean                      gBox_Acquired                       = true;
-
-
-static pthread_mutex_t              gDevice_IOMutex                     = PTHREAD_MUTEX_INITIALIZER;
-static Float64                      gDevice_SampleRate                  = 44100.0;
-static UInt64                       gDevice_IOIsRunning                 = 0;
-static const UInt32                 kDevice_RingBufferSize              = 16384;
-static Float64                      gDevice_HostTicksPerFrame           = 0.0;
-static UInt64                       gDevice_NumberTimeStamps            = 0;
-static Float64                      gDevice_AnchorSampleTime            = 0.0;
-static UInt64                       gDevice_AnchorHostTime              = 0;
-
-static bool                         gStream_Input_IsActive              = true;
-static bool                         gStream_Output_IsActive             = true;
-
-static const Float32                kVolume_MinDB                       = -64.0;
-static const Float32                kVolume_MaxDB                       = 0.0;
-static Float32                      gVolume_Master_Value                = 1.0;
-static bool                         gMute_Master_Value                  = false;
-
-static struct ObjectInfo            kDevice_ObjectList[]                = {
-    { kObjectID_Stream_Input,           kObjectType_Stream,     kAudioObjectPropertyScopeInput  },
-    { kObjectID_Volume_Input_Master,    kObjectType_Control,    kAudioObjectPropertyScopeInput  },
-    { kObjectID_Mute_Input_Master,      kObjectType_Control,    kAudioObjectPropertyScopeInput  },
-    { kObjectID_Stream_Output,          kObjectType_Stream,     kAudioObjectPropertyScopeOutput },
-    { kObjectID_Volume_Output_Master,   kObjectType_Control,    kAudioObjectPropertyScopeOutput },
-    { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput }
-};
-
-static const UInt32                 kDevice_ObjectListSize              = sizeof(kDevice_ObjectList) / sizeof(struct ObjectInfo);
-
-static Float64                      kDevice_SampleRates[]               = {
-                                                                              8000,
-                                                                             16000,
-                                                                             44100,
-                                                                             48000,
-                                                                             88200,
-                                                                             96000,
-                                                                            176400,
-                                                                            192000,
-                                                                            352800,
-                                                                            384000,
-                                                                            705600,
-                                                                            768000
-                                                                           };
-
-static const UInt32                 kDevice_SampleRatesSize             = sizeof(kDevice_SampleRates) / sizeof(Float64);
-
 #ifndef kDevice_Name
 #define                             kDevice_Name                        kDriver_Name " %ich"
 #endif
@@ -222,8 +168,6 @@ static const UInt32                 kDevice_SampleRatesSize             = sizeof
 #ifndef kDevice2_Name
 #define                             kDevice2_Name                       kDriver_Name " %ich 2"
 #endif
-
-
 
 #ifndef kDevice_IsHidden
 #define                             kDevice_IsHidden                    false
@@ -262,6 +206,80 @@ static const UInt32                 kDevice_SampleRatesSize             = sizeof
 #ifndef kNumber_Of_Channels
 #define                             kNumber_Of_Channels                 2
 #endif
+
+static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
+static UInt32                       gPlugIn_RefCount                    = 0;
+static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
+
+
+static CFStringRef                  gBox_Name                           = NULL;
+static Boolean                      gBox_Acquired                       = true;
+
+
+static pthread_mutex_t              gDevice_IOMutex                     = PTHREAD_MUTEX_INITIALIZER;
+static Float64                      gDevice_SampleRate                  = 44100.0;
+static UInt64                       gDevice_IOIsRunning                 = 0;
+static const UInt32                 kDevice_RingBufferSize              = 16384;
+static Float64                      gDevice_HostTicksPerFrame           = 0.0;
+static UInt64                       gDevice_NumberTimeStamps            = 0;
+static Float64                      gDevice_AnchorSampleTime            = 0.0;
+static UInt64                       gDevice_AnchorHostTime              = 0;
+
+static bool                         gStream_Input_IsActive              = true;
+static bool                         gStream_Output_IsActive             = true;
+
+static const Float32                kVolume_MinDB                       = -64.0;
+static const Float32                kVolume_MaxDB                       = 0.0;
+static Float32                      gVolume_Master_Value                = 1.0;
+static bool                         gMute_Master_Value                  = false;
+
+static struct ObjectInfo            kDevice_ObjectList[]                = {
+#if kDevice_HasInput
+    { kObjectID_Stream_Input,           kObjectType_Stream,     kAudioObjectPropertyScopeInput  },
+    { kObjectID_Volume_Input_Master,    kObjectType_Control,    kAudioObjectPropertyScopeInput  },
+    { kObjectID_Mute_Input_Master,      kObjectType_Control,    kAudioObjectPropertyScopeInput  },
+#endif
+#if kDevice_HasOutput
+    { kObjectID_Stream_Output,          kObjectType_Stream,     kAudioObjectPropertyScopeOutput },
+    { kObjectID_Volume_Output_Master,   kObjectType_Control,    kAudioObjectPropertyScopeOutput },
+    { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput }
+#endif
+};
+
+static struct ObjectInfo            kDevice2_ObjectList[]                = {
+#if kDevice2_HasInput
+    { kObjectID_Stream_Input,           kObjectType_Stream,     kAudioObjectPropertyScopeInput  },
+    { kObjectID_Volume_Input_Master,    kObjectType_Control,    kAudioObjectPropertyScopeInput  },
+    { kObjectID_Mute_Input_Master,      kObjectType_Control,    kAudioObjectPropertyScopeInput  },
+#endif
+#if kDevice2_HasOutput
+    { kObjectID_Stream_Output,          kObjectType_Stream,     kAudioObjectPropertyScopeOutput },
+    { kObjectID_Volume_Output_Master,   kObjectType_Control,    kAudioObjectPropertyScopeOutput },
+    { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput }
+#endif
+};
+
+static const UInt32                 kDevice_ObjectListSize              = sizeof(kDevice_ObjectList) / sizeof(struct ObjectInfo);
+static const UInt32                 kDevice2_ObjectListSize              = sizeof(kDevice2_ObjectList) / sizeof(struct ObjectInfo);
+
+static Float64                      kDevice_SampleRates[]               = {
+                                                                              8000,
+                                                                             16000,
+                                                                             44100,
+                                                                             48000,
+                                                                             88200,
+                                                                             96000,
+                                                                            176400,
+                                                                            192000,
+                                                                            352800,
+                                                                            384000,
+                                                                            705600,
+                                                                            768000
+                                                                           };
+
+static const UInt32                 kDevice_SampleRatesSize             = sizeof(kDevice_SampleRates) / sizeof(Float64);
+
+
 
 #define                             kBits_Per_Channel                   32
 #define                             kBytes_Per_Channel                  (kBits_Per_Channel/ 8)

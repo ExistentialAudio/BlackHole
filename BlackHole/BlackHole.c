@@ -62,39 +62,117 @@ static Float32 volume_from_scalar(Float32 scalar)
 	return volume_from_decibel(decibel);
 }
 
-static UInt32 device_object_list_size(AudioObjectPropertyScope scope) {
-    if (scope == kAudioObjectPropertyScopeGlobal)
-    {
-        return kDevice_ObjectListSize;
-    }
+static UInt32 device_object_list_size(AudioObjectPropertyScope scope, AudioObjectID objectID) {
+    
+    switch (objectID) {
+        case kObjectID_Device:
+            {
+                if (scope == kAudioObjectPropertyScopeGlobal)
+                {
+                    return kDevice_ObjectListSize;
+                }
 
-    UInt32 count = 0;
-    for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
-    {
-        count += (kDevice_ObjectList[i].scope == scope);
-    }
+                UInt32 count = 0;
+                for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
+                {
+                    count += (kDevice_ObjectList[i].scope == scope);
+                }
 
-    return count;
+                return count;
+            }
+            break;
+            
+        case kObjectID_Device2:
+            {
+                if (scope == kAudioObjectPropertyScopeGlobal)
+                {
+                    return kDevice2_ObjectListSize;
+                }
+
+                UInt32 count = 0;
+                for (UInt32 i = 0; i < kDevice2_ObjectListSize; i++)
+                {
+                    count += (kDevice2_ObjectList[i].scope == scope);
+                }
+
+                return count;
+            }
+            break;
+            
+        default:
+            return 0;
+            break;
+    }
 }
 
-static UInt32 device_stream_list_size(AudioObjectPropertyScope scope) {
-    UInt32 count = 0;
-    for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
-    {
-        count += (kDevice_ObjectList[i].type == kObjectType_Stream && (kDevice_ObjectList[i].scope == scope || scope == kAudioObjectPropertyScopeGlobal));
-    }
+static UInt32 device_stream_list_size(AudioObjectPropertyScope scope, AudioObjectID objectID) {
+    
+    switch (objectID) {
+        case kObjectID_Device:
+            {
+                UInt32 count = 0;
+                for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
+                {
+                    count += (kDevice_ObjectList[i].type == kObjectType_Stream && (kDevice_ObjectList[i].scope == scope || scope == kAudioObjectPropertyScopeGlobal));
+                }
 
-    return count;
+                return count;
+            }
+            break;
+            
+        case kObjectID_Device2:
+            {
+                UInt32 count = 0;
+                for (UInt32 i = 0; i < kDevice2_ObjectListSize; i++)
+                {
+                    count += (kDevice2_ObjectList[i].type == kObjectType_Stream && (kDevice2_ObjectList[i].scope == scope || scope == kAudioObjectPropertyScopeGlobal));
+                }
+
+                return count;
+            }
+            break;
+            
+        default:
+            return 0;
+            break;
+    }
+    
+
 }
 
-static UInt32 device_control_list_size() {
-    UInt32 count = 0;
-    for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
-    {
-        count += (kDevice_ObjectList[i].type == kObjectType_Control);
+static UInt32 device_control_list_size(AudioObjectID objectID) {
+    
+    switch (objectID) {
+        case kObjectID_Device:
+        {
+            
+            UInt32 count = 0;
+            for (UInt32 i = 0; i < kDevice_ObjectListSize; i++)
+            {
+                count += (kDevice_ObjectList[i].type == kObjectType_Control);
+            }
+
+            return count;
+        }
+            break;
+        case kObjectID_Device2:
+        {
+            
+            UInt32 count = 0;
+            for (UInt32 i = 0; i < kDevice2_ObjectListSize; i++)
+            {
+                count += (kDevice2_ObjectList[i].type == kObjectType_Control);
+            }
+
+            return count;
+        }
+            break;
+            
+        default:
+            return 0;
+            break;
     }
 
-    return count;
 }
 
 static UInt32 minimum(UInt32 a, UInt32 b) {
@@ -1784,7 +1862,7 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 			
 		case kAudioObjectPropertyOwnedObjects:
-            *outDataSize = device_object_list_size(inAddress->mScope) * sizeof(AudioObjectID);
+            *outDataSize = device_object_list_size(inAddress->mScope, inObjectID) * sizeof(AudioObjectID);
 			break;
 
 		case kAudioDevicePropertyDeviceUID:
@@ -1828,11 +1906,11 @@ static OSStatus	BlackHole_GetDevicePropertyDataSize(AudioServerPlugInDriverRef i
 			break;
 
 		case kAudioDevicePropertyStreams:
-            *outDataSize = device_stream_list_size(inAddress->mScope) * sizeof(AudioObjectID);
+            *outDataSize = device_stream_list_size(inAddress->mScope, inObjectID) * sizeof(AudioObjectID);
 			break;
 
 		case kAudioObjectPropertyControlList:
-            *outDataSize = device_control_list_size() * sizeof(AudioObjectID);
+            *outDataSize = device_control_list_size(inObjectID) * sizeof(AudioObjectID);
 			break;
 
 		case kAudioDevicePropertySafetyOffset:
@@ -1948,7 +2026,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	Calculate the number of items that have been requested. Note that this
 			//	number is allowed to be smaller than the actual size of the list. In such
 			//	case, only that number of items will be returned
-            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_object_list_size(inAddress->mScope));
+            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_object_list_size(inAddress->mScope, inObjectID));
 
             //    fill out the list with the right objects
             for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
@@ -2104,7 +2182,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	Calculate the number of items that have been requested. Note that this
 			//	number is allowed to be smaller than the actual size of the list. In such
 			//	case, only that number of items will be returned
-            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_stream_list_size(inAddress->mScope));
+            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_stream_list_size(inAddress->mScope, inObjectID));
 
             //    fill out the list with as many objects as requested
             for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
@@ -2125,7 +2203,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	number is allowed to be smaller than the actual size of the list. In such
 			//	case, only that number of items will be returned
 
-            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_control_list_size());
+            theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_control_list_size(inObjectID));
 
             //    fill out the list with as many objects as requested
             for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
