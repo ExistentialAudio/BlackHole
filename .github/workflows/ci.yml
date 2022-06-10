@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [master]
     paths-ignore:
       - '**/*.md'       # .md files anywhere in the repo
       - '**/LICENSE'    # LICENSE files anywhere in the repo
@@ -10,6 +10,15 @@ on:
       - '**/.gitignore' # .gitignore files anywhere in the repo
     tags:
       - '*' # run on every tag
+      
+  pull_request:
+    branches:
+      - '*' # all branches
+    paths-ignore:
+      - '**/*.md'       # .md files anywhere in the repo
+      - '**/LICENSE'    # LICENSE files anywhere in the repo
+      - '**/VERSION'    # LICENSE files anywhere in the repo
+      - '**/.gitignore' # .gitignore files anywhere in the repo
 
   workflow_dispatch: # allows running the workflow manually from the Actions tab on the repo
 
