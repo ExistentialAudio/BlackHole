@@ -23,28 +23,28 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
 
 ## Features
-- Builds 2, 16, 64, 128, 256 audio channels versions.
-- Customizable channel count, latency, hidden devices.
-- Customizable mirror device to allow for a hidden input or output.
-- Supports 8k, 16k, 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, 192kHz, 352.8kHz, 384kHz, 705.6kHz and 768kHz sample rates.
-- No driver latency. 
-- Compatible with macOS Mavericks (10.9) and newer. 
-- Builds for Intel and Apple Silicon.
+- Builds 2, 16, 64, 128, 256 audio channels versions
+- Customizable channel count, latency, hidden devices
+- Customizable mirror device to allow for a hidden input or output
+- Supports 8kHz, 16kHz, 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, 192kHz, 352.8kHz, 384kHz, 705.6kHz and 768kHz sample rates
+- Zero driver latency
+- Compatible with macOS Mavericks (10.9) and newer
+- Builds for Intel and Apple Silicon
 
 ![Image of BlackHole Audio Driver](Images/BlackHole.png)
 
 ## Installation Instructions
 
 ### Option 1: Download Installer
-1. [Download Installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme)
+1. [Download the latest installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme)
 2. Close all running audio applications
 3. Open and install package
 
-### Option 2: Install via Homebrew:
+### Option 2: Install via Homebrew (Currently BlackHole v0.2.10)
 
 - 2ch: `brew install blackhole-2ch`
 - 16ch: `brew install blackhole-16ch`
-- 64ch: `brew install blackhole-16ch`
+- 64ch: `brew install blackhole-64ch`
 
 ## Uninstallation Instructions
 ### Option 1: Use Uninstaller
@@ -54,13 +54,15 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ### Option 2: Manually Uninstall
 
-1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` NOTE: The directory is in `/Library` not `user/Library` and be sure to replace `X` with either `2`, `16`, or `64`
+1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` 
+   NOTE: The directory is in `/Library` not `user/Library` and be sure to replace `X` with either `2`, `16`, or `64`
 2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
-For more specific details [visit the wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
+For more specific details [visit the Wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
 
 ### Advanced Customization and Installation
-There are a number of options available to customize BlackHole including number of channels, names, running multiple drivers, and latency. 
+There are a number of options available to customize BlackHole including number of channels, names, running multiple drivers, and latency.
+
 Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki#advanced-customization) for details.   
 
 ## Guides
@@ -81,11 +83,11 @@ Visit the [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki#advanced-cus
 - [Reaper to Zoom](https://noahliebman.net/2020/12/telephone-colophon-or-how-i-overengineered-my-call-audio/) by Noah Liebman
 
 ### Record System Audio
-1. [Setup Multi-output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
-2. In `Audio Midi Setup`->`Audio Devices` Right-click on the newly created Multi-output and select "Use This Device For Sound Output"
+1. [Setup Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
+2. In `Audio Midi Setup` → `Audio Devices` right-click on the newly created Multi-Output and select "Use This Device For Sound Output"
 3. Open digital audio workstation (DAW) such as GarageBand and set input device to "BlackHole" 
 4. Set track to input from channel 1-2
-5. Play audio from another application and monitor or record in your DAW.
+5. Play audio from another application and monitor or record in your DAW
 
 ### Route Audio Between Applications
 1. Set output driver to "BlackHole" in sending application
@@ -108,10 +110,10 @@ If you are interested in any of the following features please leave a comment in
 ## FAQ
 
 ### Why isn't BlackHole showing up in the Applications folder?
-BlackHole is an audio interface driver. It only shows up in `Audio MIDI Setup`, `Sound Preferences`, or other audio applications.
+BlackHole is a virtual audio loopback driver. It only shows up in `Audio MIDI Setup`, `Sound Preferences`, or other audio applications.
 
 ### How can I listen to the audio and use BlackHole at the same time?
-[Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
+[Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device).
 
 ### How can I change the volume of a Multi-Output device?
 Unfortunately macOS does not support changing the volume of a Multi-Output device but you can set the volume of individual devices in Audio MIDI Setup. 
@@ -121,7 +123,7 @@ Unfortunately macOS does not support changing the volume of a Multi-Output devic
 
 - Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
 
-- If you are using a multi-output device, due to issues with macOS the Built-in Output must be enabled and listed as the top device in the Multi-Output. https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices
+- If you are using a multi-output device, due to issues with macOS the Built-in Output must be enabled and listed as the top device in the Multi-Output. [See here for details](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices).
 
 ### Why is audio glitching after X minutes when using a multi-output or an aggregate?
 - You need to enable drift correction for all devices except the clock source device. 
@@ -138,4 +140,4 @@ The microphone from AirPods runs at a lower sample rate which means it should no
 Read the discussion. https://github.com/ExistentialAudio/BlackHole/issues/146
 
 ### Can I integrate BlackHole into my app?
-BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications contact me directly at devinroth@existential.audio.
+BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications please [contact Existential Audio directly](mailto:devinroth@existential.audio).
