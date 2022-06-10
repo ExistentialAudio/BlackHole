@@ -3,6 +3,7 @@
 
 
 # create installer for different channel versions
+
 for channels in 2 16 64 128 256
 do
 
@@ -15,7 +16,8 @@ xcodebuild \
 -project BlackHole.xcodeproj \
 -configuration Release \
 -target BlackHole CONFIGURATION_BUILD_DIR=build \
-GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS kNumber_Of_Channels='$channels' kPlugIn_BundleID=\"'$bundleID'\" '
+PRODUCT_BUNDLE_IDENTIFIER=$bundleID \
+GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS kNumber_Of_Channels='$channels' kPlugIn_BundleID=\"'$bundleID'\"'
 
 mkdir installer/root
 mv build/BlackHole.driver installer/root/BlackHole$ch.driver
@@ -28,7 +30,7 @@ codesign --force --deep --options runtime --sign Q5C99V536K Installer/root/Black
 chmod 755 Installer/Scripts/preinstall
 chmod 755 Installer/Scripts/postinstall
 
-sudo pkgbuild --sign "Q5C99V536K" --root Installer/root --scripts Installer/Scripts --install-location /Library/Audio/Plug-Ins/HAL Installer/BlackHole.pkg
+pkgbuild --sign "Q5C99V536K" --root Installer/root --scripts Installer/Scripts --install-location /Library/Audio/Plug-Ins/HAL Installer/BlackHole.pkg
 rm -r Installer/root
 
 # Create installer with productbuild
@@ -63,13 +65,9 @@ rm distribution.xml
 rm -f BlackHole.pkg
 
 # Notarize
-xcrun altool --notarize-app -f BlackHole$ch.$version.pkg --primary-bundle-id $bundleID --username devinroth@existential.audio -progress -wait
+xcrun notarytool submit BlackHole$ch.$version.pkg --team-id Q5C99V536K --progress --wait --keychain-profile "Notarize"
 
-# sudo xcrun stapler staple BlackHole$ch.$version.pkg
-
-# Clean up
-
-# rm BlackHole$ch.$version.pkg
+xcrun stapler staple BlackHole$ch.$version.pkg
 
 cd ..
 
