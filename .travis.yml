@@ -1,4 +1,0 @@
-language: objective-c
-xcode_project: BlackHole.xcodeproj
-xcode_scheme: BlackHole
-script: set -o pipefail && xcodebuild -project BlackHole.xcodeproj -scheme BlackHole build | xcpretty

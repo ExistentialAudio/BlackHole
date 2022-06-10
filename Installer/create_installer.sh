@@ -1,23 +1,78 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-ch=2ch
-version=v0.4.0
 
-chmod 755 generate_distribution.sh
-./generate_distribution.sh
 
-codesign --force --deep --options runtime --sign Q5C99V536K root/BlackHole$ch.driver
+# create installer for different channel versions
+for channels in 2 16 64 128 256
+do
 
-chmod 755 Scripts/preinstall
-chmod 755 Scripts/postinstall
+ch=$channels"ch"
+version=v$(head -n 1 VERSION)
+bundleID="audio.existential.BlackHole$ch"
 
-sudo pkgbuild --sign "Q5C99V536K" --root root --scripts Scripts --install-location /Library/Audio/Plug-Ins/HAL BlackHole$ch.$version.pkg
+# Build
+xcodebuild \
+-project BlackHole.xcodeproj \
+-configuration Release \
+-target BlackHole CONFIGURATION_BUILD_DIR=build \
+GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS kNumber_Of_Channels='$channels' kPlugIn_BundleID=\"'$bundleID'\" '
 
-productbuild --sign "Q5C99V536K" --distribution distribution.xml --resources . --package-path BlackHole$ch.$version.pkg build/BlackHole$ch.$version.pkg 
+mkdir installer/root
+mv build/BlackHole.driver installer/root/BlackHole$ch.driver
+rm -r build
 
-xcrun altool --notarize-app -f build/BlackHole$ch.$version.pkg --primary-bundle-id audio.existential.BlackHole$ch --username devinroth@existential.audio -progress -wait
+# Sign
+codesign --force --deep --options runtime --sign Q5C99V536K Installer/root/BlackHole$ch.driver
 
-sudo xcrun stapler staple build/BlackHole$ch.$version.pkg
+# Create package with pkgbuild
+chmod 755 Installer/Scripts/preinstall
+chmod 755 Installer/Scripts/postinstall
 
+sudo pkgbuild --sign "Q5C99V536K" --root Installer/root --scripts Installer/Scripts --install-location /Library/Audio/Plug-Ins/HAL Installer/BlackHole.pkg
+rm -r Installer/root
+
+# Create installer with productbuild
+cd Installer
+
+echo "<?xml version=\"1.0\" encoding='utf-8'?>
+<installer-gui-script minSpecVersion='2'>
+    <title>BlackHole: Virtual Audio Driver $ch $version</title>
+    <welcome file='welcome.html'/>
+    <license file='../LICENSE'/>
+    <conclusion file='conclusion.html'/>
+    <domains enable_anywhere='false' enable_currentUserHome='false' enable_localSystem='true'/>
+    <pkg-ref id=\"$bundleID\"/>
+    <options customize='never' require-scripts='false' hostArchitectures='x86_64,arm64'/>
+    <volume-check>
+        <allowed-os-versions>
+            <os-version min='10.9'/>
+        </allowed-os-versions>
+    </volume-check>
+    <choices-outline>
+        <line choice=\"audio.existential.BlackHole$ch\"/>
+    </choices-outline>
+    <choice id=\"audio.existential.BlackHole$ch\" visible='true' title=\"BlackHole $ch\" start_selected='true'>
+        <pkg-ref id=\"audio.existential.BlackHole$ch\"/>
+    </choice>
+    <pkg-ref id=\"audio.existential.BlackHole$ch\" version=\"$version\" onConclusion='none'>BlackHole.pkg</pkg-ref>
+</installer-gui-script>" >> distribution.xml
+
+
+productbuild --sign "Q5C99V536K" --distribution distribution.xml --resources . --package-path BlackHole.pkg BlackHole$ch.$version.pkg
 rm distribution.xml
-rm BlackHole$ch.$version.pkg
+rm -f BlackHole.pkg
+
+# Notarize
+xcrun altool --notarize-app -f BlackHole$ch.$version.pkg --primary-bundle-id $bundleID --username devinroth@existential.audio -progress -wait
+
+# sudo xcrun stapler staple BlackHole$ch.$version.pkg
+
+# Clean up
+
+# rm BlackHole$ch.$version.pkg
+
+cd ..
+
+done
+
+

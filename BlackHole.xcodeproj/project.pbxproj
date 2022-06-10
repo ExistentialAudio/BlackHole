@@ -7,23 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D083810284A7ED000C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
-		3D083811284A7ED800C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
-		3D083812284A7EEB00C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
-		3D083813284A7EF100C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
-		3D083814284A7EFE00C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
-		3D083815284A7F0000C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
-		3D083816284A7F0400C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
-		3D083817284A7F0A00C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
 		3D083818284A7F1200C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
 		3D083819284A7F1500C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
-		3D89662028499E1B002AB3F0 /* BlackHole.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D616EF215B8C82500D598BD /* BlackHole.c */; };
-		3D89662228499E1B002AB3F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6C8E45275E92B40030C104 /* Accelerate.framework */; };
-		3D89662328499E1B002AB3F0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477EC157823CF00412279 /* CoreAudio.framework */; };
-		3D89662428499E1B002AB3F0 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477AC1578168D00412279 /* CoreFoundation.framework */; };
-		3D89662628499E1B002AB3F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCADB233FAE0500101681 /* LICENSE */; };
-		3D89662728499E1B002AB3F0 /* BlackHole.icns in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCAD9233F235500101681 /* BlackHole.icns */; };
-		3D89662828499E1B002AB3F0 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 039FF2572341B6E800400D7A /* CHANGELOG.md */; };
 		3D89663F2849C318002AB3F0 /* BlackHole.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D616EF215B8C82500D598BD /* BlackHole.c */; };
 		3D8966412849C318002AB3F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6C8E45275E92B40030C104 /* Accelerate.framework */; };
 		3D8966422849C318002AB3F0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477EC157823CF00412279 /* CoreAudio.framework */; };
@@ -31,27 +16,6 @@
 		3D8966462849C318002AB3F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCADB233FAE0500101681 /* LICENSE */; };
 		3D8966472849C318002AB3F0 /* BlackHole.icns in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCAD9233F235500101681 /* BlackHole.icns */; };
 		3D8966482849C318002AB3F0 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 039FF2572341B6E800400D7A /* CHANGELOG.md */; };
-		3D8966532849CB29002AB3F0 /* BlackHole.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D616EF215B8C82500D598BD /* BlackHole.c */; };
-		3D8966552849CB29002AB3F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6C8E45275E92B40030C104 /* Accelerate.framework */; };
-		3D8966562849CB29002AB3F0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477EC157823CF00412279 /* CoreAudio.framework */; };
-		3D8966572849CB29002AB3F0 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477AC1578168D00412279 /* CoreFoundation.framework */; };
-		3D89665A2849CB29002AB3F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCADB233FAE0500101681 /* LICENSE */; };
-		3D89665B2849CB29002AB3F0 /* BlackHole.icns in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCAD9233F235500101681 /* BlackHole.icns */; };
-		3D89665C2849CB29002AB3F0 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 039FF2572341B6E800400D7A /* CHANGELOG.md */; };
-		3D8966652849CB2E002AB3F0 /* BlackHole.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D616EF215B8C82500D598BD /* BlackHole.c */; };
-		3D8966672849CB2E002AB3F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6C8E45275E92B40030C104 /* Accelerate.framework */; };
-		3D8966682849CB2E002AB3F0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477EC157823CF00412279 /* CoreAudio.framework */; };
-		3D8966692849CB2E002AB3F0 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477AC1578168D00412279 /* CoreFoundation.framework */; };
-		3D89666C2849CB2E002AB3F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCADB233FAE0500101681 /* LICENSE */; };
-		3D89666D2849CB2E002AB3F0 /* BlackHole.icns in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCAD9233F235500101681 /* BlackHole.icns */; };
-		3D89666E2849CB2E002AB3F0 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 039FF2572341B6E800400D7A /* CHANGELOG.md */; };
-		3D8966772849CB32002AB3F0 /* BlackHole.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D616EF215B8C82500D598BD /* BlackHole.c */; };
-		3D8966792849CB32002AB3F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D6C8E45275E92B40030C104 /* Accelerate.framework */; };
-		3D89667A2849CB32002AB3F0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477EC157823CF00412279 /* CoreAudio.framework */; };
-		3D89667B2849CB32002AB3F0 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D7477AC1578168D00412279 /* CoreFoundation.framework */; };
-		3D89667E2849CB32002AB3F0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCADB233FAE0500101681 /* LICENSE */; };
-		3D89667F2849CB32002AB3F0 /* BlackHole.icns in Resources */ = {isa = PBXBuildFile; fileRef = 03FDCAD9233F235500101681 /* BlackHole.icns */; };
-		3D8966802849CB32002AB3F0 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 039FF2572341B6E800400D7A /* CHANGELOG.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,35 +32,16 @@
 		3D083806284A7BB000C69403 /* conclusion.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = conclusion.html; sourceTree = "<group>"; };
 		3D083807284A7BB000C69403 /* requirements.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = requirements.xml; sourceTree = "<group>"; };
 		3D083808284A7BB000C69403 /* welcome.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = welcome.html; sourceTree = "<group>"; };
-		3D08380B284A7DE000C69403 /* BlackHole256ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole256ch.plist; sourceTree = "<group>"; };
-		3D08380C284A7DE100C69403 /* BlackHole64ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole64ch.plist; sourceTree = "<group>"; };
-		3D08380D284A7DE100C69403 /* BlackHole128ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole128ch.plist; sourceTree = "<group>"; };
-		3D08380E284A7DE100C69403 /* BlackHole2ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole2ch.plist; sourceTree = "<group>"; };
-		3D08380F284A7DE100C69403 /* BlackHole16ch.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole16ch.plist; sourceTree = "<group>"; };
-		3D08381A284AA8E400C69403 /* generate_distribution.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = generate_distribution.sh; sourceTree = "<group>"; };
+		3D08380E284A7DE100C69403 /* BlackHole.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = BlackHole.plist; sourceTree = "<group>"; };
 		3D08381B284AA8EE00C69403 /* create_installer.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = create_installer.sh; sourceTree = "<group>"; };
 		3D6C8E45275E92B40030C104 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		3D89662D28499E1B002AB3F0 /* BlackHole16ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole16ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D89662F2849BF1A002AB3F0 /* VERSION */ = {isa = PBXFileReference; lastKnownFileType = text; path = VERSION; sourceTree = "<group>"; };
-		3D89664D2849C318002AB3F0 /* BlackHole2ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole2ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D8966612849CB29002AB3F0 /* BlackHole64ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole64ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D8966732849CB2E002AB3F0 /* BlackHole128ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole128ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D8966852849CB32002AB3F0 /* BlackHole256ch.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole256ch.driver; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D89664D2849C318002AB3F0 /* BlackHole.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackHole.driver; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D8966882849D45F002AB3F0 /* postinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = postinstall; sourceTree = "<group>"; };
 		3D8966892849D45F002AB3F0 /* preinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = preinstall; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3D89662128499E1B002AB3F0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D89662228499E1B002AB3F0 /* Accelerate.framework in Frameworks */,
-				3D89662328499E1B002AB3F0 /* CoreAudio.framework in Frameworks */,
-				3D89662428499E1B002AB3F0 /* CoreFoundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3D8966402849C318002AB3F0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -107,47 +52,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3D8966542849CB29002AB3F0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D8966552849CB29002AB3F0 /* Accelerate.framework in Frameworks */,
-				3D8966562849CB29002AB3F0 /* CoreAudio.framework in Frameworks */,
-				3D8966572849CB29002AB3F0 /* CoreFoundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3D8966662849CB2E002AB3F0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D8966672849CB2E002AB3F0 /* Accelerate.framework in Frameworks */,
-				3D8966682849CB2E002AB3F0 /* CoreAudio.framework in Frameworks */,
-				3D8966692849CB2E002AB3F0 /* CoreFoundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3D8966782849CB32002AB3F0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D8966792849CB32002AB3F0 /* Accelerate.framework in Frameworks */,
-				3D89667A2849CB32002AB3F0 /* CoreAudio.framework in Frameworks */,
-				3D89667B2849CB32002AB3F0 /* CoreFoundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		2D616EF015B8C82500D598BD /* BlackHole */ = {
 			isa = PBXGroup;
 			children = (
-				3D08380E284A7DE100C69403 /* BlackHole2ch.plist */,
-				3D08380F284A7DE100C69403 /* BlackHole16ch.plist */,
-				3D08380C284A7DE100C69403 /* BlackHole64ch.plist */,
-				3D08380D284A7DE100C69403 /* BlackHole128ch.plist */,
-				3D08380B284A7DE000C69403 /* BlackHole256ch.plist */,
+				3D08380E284A7DE100C69403 /* BlackHole.plist */,
 				03FDCAD9233F235500101681 /* BlackHole.icns */,
 				03FEA4BB233D27770005D277 /* BlackHole.h */,
 				2D616EF215B8C82500D598BD /* BlackHole.c */,
@@ -172,11 +83,7 @@
 		2D7477AA1578168D00412279 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3D89662D28499E1B002AB3F0 /* BlackHole16ch.driver */,
-				3D89664D2849C318002AB3F0 /* BlackHole2ch.driver */,
-				3D8966612849CB29002AB3F0 /* BlackHole64ch.driver */,
-				3D8966732849CB2E002AB3F0 /* BlackHole128ch.driver */,
-				3D8966852849CB32002AB3F0 /* BlackHole256ch.driver */,
+				3D89664D2849C318002AB3F0 /* BlackHole.driver */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -197,7 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				3D08381B284AA8EE00C69403 /* create_installer.sh */,
-				3D08381A284AA8E400C69403 /* generate_distribution.sh */,
 				3D8966872849D45F002AB3F0 /* scripts */,
 				3D083806284A7BB000C69403 /* conclusion.html */,
 				3D083807284A7BB000C69403 /* requirements.xml */,
@@ -218,27 +124,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3D89661E28499E1B002AB3F0 /* BlackHole16ch */ = {
+		3D89663D2849C318002AB3F0 /* BlackHole */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3D89662928499E1B002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole16ch" */;
-			buildPhases = (
-				3D89661F28499E1B002AB3F0 /* Sources */,
-				3D89662128499E1B002AB3F0 /* Frameworks */,
-				3D89663C2849C125002AB3F0 /* ShellScript */,
-				3D89662528499E1B002AB3F0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = BlackHole16ch;
-			productName = AudioNULLDriver;
-			productReference = 3D89662D28499E1B002AB3F0 /* BlackHole16ch.driver */;
-			productType = "com.apple.product-type.bundle";
-		};
-		3D89663D2849C318002AB3F0 /* BlackHole2ch */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3D8966492849C318002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole2ch" */;
+			buildConfigurationList = 3D8966492849C318002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole" */;
 			buildPhases = (
 				3D89663E2849C318002AB3F0 /* Sources */,
 				3D8966402849C318002AB3F0 /* Frameworks */,
@@ -249,63 +137,9 @@
 			);
 			dependencies = (
 			);
-			name = BlackHole2ch;
+			name = BlackHole;
 			productName = AudioNULLDriver;
-			productReference = 3D89664D2849C318002AB3F0 /* BlackHole2ch.driver */;
-			productType = "com.apple.product-type.bundle";
-		};
-		3D8966512849CB29002AB3F0 /* BlackHole64ch */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3D89665D2849CB29002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole64ch" */;
-			buildPhases = (
-				3D8966522849CB29002AB3F0 /* Sources */,
-				3D8966542849CB29002AB3F0 /* Frameworks */,
-				3D8966582849CB29002AB3F0 /* ShellScript */,
-				3D8966592849CB29002AB3F0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = BlackHole64ch;
-			productName = AudioNULLDriver;
-			productReference = 3D8966612849CB29002AB3F0 /* BlackHole64ch.driver */;
-			productType = "com.apple.product-type.bundle";
-		};
-		3D8966632849CB2E002AB3F0 /* BlackHole128ch */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3D89666F2849CB2E002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole128ch" */;
-			buildPhases = (
-				3D8966642849CB2E002AB3F0 /* Sources */,
-				3D8966662849CB2E002AB3F0 /* Frameworks */,
-				3D89666A2849CB2E002AB3F0 /* ShellScript */,
-				3D89666B2849CB2E002AB3F0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = BlackHole128ch;
-			productName = AudioNULLDriver;
-			productReference = 3D8966732849CB2E002AB3F0 /* BlackHole128ch.driver */;
-			productType = "com.apple.product-type.bundle";
-		};
-		3D8966752849CB32002AB3F0 /* BlackHole256ch */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3D8966812849CB32002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole256ch" */;
-			buildPhases = (
-				3D8966762849CB32002AB3F0 /* Sources */,
-				3D8966782849CB32002AB3F0 /* Frameworks */,
-				3D89667C2849CB32002AB3F0 /* ShellScript */,
-				3D89667D2849CB32002AB3F0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = BlackHole256ch;
-			productName = AudioNULLDriver;
-			productReference = 3D8966852849CB32002AB3F0 /* BlackHole256ch.driver */;
+			productReference = 3D89664D2849C318002AB3F0 /* BlackHole.driver */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -316,19 +150,7 @@
 			attributes = {
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
-					3D89661E28499E1B002AB3F0 = {
-						DevelopmentTeam = Q5C99V536K;
-					};
 					3D89663D2849C318002AB3F0 = {
-						DevelopmentTeam = Q5C99V536K;
-					};
-					3D8966512849CB29002AB3F0 = {
-						DevelopmentTeam = Q5C99V536K;
-					};
-					3D8966632849CB2E002AB3F0 = {
-						DevelopmentTeam = Q5C99V536K;
-					};
-					3D8966752849CB32002AB3F0 = {
 						DevelopmentTeam = Q5C99V536K;
 					};
 				};
@@ -346,28 +168,12 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3D89663D2849C318002AB3F0 /* BlackHole2ch */,
-				3D89661E28499E1B002AB3F0 /* BlackHole16ch */,
-				3D8966512849CB29002AB3F0 /* BlackHole64ch */,
-				3D8966632849CB2E002AB3F0 /* BlackHole128ch */,
-				3D8966752849CB32002AB3F0 /* BlackHole256ch */,
+				3D89663D2849C318002AB3F0 /* BlackHole */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3D89662528499E1B002AB3F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D89662628499E1B002AB3F0 /* LICENSE in Resources */,
-				3D89662728499E1B002AB3F0 /* BlackHole.icns in Resources */,
-				3D89662828499E1B002AB3F0 /* CHANGELOG.md in Resources */,
-				3D083816284A7F0400C69403 /* VERSION in Resources */,
-				3D083817284A7F0A00C69403 /* README.md in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3D8966452849C318002AB3F0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -380,114 +186,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3D8966592849CB29002AB3F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D89665A2849CB29002AB3F0 /* LICENSE in Resources */,
-				3D89665B2849CB29002AB3F0 /* BlackHole.icns in Resources */,
-				3D89665C2849CB29002AB3F0 /* CHANGELOG.md in Resources */,
-				3D083814284A7EFE00C69403 /* VERSION in Resources */,
-				3D083815284A7F0000C69403 /* README.md in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3D89666B2849CB2E002AB3F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D89666C2849CB2E002AB3F0 /* LICENSE in Resources */,
-				3D89666D2849CB2E002AB3F0 /* BlackHole.icns in Resources */,
-				3D89666E2849CB2E002AB3F0 /* CHANGELOG.md in Resources */,
-				3D083812284A7EEB00C69403 /* VERSION in Resources */,
-				3D083813284A7EF100C69403 /* README.md in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3D89667D2849CB32002AB3F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D89667E2849CB32002AB3F0 /* LICENSE in Resources */,
-				3D89667F2849CB32002AB3F0 /* BlackHole.icns in Resources */,
-				3D8966802849CB32002AB3F0 /* CHANGELOG.md in Resources */,
-				3D083810284A7ED000C69403 /* VERSION in Resources */,
-				3D083811284A7ED800C69403 /* README.md in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3D89663C2849C125002AB3F0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n#read vesion number from VERSION in project root\nVERSION=$(head -n 1 VERSION)\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
-		};
 		3D8966442849C318002AB3F0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n#read vesion number from VERSION in project root\nVERSION=$(head -n 1 VERSION)\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
-		};
-		3D8966582849CB29002AB3F0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n#read vesion number from VERSION in project root\nVERSION=$(head -n 1 VERSION)\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
-		};
-		3D89666A2849CB2E002AB3F0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n#read vesion number from VERSION in project root\nVERSION=$(head -n 1 VERSION)\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
-		};
-		3D89667C2849CB32002AB3F0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -507,43 +209,11 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3D89661F28499E1B002AB3F0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D89662028499E1B002AB3F0 /* BlackHole.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3D89663E2849C318002AB3F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				3D89663F2849C318002AB3F0 /* BlackHole.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3D8966522849CB29002AB3F0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D8966532849CB29002AB3F0 /* BlackHole.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3D8966642849CB2E002AB3F0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D8966652849CB2E002AB3F0 /* BlackHole.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3D8966762849CB32002AB3F0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D8966772849CB32002AB3F0 /* BlackHole.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -710,69 +380,6 @@
 			};
 			name = "Debug-Opt";
 		};
-		3D89662A28499E1B002AB3F0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=0",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole16ch\\\"",
-					"kNumber_Of_Channels=16",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole16ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole16ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = Release;
-		};
-		3D89662B28499E1B002AB3F0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole16ch\\\"",
-					"kNumber_Of_Channels=16",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole16ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole16ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = Debug;
-		};
-		3D89662C28499E1B002AB3F0 /* Debug-Opt */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole16ch\\\"",
-					"kNumber_Of_Channels=16",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole16ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole16ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = "Debug-Opt";
-		};
 		3D89664A2849C318002AB3F0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -782,10 +389,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"DEBUG=0",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole2ch\\\"",
-					"kNumber_Of_Channels=2",
 				);
-				INFOPLIST_FILE = BlackHole/BlackHole2ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
@@ -803,10 +408,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole2ch\\\"",
-					"kNumber_Of_Channels=2",
 				);
-				INFOPLIST_FILE = BlackHole/BlackHole2ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
@@ -824,202 +427,11 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole2ch\\\"",
-					"kNumber_Of_Channels=2",
 				);
-				INFOPLIST_FILE = BlackHole/BlackHole2ch.plist;
+				INFOPLIST_FILE = BlackHole/BlackHole.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole2ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = "Debug-Opt";
-		};
-		3D89665E2849CB29002AB3F0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=0",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole64ch\\\"",
-					"kNumber_Of_Channels=64",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole64ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole64ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = Release;
-		};
-		3D89665F2849CB29002AB3F0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole64ch\\\"",
-					"kNumber_Of_Channels=64",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole64ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole64ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = Debug;
-		};
-		3D8966602849CB29002AB3F0 /* Debug-Opt */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole64ch\\\"",
-					"kNumber_Of_Channels=64",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole64ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole64ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = "Debug-Opt";
-		};
-		3D8966702849CB2E002AB3F0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=0",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole128ch\\\"",
-					"kNumber_Of_Channels=128",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole128ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole128ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = Release;
-		};
-		3D8966712849CB2E002AB3F0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole128ch\\\"",
-					"kNumber_Of_Channels=128",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole128ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole128ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = Debug;
-		};
-		3D8966722849CB2E002AB3F0 /* Debug-Opt */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole128ch\\\"",
-					"kNumber_Of_Channels=128",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole128ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole128ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = "Debug-Opt";
-		};
-		3D8966822849CB32002AB3F0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=0",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole256ch\\\"",
-					"kNumber_Of_Channels=256",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole256ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole256ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = Release;
-		};
-		3D8966832849CB32002AB3F0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole256ch\\\"",
-					"kNumber_Of_Channels=256",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole256ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole256ch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = driver;
-			};
-			name = Debug;
-		};
-		3D8966842849CB32002AB3F0 /* Debug-Opt */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				DEVELOPMENT_TEAM = Q5C99V536K;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"DEBUG=1",
-					"kPlugIn_BundleID=\\\"audio.existential.BlackHole256ch\\\"",
-					"kNumber_Of_Channels=256",
-				);
-				INFOPLIST_FILE = BlackHole/BlackHole256ch.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole256ch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = driver;
 			};
@@ -1038,52 +450,12 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3D89662928499E1B002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole16ch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3D89662A28499E1B002AB3F0 /* Release */,
-				3D89662B28499E1B002AB3F0 /* Debug */,
-				3D89662C28499E1B002AB3F0 /* Debug-Opt */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3D8966492849C318002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole2ch" */ = {
+		3D8966492849C318002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3D89664A2849C318002AB3F0 /* Release */,
 				3D89664B2849C318002AB3F0 /* Debug */,
 				3D89664C2849C318002AB3F0 /* Debug-Opt */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3D89665D2849CB29002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole64ch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3D89665E2849CB29002AB3F0 /* Release */,
-				3D89665F2849CB29002AB3F0 /* Debug */,
-				3D8966602849CB29002AB3F0 /* Debug-Opt */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3D89666F2849CB2E002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole128ch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3D8966702849CB2E002AB3F0 /* Release */,
-				3D8966712849CB2E002AB3F0 /* Debug */,
-				3D8966722849CB2E002AB3F0 /* Debug-Opt */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3D8966812849CB32002AB3F0 /* Build configuration list for PBXNativeTarget "BlackHole256ch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3D8966822849CB32002AB3F0 /* Release */,
-				3D8966832849CB32002AB3F0 /* Debug */,
-				3D8966842849CB32002AB3F0 /* Debug-Opt */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
