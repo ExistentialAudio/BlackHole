@@ -40,7 +40,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 2. Close all running audio applications
 3. Open and install package
 
-### Option 2: Install via Homebrew (Currently BlackHole v0.2.10)
+### Option 2: Install via Homebrew
 
 - 2ch: `brew install blackhole-2ch`
 - 16ch: `brew install blackhole-16ch`
@@ -54,9 +54,16 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ### Option 2: Manually Uninstall
 
-1. Delete BlackHoleXch.driver by running `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` 
-   NOTE: The directory is in `/Library` not `user/Library` and be sure to replace `X` with either `2`, `16`, or `64`
-2. Restart CoreAudio with terminal command `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
+1. Delete the BlackHold driver with the terminal command:
+   
+    `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` 
+   
+   Be sure to replace `X` with either `2`, `16`, or `64`.
+   
+   Note that the directory is the root `/Library` not `/Users/user/Library`.
+2. Restart CoreAudio with the terminal command:
+
+    `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 For more specific details [visit the Wiki.](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation)
 
