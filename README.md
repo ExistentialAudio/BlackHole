@@ -16,8 +16,8 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - [Features](#features)
 - [Installation Instructions](#installation-instructions)
 - [Uninstallation Instructions](#uninstallation-instructions)
-- [Guides](#guides)
-- [Advanced Customization and Installation](#advanced-customization-and-installation)
+- [User Guides](#user-guides)
+- [Developer Guides](#developer-guides)
 - [Feature Requests](#feature-requests)
 - [FAQ](#faq)
 - [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)
@@ -101,6 +101,9 @@ For more specific details [visit the Wiki.](https://github.com/ExistentialAudio/
 
 ### A license is required for all non GPL-3.0 projects. 
 Please support our hard work and continued development. To request a license [contact Existential Audio](mailto:devinroth@existential.audio).
+
+### Install
+To install BlackHole copy the `BlackHoleXch.driver` folder to `/Library/Audio/Plug-Ins/HAL` and restart CoreAudio using `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`.
 
 ### Customizing BlackHole
 
