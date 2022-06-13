@@ -28,7 +28,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - Customizable mirror device to allow for a hidden input or output
 - Supports 8kHz, 16kHz, 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, 192kHz, 352.8kHz, 384kHz, 705.6kHz and 768kHz sample rates
 - Zero driver latency
-- Compatible with macOS Mavericks (10.9) and newer
+- Compatible with macOS Mavericks (10.9) and newer.
 - Builds for Intel and Apple Silicon
 
 ![Image of BlackHole Audio Driver](Images/BlackHole.png)
