@@ -102,7 +102,7 @@ For more specific details [visit the Wiki.](https://github.com/ExistentialAudio/
 ### A license is required for all non GPL-3.0 projects. 
 Please support our hard work and continued development. To request a license [contact Existential Audio](mailto:devinroth@existential.audio).
 
-### Install
+### Installation
 To install BlackHole copy the `BlackHoleXch.driver` folder to `/Library/Audio/Plug-Ins/HAL` and restart CoreAudio using `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`.
 
 ### Customizing BlackHole
@@ -208,6 +208,10 @@ In this situation we have two BlackHole devices. One will have inputs only and t
 One way to use this in projects is to hide the mirrored device and use it behind the scenes. That way the user will see an input only device while routing audio through to the output behind them scenes. 
 
 Hidden audio devices can be accessed using `kAudioHardwarePropertyTranslateUIDToDevice`.
+
+### Continuous Integration / Continuous Deployment
+BlackHole can be integrated into your CI/CD. Take a look at https://github.com/ExistentialAudio/BlackHole/blob/master/Installer/create_installer.sh to see how the installer is built, signed and notarized.
+
 
 
 ## Feature Requests
