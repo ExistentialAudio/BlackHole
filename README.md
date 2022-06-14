@@ -135,7 +135,7 @@ Example.
 ```
 xcodebuild \
 -project BlackHole.xcodeproj \
-GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS \
+GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS 
 kSomeConstant=value
 ```
 
@@ -159,9 +159,9 @@ xcodebuild \
 -project BlackHole.xcodeproj \
 -configuration Release \
 PRODUCT_BUNDLE_IDENTIFIER=$bundleID \
-GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS \
-kDriver_Name=\"'$driverName'\" \
-kPlugIn_BundleID=\"'$bundleID'\" \
+GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS
+kDriver_Name=\"'$driverName'\"
+kPlugIn_BundleID=\"'$bundleID'\"
 kPlugIn_Icon=\"'$icon'\"'
 ```
 
