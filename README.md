@@ -171,7 +171,7 @@ kPlugIn_Icon=\"'$icon'\"'
 
 `kLatency_Frame_Size` is how much time in frames that the driver has to process incoming and outgoing audio. It can be used to delay the audio inside of BlackHole up to a maximum of 65536 frames. This may be helpful if using BlackHole with a high channel count. 
 
-`kSampleRates` set the sample rate or sample rates of the audio device. If using multiple sample rates separate each with a  `,`. Example: `44100, 48000'.
+`kSampleRates` set the sample rate or sample rates of the audio device. If using multiple sample rates separate each with a  `,`. Example: `44100, 48000`.
 
 ### Mirror Device
 By default BlackHole has a hidden mirrored audio device. The devices may be customized using the following constants. 
