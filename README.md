@@ -126,6 +126,7 @@ kDevice2_HasOutput
 
 kLatency_Frame_Size
 kNumber_Of_Channels
+kSampleRates
 ```
 
 They can be specified at build time with `xcodebuild` using `GCC_PREPROCESSOR_DEFINITIONS`. 
@@ -165,10 +166,12 @@ kPlugIn_BundleID=\"'$bundleID'\"
 kPlugIn_Icon=\"'$icon'\"'
 ```
 
-### Customizing Channels and Latency
+### Customizing Channels, Latency, and Sample Rates
 `kNumber_Of_Channels` is used to set the number of channels. Be careful when specifying high channel counts. Although BlackHole is designed to be extremely efficient at higher channel counts it's possible that your computer might not be able to keep up. Sample rates play a roll as well. Don't use high sample rates with a high number of channels. Some applications don't know how to handle high channel counts. Proceed with caution.
 
 `kLatency_Frame_Size` is how much time in frames that the driver has to process incoming and outgoing audio. It can be used to delay the audio inside of BlackHole up to a maximum of 65536 frames. This may be helpful if using BlackHole with a high channel count. 
+
+`kSampleRates` set the sample rate or sample rates of the audio device. If using multiple sample rates separate each with a  `,`. Example: `44100, 48000'.
 
 ### Mirror Device
 By default BlackHole has a hidden mirrored audio device. The devices may be customized using the following constants. 
