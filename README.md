@@ -137,7 +137,7 @@ Example.
 xcodebuild \
 -project BlackHole.xcodeproj \
 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS 
-kSomeConstant=value
+kSomeConstant=value'
 ```
 
 Be sure to escape any quotation marks when using strings. 
