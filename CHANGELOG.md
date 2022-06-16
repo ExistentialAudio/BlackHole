@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Create multi-output / aggregate device with installer.
 - Keep track of which apps are connected to the driver.
 
+## [0.4.1] - Unreleased
+### Changed
+- Merged BlackHole.h into BlackHole.c for easier testing.
+- Fixed control size bugs. 
+
+### Added
+- Added BlackHoleTests target and relevant files. 
+
 ## [0.4.0] - 2021-06-10
 ### Added
 - Hidden duplicate device.
