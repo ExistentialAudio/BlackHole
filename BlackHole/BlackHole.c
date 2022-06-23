@@ -216,7 +216,11 @@ static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
 
 
 static CFStringRef                  gBox_Name                           = NULL;
-static Boolean                      gBox_Acquired                       = true;
+
+#ifndef kBox_Aquired
+#define                             kBox_Aquired                 	true
+#endif
+static Boolean                      gBox_Acquired                       = kBox_Aquired;
 
 
 static pthread_mutex_t              gDevice_IOMutex                     = PTHREAD_MUTEX_INITIALIZER;
