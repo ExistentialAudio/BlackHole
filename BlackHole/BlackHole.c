@@ -210,6 +210,10 @@ struct ObjectInfo {
 #define                             kNumber_Of_Channels                 2
 #endif
 
+#ifndef kEnableVolumeControl
+#define                             kEnableVolumeControl                 true
+#endif
+
 static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
 static UInt32                       gPlugIn_RefCount                    = 0;
 static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
@@ -4047,7 +4051,11 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             memcpy((Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
             
             // Finally we'll apply the output volume to the buffer.
-            vDSP_vsmul(ioMainBuffer, 1, &gVolume_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
+	    if(kEnableVolumeControl)
+	    {
+	 	vDSP_vsmul(ioMainBuffer, 1, &gVolume_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
+	    }
+
         }
     }
     
