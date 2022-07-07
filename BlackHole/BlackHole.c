@@ -1995,6 +1995,7 @@ static OSStatus	BlackHole_SetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 		case kAudioObjectPropertyName:
 			//	Boxes should allow their name to be editable
 			{
+				FailWithAction(inData == NULL, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_SetBoxPropertyData: NULL data for kAudioObjectPropertyName");
 				FailWithAction(inDataSize != sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetBoxPropertyData: wrong size for the data for kAudioObjectPropertyName");
 				CFStringRef* theNewName = (CFStringRef*)inData;
 				pthread_mutex_lock(&gPlugIn_StateMutex);
