@@ -8,7 +8,7 @@
 [![Twitter](https://img.shields.io/badge/Follow%20on%20Twitter-1da1f2)](https://twitter.com/ExistentialAI)
 [![Facebook](https://img.shields.io/badge/Like%20on%20Facebook-4267B2)](https://www.facebook.com/Existential-Audio-103423234434751)
 
-BlackHole is a modern MacOS virtual audio loopback driver that allows applications to pass audio to other applications with zero additional latency.
+BlackHole is a modern macOS virtual audio loopback driver that allows applications to pass audio to other applications with zero additional latency.
 
 ### [Download Installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme) 
 
