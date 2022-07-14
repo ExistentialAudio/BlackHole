@@ -1,4 +1,7 @@
+![blackhole-banner-830px](Images/blackhole-banner-830px.png)
+
 # BlackHole: Audio Loopback Driver
+
 ![Platform:macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
 ![GitHub](https://img.shields.io/github/v/release/ExistentialAudio/BlackHole)
 [![GitHub](https://img.shields.io/github/license/ExistentialAudio/BlackHole)](LICENSE)
@@ -31,7 +34,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - Compatible with macOS Mavericks (10.9) and newer.
 - Builds for Intel and Apple Silicon
 
-![Image of BlackHole Audio Driver](Images/BlackHole.png)
+![Image of BlackHole Audio Driver](Images/audio-midi-setup.png)
 
 ## Installation Instructions
 
