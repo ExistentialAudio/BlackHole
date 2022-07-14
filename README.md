@@ -1,11 +1,11 @@
-# BlackHole: Virtual Audio Driver
+# BlackHole: Audio Loopback Driver
 ![Platform:macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
 ![GitHub](https://img.shields.io/github/v/release/ExistentialAudio/BlackHole)
 [![GitHub](https://img.shields.io/github/license/ExistentialAudio/BlackHole)](LICENSE)
 [![Twitter](https://img.shields.io/badge/Follow%20on%20Twitter-1da1f2)](https://twitter.com/ExistentialAI)
 [![Facebook](https://img.shields.io/badge/Like%20on%20Facebook-4267B2)](https://www.facebook.com/Existential-Audio-103423234434751)
 
-BlackHole is a modern MacOS virtual audio driver that allows applications to pass audio to other applications with zero additional latency.
+BlackHole is a modern MacOS virtual audio loopback driver that allows applications to pass audio to other applications with zero additional latency.
 
 ### [Download Installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme) 
 
@@ -54,7 +54,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ### Option 2: Manually Uninstall
 
-1. Delete the BlackHold driver with the terminal command:
+1. Delete the BlackHole driver with the terminal command:
    
     `rm -R /Library/Audio/Plug-Ins/HAL/BlackHoleXch.driver` 
    
@@ -214,8 +214,6 @@ Hidden audio devices can be accessed using `kAudioHardwarePropertyTranslateUIDTo
 
 ### Continuous Integration / Continuous Deployment
 BlackHole can be integrated into your CI/CD. Take a look at https://github.com/ExistentialAudio/BlackHole/blob/master/Installer/create_installer.sh to see how the installer is built, signed and notarized.
-
-
 
 ## Feature Requests
 
