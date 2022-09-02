@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Feature request
     url: https://github.com/ExistentialAudio/BlackHole/discussions
-    about: Please ask and answer questions here.
+    about: Suggest an idea for a new feature.
   - name: I need help setting up or troubleshooting BlackHole
     url: https://github.com/ExistentialAudio/BlackHole/discussions
     about: Questions about how to configure your favorite apps.
