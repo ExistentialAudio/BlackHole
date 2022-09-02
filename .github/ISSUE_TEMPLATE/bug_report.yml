@@ -53,7 +53,7 @@ body:
   id: repro
   attributes:
     label: Reproduction Steps
-    description: "Please list steps to reproudce the bug. If exact steps are unknown, please describe what conditions cause the issue."
+    description: "Please list steps to reproduce the bug. If exact steps are unknown, please describe what conditions cause the issue."
     value: |
       1.
       2.
