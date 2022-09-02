@@ -1,4 +1,4 @@
-name: Bug Report
+name: Bug report
 description: Create a bug report about a reproducible problem.
 labels: bug
 body:
