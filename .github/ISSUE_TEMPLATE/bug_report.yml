@@ -1,0 +1,75 @@
+name: Bug Report
+description: Create a bug report about a reproducible problem.
+labels: bug
+body:
+- type: checkboxes
+  id: searched-discussions
+  attributes:
+    label: Please Confirm
+    options:
+      - label: I have read the **[FAQ](https://github.com/ExistentialAudio/BlackHole#faq) and [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)** where most common issues can be resolved
+        required: true
+      - label: I have searched **[Discussions](https://github.com/ExistentialAudio/BlackHole/discussions)** to see if the same question has already been asked
+        required: true
+      - label: This is a **bug** and not a question about audio routing or configuration, which should be posted in [Discussions](https://github.com/ExistentialAudio/BlackHole/discussions)
+        required: true
+- type: dropdown
+  id: operating-system
+  attributes:
+    label: "macOS Version"
+    multiple: false
+    options:
+      - "macOS 13 Ventura"
+      - "macOS 12 Monterey"
+      - "macOS 11 Big Sur"
+      - "macOS 10.15 Catalina"
+      - "macOS 10.14 Mojave"
+      - "macOS 10.13 High Sierra"
+      - "macOS 10.12 Sierra"
+      - "macOS 10.11 El Capitan"
+      - "macOS 10.10 Yosemite"
+      - "macOS 10.9 Mavericks"
+  validations:
+    required: true
+- type: checkboxes
+  id: blackhole-config
+  attributes:
+    label: "BlackHole Build(s) Affected"
+    options:
+      - label: "2 channel"
+      - label: "16 channel"
+      - label: "64 channel"
+      - label: "other/custom build"
+  validations:
+    required: true
+- type: textarea
+  id: bug-description
+  attributes:
+    label: Describe the bug
+    description: "A clear and concise description of what the bug is."
+  validations:
+    required: true     
+- type: textarea
+  id: repro
+  attributes:
+    label: Reproduction Steps
+    description: "Please list steps to reproudce the bug. If exact steps are unknown, please describe what conditions cause the issue."
+    value: |
+      1.
+      2.
+      3.
+      etc...
+  validations:
+    required: true
+- type: textarea
+  id: expected-behavior
+  attributes:
+    label: Expected Behavior
+    description: "A clear and concise description of what you expected to happen."
+  validations:
+    required: true
+- type: textarea
+  id: screenshots
+  attributes:
+    label: Screenshots
+    description: "Please include screenshots of Audio MIDI Setup (BlackHole, your Multi-Output Device, etc.) and any app configuration windows in question. You can take screen shots by pressing <kbd>Shift</kbd><kbd>Cmd</kbd><kbd>4</kbd>, then attach the screenshot image files by dragging them onto the text entry area below:"
