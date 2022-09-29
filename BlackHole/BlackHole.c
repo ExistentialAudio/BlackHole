@@ -157,12 +157,7 @@ struct ObjectInfo {
 #define                             kDevice_UID                         kDriver_Name kDriver_Name_Format "_UID"
 #define                             kDevice2_UID                        kDriver_Name kDriver_Name_Format "_2_UID"
 #define                             kDevice_ModelUID                    kDriver_Name kDriver_Name_Format "_ModelUID"
-#else
-#define                             kBox_UID                            kDriver_Name "_UID"
-#define                             kDevice_UID                         kDriver_Name "_UID"
-#define                             kDevice2_UID                        kDriver_Name "_2_UID"
-#define                             kDevice_ModelUID                    kDriver_Name "_ModelUID"
-#endif
+
 
 #ifndef kDevice_Name
 #define                             kDevice_Name                        kDriver_Name " %ich"
@@ -170,6 +165,24 @@ struct ObjectInfo {
 
 #ifndef kDevice2_Name
 #define                             kDevice2_Name                       kDriver_Name " %ich 2"
+#endif
+
+
+#else
+#define                             kBox_UID                            kDriver_Name "_UID"
+#define                             kDevice_UID                         kDriver_Name "_UID"
+#define                             kDevice2_UID                        kDriver_Name "_2_UID"
+#define                             kDevice_ModelUID                    kDriver_Name "_ModelUID"
+
+
+#ifndef kDevice_Name
+#define                             kDevice_Name                        kDriver_Name " "
+#endif
+
+#ifndef kDevice2_Name
+#define                             kDevice2_Name                       kDriver_Name " Mirror"
+#endif
+
 #endif
 
 #ifndef kDevice_IsHidden
