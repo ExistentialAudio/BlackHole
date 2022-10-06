@@ -241,7 +241,7 @@ static Boolean                      gBox_Acquired                       = kBox_A
 
 
 static pthread_mutex_t              gDevice_IOMutex                     = PTHREAD_MUTEX_INITIALIZER;
-static Float64                      gDevice_SampleRate                  = 44100.0;
+static Float64                      gDevice_SampleRate                  = 48000.0;
 static UInt64                       gDevice_IOIsRunning                 = 0;
 static const UInt32                 kDevice_RingBufferSize              = 16384;
 static Float64                      gDevice_HostTicksPerFrame           = 0.0;
