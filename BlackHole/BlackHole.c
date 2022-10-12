@@ -113,7 +113,8 @@ enum
     kObjectID_Stream_Output             = 7,
     kObjectID_Volume_Output_Master      = 8,
     kObjectID_Mute_Output_Master        = 9,
-    kObjectID_Device2                   = 10,
+	kObjectID_Pitch_Adjust              = 10,
+    kObjectID_Device2                   = 11,
 };
 
 enum ObjectType
@@ -255,6 +256,7 @@ static bool                         gStream_Output_IsActive             = true;
 static const Float32                kVolume_MinDB                       = -64.0;
 static const Float32                kVolume_MaxDB                       = 0.0;
 static Float32                      gVolume_Master_Value                = 1.0;
+static Float32                      gPitch_Adjust                       = 0.5;
 static bool                         gMute_Master_Value                  = false;
 
 static struct ObjectInfo            kDevice_ObjectList[]                = {
@@ -266,7 +268,8 @@ static struct ObjectInfo            kDevice_ObjectList[]                = {
 #if kDevice_HasOutput
     { kObjectID_Stream_Output,          kObjectType_Stream,     kAudioObjectPropertyScopeOutput },
     { kObjectID_Volume_Output_Master,   kObjectType_Control,    kAudioObjectPropertyScopeOutput },
-    { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput }
+    { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput },
+	{ kObjectID_Pitch_Adjust,           kObjectType_Control,    kAudioObjectPropertyScopeOutput }
 #endif
 };
 
@@ -279,7 +282,8 @@ static struct ObjectInfo            kDevice2_ObjectList[]                = {
 #if kDevice2_HasOutput
     { kObjectID_Stream_Output,          kObjectType_Stream,     kAudioObjectPropertyScopeOutput },
     { kObjectID_Volume_Output_Master,   kObjectType_Control,    kAudioObjectPropertyScopeOutput },
-    { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput }
+    { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput },
+	{ kObjectID_Pitch_Adjust,           kObjectType_Control,    kAudioObjectPropertyScopeOutput }
 #endif
 };
 
@@ -942,8 +946,9 @@ static Boolean	BlackHole_HasProperty(AudioServerPlugInDriverRef inDriver, AudioO
 		
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
-        case kObjectID_Volume_Input_Master:
-        case kObjectID_Mute_Input_Master:
+		case kObjectID_Volume_Input_Master:
+		case kObjectID_Mute_Input_Master:
+		case kObjectID_Pitch_Adjust:
 			theAnswer = BlackHole_HasControlProperty(inDriver, inObjectID, inClientProcessID, inAddress);
 			break;
 	};
@@ -987,14 +992,15 @@ static OSStatus	BlackHole_IsPropertySettable(AudioServerPlugInDriverRef inDriver
 		case kObjectID_Stream_Output:
 			theAnswer = BlackHole_IsStreamPropertySettable(inDriver, inObjectID, inClientProcessID, inAddress, outIsSettable);
 			break;
-		
+
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
-        case kObjectID_Volume_Input_Master:
-        case kObjectID_Mute_Input_Master:
+		case kObjectID_Volume_Input_Master:
+		case kObjectID_Mute_Input_Master:
+		case kObjectID_Pitch_Adjust:
 			theAnswer = BlackHole_IsControlPropertySettable(inDriver, inObjectID, inClientProcessID, inAddress, outIsSettable);
 			break;
-				
+
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -1038,14 +1044,15 @@ static OSStatus	BlackHole_GetPropertyDataSize(AudioServerPlugInDriverRef inDrive
 		case kObjectID_Stream_Output:
 			theAnswer = BlackHole_GetStreamPropertyDataSize(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, outDataSize);
 			break;
-		
+			
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
-        case kObjectID_Volume_Input_Master:
-        case kObjectID_Mute_Input_Master:
+		case kObjectID_Volume_Input_Master:
+		case kObjectID_Mute_Input_Master:
+		case kObjectID_Pitch_Adjust:
 			theAnswer = BlackHole_GetControlPropertyDataSize(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, outDataSize);
 			break;
-				
+			
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -1093,11 +1100,12 @@ static OSStatus	BlackHole_GetPropertyData(AudioServerPlugInDriverRef inDriver, A
 		
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
-        case kObjectID_Volume_Input_Master:
-        case kObjectID_Mute_Input_Master:
+		case kObjectID_Volume_Input_Master:
+		case kObjectID_Mute_Input_Master:
+		case kObjectID_Pitch_Adjust:
 			theAnswer = BlackHole_GetControlPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, outDataSize, outData);
 			break;
-				
+			
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -1140,14 +1148,15 @@ static OSStatus	BlackHole_SetPropertyData(AudioServerPlugInDriverRef inDriver, A
 		case kObjectID_Stream_Output:
 			theAnswer = BlackHole_SetStreamPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData, &theNumberPropertiesChanged, theChangedAddresses);
 			break;
-		
+			
 		case kObjectID_Volume_Output_Master:
 		case kObjectID_Mute_Output_Master:
-        case kObjectID_Volume_Input_Master:
-        case kObjectID_Mute_Input_Master:
+		case kObjectID_Volume_Input_Master:
+		case kObjectID_Mute_Input_Master:
+		case kObjectID_Pitch_Adjust:
 			theAnswer = BlackHole_SetControlPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData, &theNumberPropertiesChanged, theChangedAddresses);
 			break;
-				
+			
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -3247,6 +3256,21 @@ static Boolean	BlackHole_HasControlProperty(AudioServerPlugInDriverRef inDriver,
 					break;
 			};
 			break;
+
+		case kObjectID_Pitch_Adjust:
+			switch(inAddress->mSelector)
+			{
+				case kAudioObjectPropertyBaseClass:
+				case kAudioObjectPropertyClass:
+				case kAudioObjectPropertyOwner:
+				case kAudioObjectPropertyOwnedObjects:
+				case kAudioControlPropertyScope:
+				case kAudioControlPropertyElement:
+				case kAudioStereoPanControlPropertyValue:
+					theAnswer = true;
+					break;
+			};
+			break;
 	};
 
 Done:
@@ -3322,7 +3346,29 @@ static OSStatus	BlackHole_IsControlPropertySettable(AudioServerPlugInDriverRef i
 					break;
 			};
 			break;
-				
+
+		case kObjectID_Pitch_Adjust:
+			switch(inAddress->mSelector)
+			{
+				case kAudioObjectPropertyBaseClass:
+				case kAudioObjectPropertyClass:
+				case kAudioObjectPropertyOwner:
+				case kAudioObjectPropertyOwnedObjects:
+				case kAudioControlPropertyScope:
+				case kAudioControlPropertyElement:
+					*outIsSettable = false;
+					break;
+
+				case kAudioStereoPanControlPropertyValue:
+					*outIsSettable = true;
+					break;
+
+				default:
+					theAnswer = kAudioHardwareUnknownPropertyError;
+					break;
+			};
+			break;
+
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -3442,7 +3488,44 @@ static OSStatus	BlackHole_GetControlPropertyDataSize(AudioServerPlugInDriverRef 
 					break;
 			};
 			break;
-				
+			
+		case kObjectID_Pitch_Adjust:
+			switch(inAddress->mSelector)
+			{
+				case kAudioObjectPropertyBaseClass:
+					*outDataSize = sizeof(AudioClassID);
+					break;
+
+				case kAudioObjectPropertyClass:
+					*outDataSize = sizeof(AudioClassID);
+					break;
+
+				case kAudioObjectPropertyOwner:
+					*outDataSize = sizeof(AudioObjectID);
+					break;
+
+				case kAudioObjectPropertyOwnedObjects:
+					*outDataSize = 0 * sizeof(AudioObjectID);
+					break;
+
+				case kAudioControlPropertyScope:
+					*outDataSize = sizeof(AudioObjectPropertyScope);
+					break;
+
+				case kAudioControlPropertyElement:
+					*outDataSize = sizeof(AudioObjectPropertyElement);
+					break;
+
+				case kAudioStereoPanControlPropertyValue:
+					*outDataSize = sizeof(Float32);
+					break;
+
+				default:
+					theAnswer = kAudioHardwareUnknownPropertyError;
+					break;
+			};
+			break;
+
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -3660,7 +3743,66 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					break;
 			};
 			break;
-				
+
+		case kObjectID_Pitch_Adjust:
+			switch(inAddress->mSelector)
+			{
+				case kAudioObjectPropertyBaseClass:
+					//    The base class for kAudioMuteControlClassID is kAudioBooleanControlClassID
+					FailWithAction(inDataSize < sizeof(AudioClassID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioObjectPropertyBaseClass for the pitch control");
+					*((AudioClassID*)outData) = kAudioStereoPanControlClassID;
+					*outDataSize = sizeof(AudioClassID);
+					break;
+
+				case kAudioObjectPropertyClass:
+					//    Level controls are of the class, kAudioLevelControlClassID
+					FailWithAction(inDataSize < sizeof(AudioClassID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioObjectPropertyClass for the pitch control");
+					*((AudioClassID*)outData) = kAudioStereoPanControlClassID;
+					*outDataSize = sizeof(AudioClassID);
+					break;
+
+				case kAudioObjectPropertyOwner:
+					//    The control's owner is the device object
+					FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioObjectPropertyOwner for the pitch control");
+					*((AudioObjectID*)outData) = kObjectID_Device;
+					*outDataSize = sizeof(AudioObjectID);
+					break;
+
+				case kAudioObjectPropertyOwnedObjects:
+					//    Controls do not own any objects
+					*outDataSize = 0 * sizeof(AudioObjectID);
+					break;
+
+				case kAudioControlPropertyScope:
+					//    This property returns the scope that the control is attached to.
+					FailWithAction(inDataSize < sizeof(AudioObjectPropertyScope), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioControlPropertyScope for the pitch control");
+					*((AudioObjectPropertyScope*)outData) = kAudioObjectPropertyScopeOutput;
+					*outDataSize = sizeof(AudioObjectPropertyScope);
+					break;
+
+				case kAudioControlPropertyElement:
+					//    This property returns the element that the control is attached to.
+					FailWithAction(inDataSize < sizeof(AudioObjectPropertyElement), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioControlPropertyElement for the pitch control");
+					*((AudioObjectPropertyElement*)outData) = kAudioObjectPropertyElementMaster;
+					*outDataSize = sizeof(AudioObjectPropertyElement);
+					break;
+
+				case kAudioStereoPanControlPropertyValue:
+					//    This returns the value of the pitch control.
+					//    Note that we need to take the state lock to examine this value.
+					FailWithAction(inDataSize < sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioLevelControlScalarValue for the pitch control");
+					pthread_mutex_lock(&gPlugIn_StateMutex);
+					*((Float32*)outData) = (inObjectID == kObjectID_Pitch_Adjust) ? gPitch_Adjust : 0.5;
+					pthread_mutex_unlock(&gPlugIn_StateMutex);
+					*outDataSize = sizeof(Float32);
+					break;
+
+				default:
+					theAnswer = kAudioHardwareUnknownPropertyError;
+					break;
+			};
+			break;
+
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -3677,6 +3819,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	Float32 theNewVolume;
+    Float32 theNewPitch;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_SetControlPropertyData: bad driver reference");
@@ -3783,6 +3926,53 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					break;
 			};
 			break;
+
+		case kObjectID_Pitch_Adjust:
+			switch(inAddress->mSelector)
+			{
+				case kAudioStereoPanControlPropertyValue:
+					//    For the scalar pitch, we clamp the new value to [-1, 1].
+					FailWithAction(inDataSize != sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetControlPropertyData: wrong size for the data for kAudioLevelControlPropertyScalarValue");
+					theNewPitch = *((const Float32*)inData);
+					if(theNewPitch < 0.0)
+					{
+						theNewPitch = 0.0;
+					}
+					else if(theNewPitch > 1.0)
+					{
+						theNewPitch = 1.0;
+					}
+					pthread_mutex_lock(&gPlugIn_StateMutex);
+					if(inObjectID == kObjectID_Pitch_Adjust)
+					{
+						if(gPitch_Adjust != theNewPitch)
+						{
+							gPitch_Adjust = theNewPitch;
+							*outNumberPropertiesChanged = 1;
+							outChangedAddresses[0].mSelector = kAudioStereoPanControlPropertyValue;
+							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
+							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
+						}
+					}
+					else
+					{
+						if(gVolume_Master_Value != theNewPitch)
+						{
+							gPitch_Adjust = theNewPitch;
+							*outNumberPropertiesChanged = 1;
+							outChangedAddresses[0].mSelector = kAudioStereoPanControlPropertyValue;
+							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
+							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
+						}
+					}
+					pthread_mutex_unlock(&gPlugIn_StateMutex);
+					break;
+					
+				default:
+					theAnswer = kAudioHardwareUnknownPropertyError;
+					break;
+			};
+			break;
 				
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
@@ -3830,9 +4020,9 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
 		gDevice_NumberTimeStamps = 0;
 		gDevice_AnchorSampleTime = 0;
 		gDevice_AnchorHostTime = mach_absolute_time();
-        
-        // allocate ring buffer
-        gRingBuffer = calloc(kRing_Buffer_Frame_Size * kNumber_Of_Channels, sizeof(Float32));
+		
+		// allocate ring buffer
+		gRingBuffer = calloc(kRing_Buffer_Frame_Size * kNumber_Of_Channels, sizeof(Float32));
 	}
 	else
 	{
