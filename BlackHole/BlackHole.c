@@ -246,6 +246,8 @@ static Float64                      gDevice_SampleRate                  = 48000.
 static UInt64                       gDevice_IOIsRunning                 = 0;
 static const UInt32                 kDevice_RingBufferSize              = 16384;
 static Float64                      gDevice_HostTicksPerFrame           = 0.0;
+static Float64                      gDevice_AdjustedTicksPerFrame       = 0.0;
+static Float64                      gDevice_PreviousTicks               = 0.0;
 static UInt64                       gDevice_NumberTimeStamps            = 0;
 static Float64                      gDevice_AnchorSampleTime            = 0.0;
 static UInt64                       gDevice_AnchorHostTime              = 0;
@@ -2036,7 +2038,7 @@ static OSStatus	BlackHole_SetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 				*outNumberPropertiesChanged = 1;
 				outChangedAddresses[0].mSelector = kAudioObjectPropertyName;
 				outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-				outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+				outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
 			}
 			break;
 			
@@ -2050,7 +2052,7 @@ static OSStatus	BlackHole_SetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 				FailWithAction(inDataSize != sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetBoxPropertyData: wrong size for the data for kAudioObjectPropertyIdentify");
 				dispatch_after(dispatch_time(0, 2ULL * 1000ULL * 1000ULL * 1000ULL), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),	^()
 																																		{
-																																			AudioObjectPropertyAddress theAddress = { kAudioObjectPropertyIdentify, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
+																																			AudioObjectPropertyAddress theAddress = { kAudioObjectPropertyIdentify, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
 																																			gPlugIn_Host->PropertiesChanged(gPlugIn_Host, kObjectID_Box, 1, &theAddress);
 																																		});
 			}
@@ -2071,15 +2073,15 @@ static OSStatus	BlackHole_SetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 					*outNumberPropertiesChanged = 2;
 					outChangedAddresses[0].mSelector = kAudioBoxPropertyAcquired;
 					outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-					outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+					outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
 					outChangedAddresses[1].mSelector = kAudioBoxPropertyDeviceList;
 					outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
-					outChangedAddresses[1].mElement = kAudioObjectPropertyElementMain;
+					outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
 					
 					//	but it also means that the device list has changed for the plug-in too
 					dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),	^()
 																									{
-																										AudioObjectPropertyAddress theAddress = { kAudioPlugInPropertyDeviceList, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
+																										AudioObjectPropertyAddress theAddress = { kAudioPlugInPropertyDeviceList, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
 																										gPlugIn_Host->PropertiesChanged(gPlugIn_Host, kObjectID_PlugIn, 1, &theAddress);
 																									});
 				}
@@ -3148,7 +3150,7 @@ static OSStatus	BlackHole_SetStreamPropertyData(AudioServerPlugInDriverRef inDri
 					*outNumberPropertiesChanged = 1;
 					outChangedAddresses[0].mSelector = kAudioStreamPropertyIsActive;
 					outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-					outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+					outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
 				}
 			}
 			else
@@ -3159,7 +3161,7 @@ static OSStatus	BlackHole_SetStreamPropertyData(AudioServerPlugInDriverRef inDri
 					*outNumberPropertiesChanged = 1;
 					outChangedAddresses[0].mSelector = kAudioStreamPropertyIsActive;
 					outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-					outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+					outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
 				}
 			}
 			pthread_mutex_unlock(&gPlugIn_StateMutex);
@@ -3597,7 +3599,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 				case kAudioControlPropertyElement:
 					//	This property returns the element that the control is attached to.
 					FailWithAction(inDataSize < sizeof(AudioObjectPropertyElement), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioControlPropertyElement for the volume control");
-					*((AudioObjectPropertyElement*)outData) = kAudioObjectPropertyElementMain;
+					*((AudioObjectPropertyElement*)outData) = kAudioObjectPropertyElementMaster;
 					*outDataSize = sizeof(AudioObjectPropertyElement);
 					break;
 
@@ -3725,7 +3727,7 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 				case kAudioControlPropertyElement:
 					//	This property returns the element that the control is attached to.
 					FailWithAction(inDataSize < sizeof(AudioObjectPropertyElement), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioControlPropertyElement for the mute control");
-					*((AudioObjectPropertyElement*)outData) = kAudioObjectPropertyElementMain;
+					*((AudioObjectPropertyElement*)outData) = kAudioObjectPropertyElementMaster;
 					*outDataSize = sizeof(AudioObjectPropertyElement);
 					break;
 
@@ -3861,10 +3863,10 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
                         *outNumberPropertiesChanged = 2;
                         outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
                         outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
                         outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
                         outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
-                        outChangedAddresses[1].mElement = kAudioObjectPropertyElementMain;
+                        outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
                     }
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					break;
@@ -3891,10 +3893,10 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
                         *outNumberPropertiesChanged = 2;
                         outChangedAddresses[0].mSelector = kAudioLevelControlPropertyScalarValue;
                         outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
                         outChangedAddresses[1].mSelector = kAudioLevelControlPropertyDecibelValue;
                         outChangedAddresses[1].mScope = kAudioObjectPropertyScopeGlobal;
-                        outChangedAddresses[1].mElement = kAudioObjectPropertyElementMain;
+                        outChangedAddresses[1].mElement = kAudioObjectPropertyElementMaster;
                     }
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					break;
@@ -3918,7 +3920,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
                         *outNumberPropertiesChanged = 1;
                         outChangedAddresses[0].mSelector = kAudioBooleanControlPropertyValue;
                         outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMaster;
                     }
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					break;
