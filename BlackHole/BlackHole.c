@@ -118,8 +118,9 @@ enum
     kObjectID_Stream_Output             = 7,
     kObjectID_Volume_Output_Master      = 8,
     kObjectID_Mute_Output_Master        = 9,
-	kObjectID_Pitch_Adjust              = 10,
-    kObjectID_Device2                   = 11,
+    kObjectID_Pitch_Adjust              = 10,
+    kObjectID_ClockSource               = 11,
+    kObjectID_Device2                   = 12,
 };
 
 enum ObjectType
@@ -265,6 +266,10 @@ static const Float32                kVolume_MaxDB                       = 0.0;
 static Float32                      gVolume_Master_Value                = 1.0;
 static Float32                      gPitch_Adjust                       = 0.5;
 static bool                         gMute_Master_Value                  = false;
+static UInt32                       kClockSource_NumberItems            = 2;
+#define                             kClockSource_InternalFixed         "Internal Fixed"
+#define                             kClockSource_InternalAdjustable    "Internal Adjustable"
+static UInt32                       gClockSource_Value                  = 0;
 
 static struct ObjectInfo            kDevice_ObjectList[]                = {
 #if kDevice_HasInput
@@ -276,8 +281,9 @@ static struct ObjectInfo            kDevice_ObjectList[]                = {
     { kObjectID_Stream_Output,          kObjectType_Stream,     kAudioObjectPropertyScopeOutput },
     { kObjectID_Volume_Output_Master,   kObjectType_Control,    kAudioObjectPropertyScopeOutput },
     { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput },
-	{ kObjectID_Pitch_Adjust,           kObjectType_Control,    kAudioObjectPropertyScopeOutput }
+    { kObjectID_Pitch_Adjust,           kObjectType_Control,    kAudioObjectPropertyScopeOutput },
 #endif
+    { kObjectID_ClockSource,            kObjectType_Control,    kAudioObjectPropertyScopeGlobal }
 };
 
 static struct ObjectInfo            kDevice2_ObjectList[]                = {
@@ -290,8 +296,9 @@ static struct ObjectInfo            kDevice2_ObjectList[]                = {
     { kObjectID_Stream_Output,          kObjectType_Stream,     kAudioObjectPropertyScopeOutput },
     { kObjectID_Volume_Output_Master,   kObjectType_Control,    kAudioObjectPropertyScopeOutput },
     { kObjectID_Mute_Output_Master,     kObjectType_Control,    kAudioObjectPropertyScopeOutput },
-	{ kObjectID_Pitch_Adjust,           kObjectType_Control,    kAudioObjectPropertyScopeOutput }
+    { kObjectID_Pitch_Adjust,           kObjectType_Control,    kAudioObjectPropertyScopeOutput },
 #endif
+    { kObjectID_ClockSource,            kObjectType_Control,    kAudioObjectPropertyScopeGlobal }
 };
 
 static const UInt32                 kDevice_ObjectListSize              = sizeof(kDevice_ObjectList) / sizeof(struct ObjectInfo);
@@ -958,6 +965,7 @@ static Boolean	BlackHole_HasProperty(AudioServerPlugInDriverRef inDriver, AudioO
 		case kObjectID_Volume_Input_Master:
 		case kObjectID_Mute_Input_Master:
 		case kObjectID_Pitch_Adjust:
+        case kObjectID_ClockSource:
 			theAnswer = BlackHole_HasControlProperty(inDriver, inObjectID, inClientProcessID, inAddress);
 			break;
 	};
@@ -1007,6 +1015,7 @@ static OSStatus	BlackHole_IsPropertySettable(AudioServerPlugInDriverRef inDriver
 		case kObjectID_Volume_Input_Master:
 		case kObjectID_Mute_Input_Master:
 		case kObjectID_Pitch_Adjust:
+        case kObjectID_ClockSource:
 			theAnswer = BlackHole_IsControlPropertySettable(inDriver, inObjectID, inClientProcessID, inAddress, outIsSettable);
 			break;
 
@@ -1059,6 +1068,7 @@ static OSStatus	BlackHole_GetPropertyDataSize(AudioServerPlugInDriverRef inDrive
 		case kObjectID_Volume_Input_Master:
 		case kObjectID_Mute_Input_Master:
 		case kObjectID_Pitch_Adjust:
+        case kObjectID_ClockSource:
 			theAnswer = BlackHole_GetControlPropertyDataSize(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, outDataSize);
 			break;
 			
@@ -1112,6 +1122,7 @@ static OSStatus	BlackHole_GetPropertyData(AudioServerPlugInDriverRef inDriver, A
 		case kObjectID_Volume_Input_Master:
 		case kObjectID_Mute_Input_Master:
 		case kObjectID_Pitch_Adjust:
+        case kObjectID_ClockSource:
 			theAnswer = BlackHole_GetControlPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, outDataSize, outData);
 			break;
 			
@@ -1163,6 +1174,7 @@ static OSStatus	BlackHole_SetPropertyData(AudioServerPlugInDriverRef inDriver, A
 		case kObjectID_Volume_Input_Master:
 		case kObjectID_Mute_Input_Master:
 		case kObjectID_Pitch_Adjust:
+        case kObjectID_ClockSource:
 			theAnswer = BlackHole_SetControlPropertyData(inDriver, inObjectID, inClientProcessID, inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData, &theNumberPropertiesChanged, theChangedAddresses);
 			break;
 			
@@ -3280,6 +3292,23 @@ static Boolean	BlackHole_HasControlProperty(AudioServerPlugInDriverRef inDriver,
 					break;
 			};
 			break;
+            
+        case kObjectID_ClockSource:
+            switch(inAddress->mSelector)
+            {
+                case kAudioObjectPropertyBaseClass:
+                case kAudioObjectPropertyClass:
+                case kAudioObjectPropertyOwner:
+                case kAudioObjectPropertyOwnedObjects:
+                case kAudioControlPropertyScope:
+                case kAudioControlPropertyElement:
+                case kAudioSelectorControlPropertyCurrentItem:
+                case kAudioSelectorControlPropertyAvailableItems:
+                case kAudioSelectorControlPropertyItemName:
+                    theAnswer = true;
+                    break;
+            };
+            break;
 	};
 
 Done:
@@ -3535,6 +3564,43 @@ static OSStatus	BlackHole_GetControlPropertyDataSize(AudioServerPlugInDriverRef 
 			};
 			break;
 
+        case kObjectID_ClockSource:
+            switch(inAddress->mSelector)
+            {
+                case kAudioObjectPropertyBaseClass:
+                    *outDataSize = sizeof(AudioClassID);
+                    break;
+                case kAudioObjectPropertyClass:
+                    *outDataSize = sizeof(AudioClassID);
+                    break;
+                case kAudioObjectPropertyOwner:
+                    *outDataSize = sizeof(AudioObjectID);
+                    break;
+                case kAudioObjectPropertyOwnedObjects:
+                    *outDataSize = 0 * sizeof(AudioObjectID);
+                    break;
+                case kAudioControlPropertyScope:
+                    *outDataSize = sizeof(AudioObjectPropertyScope);
+                    break;
+                case kAudioControlPropertyElement:
+                    *outDataSize = sizeof(AudioObjectPropertyElement);
+                    break;
+
+                case kAudioSelectorControlPropertyCurrentItem:
+                    *outDataSize = sizeof(UInt32);
+                    break;
+
+                case kAudioSelectorControlPropertyAvailableItems:
+                    *outDataSize = kClockSource_NumberItems * sizeof(UInt32);
+                    break;
+                case kAudioSelectorControlPropertyItemName:
+                    *outDataSize = sizeof(CFStringRef);
+                    break;
+                default:
+                    theAnswer = kAudioHardwareUnknownPropertyError;
+                    break;
+                };
+                break;
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -3550,6 +3616,8 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 	
 	//	declare the local variables
 	OSStatus theAnswer = 0;
+    UInt32 theNumberItemsToFetch;
+    UInt32 theItemIndex;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_GetControlPropertyData: bad driver reference");
@@ -3811,7 +3879,108 @@ static OSStatus	BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDr
 					break;
 			};
 			break;
+        case kObjectID_ClockSource:
+                    switch(inAddress->mSelector)
+                    {
+                        case kAudioObjectPropertyBaseClass:
+                            //    The base class for kAudioDataSourceControlClassID is kAudioSelectorControlClassID
+                            FailWithAction(inDataSize < sizeof(AudioClassID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioObjectPropertyBaseClass for the data source control");
+                            *((AudioClassID*)outData) = kAudioSelectorControlClassID;
+                            *outDataSize = sizeof(AudioClassID);
+                            break;
+                            
+                        case kAudioObjectPropertyClass:
+                            //    Data Source controls are of the class, kAudioDataSourceControlClassID
+                            FailWithAction(inDataSize < sizeof(AudioClassID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioObjectPropertyClass for the data source control");
+                            *((AudioClassID*)outData) = kAudioClockSourceControlClassID;
+                            *outDataSize = sizeof(AudioClassID);
+                            break;
+                            
+                        case kAudioObjectPropertyOwner:
+                            //    The control's owner is the device object
+                            FailWithAction(inDataSize < sizeof(AudioObjectID), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioObjectPropertyOwner for the data source control");
+                            *((AudioObjectID*)outData) = kObjectID_Device;
+                            *outDataSize = sizeof(AudioObjectID);
+                            break;
+                            
+                        case kAudioObjectPropertyOwnedObjects:
+                            //    Controls do not own any objects
+                            *outDataSize = 0 * sizeof(AudioObjectID);
+                            break;
 
+                        case kAudioControlPropertyScope:
+                            //    This property returns the scope that the control is attached to.
+                            FailWithAction(inDataSize < sizeof(AudioObjectPropertyScope), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioControlPropertyScope for the data source control");
+                            *((AudioObjectPropertyScope*)outData) = kAudioObjectPropertyScopeGlobal;
+                            *outDataSize = sizeof(AudioObjectPropertyScope);
+                            break;
+
+                        case kAudioControlPropertyElement:
+                            //    This property returns the element that the control is attached to.
+                            FailWithAction(inDataSize < sizeof(AudioObjectPropertyElement), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioControlPropertyElement for the data source control");
+                            *((AudioObjectPropertyElement*)outData) = kAudioObjectPropertyElementMain;
+                            *outDataSize = sizeof(AudioObjectPropertyElement);
+                            break;
+
+                        case kAudioSelectorControlPropertyCurrentItem:
+                            //    This returns the value of the data source selector.
+                            //    Note that we need to take the state lock to examine this value.
+                            FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioSelectorControlPropertyCurrentItem for the data source control");
+                            pthread_mutex_lock(&gPlugIn_StateMutex);
+                            *((UInt32*)outData) = gClockSource_Value;
+                            pthread_mutex_unlock(&gPlugIn_StateMutex);
+                            *outDataSize = sizeof(UInt32);
+                            break;
+
+                        case kAudioSelectorControlPropertyAvailableItems:
+                            //    This returns the IDs for all the items the data source control supports.
+                            
+                            //    Calculate the number of items that have been requested. Note that this
+                            //    number is allowed to be smaller than the actual size of the list. In such
+                            //    case, only that number of items will be returned
+                            theNumberItemsToFetch = inDataSize / sizeof(UInt32);
+                            
+                            //    clamp it to the number of items we have
+                            if(theNumberItemsToFetch > kClockSource_NumberItems)
+                            {
+                                theNumberItemsToFetch = kClockSource_NumberItems;
+                            }
+                            
+                            //    fill out the return array
+                            for(theItemIndex = 0; theItemIndex < theNumberItemsToFetch; ++theItemIndex)
+                            {
+                                ((UInt32*)outData)[theItemIndex] = theItemIndex;
+                            }
+                            
+                            //    report how much we wrote
+                            *outDataSize = theNumberItemsToFetch * sizeof(UInt32);
+                            
+                            break;
+
+                        case kAudioSelectorControlPropertyItemName:
+                            
+                            //    This returns the user-readable name for the selector item in the qualifier
+                            FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: not enough space for the return value of kAudioSelectorControlPropertyItemName for the clock source control");
+                            FailWithAction(inQualifierDataSize != sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetControlPropertyData: wrong size for the qualifier of kAudioSelectorControlPropertyItemName for the clock source control");
+                            FailWithAction(*((const UInt32*)inQualifierData) >= kClockSource_NumberItems, theAnswer = kAudioHardwareIllegalOperationError, Done, "BlackHole_GetControlPropertyData: the item in the qualifier is not valid for kAudioSelectorControlPropertyItemName for the data source control");
+                            if (*(UInt32*)inQualifierData == 0) {
+                                *(CFStringRef*)outData = CFSTR(kClockSource_InternalFixed);
+                            }
+                            else if (*(UInt32*)inQualifierData == 1) {
+                                *(CFStringRef*)outData = CFSTR(kClockSource_InternalAdjustable);
+                            }
+                            //else {
+                            //    *(CFStringRef*)outData = CFSTR("Unknown");
+                            //}
+                            *outDataSize = sizeof(CFStringRef);
+                            
+                            break;
+
+                        default:
+                            theAnswer = kAudioHardwareUnknownPropertyError;
+                            break;
+                    };
+                    break;
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
 			break;
@@ -3829,6 +3998,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 	OSStatus theAnswer = 0;
 	Float32 theNewVolume;
     Float32 theNewPitch;
+    UInt32 theNewSource;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_SetControlPropertyData: bad driver reference");
@@ -3984,6 +4154,38 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 					break;
 			};
 			break;
+            
+        case kObjectID_ClockSource:
+            switch(inAddress->mSelector)
+            {
+                case kAudioSelectorControlPropertyCurrentItem:
+                    //    For the scalar pitch, we clamp the new value to [-1, 1].
+                    FailWithAction(inDataSize != sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetControlPropertyData: wrong size for the data for kAudioSelectorControlPropertyCurrentItem");
+                    theNewSource = *((const UInt32*)inData);
+                    if(theNewSource < (kClockSource_NumberItems - 1))
+                    {
+                        theNewSource = kClockSource_NumberItems - 1;
+                    }
+                    pthread_mutex_lock(&gPlugIn_StateMutex);
+                    if(inObjectID == kObjectID_ClockSource)
+                    {
+                        if(gClockSource_Value != theNewSource)
+                        {
+                            gClockSource_Value = theNewSource;
+                            *outNumberPropertiesChanged = 1;
+                            outChangedAddresses[0].mSelector = kAudioSelectorControlPropertyCurrentItem;
+                            outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
+                            outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+                        }
+                    }
+                    pthread_mutex_unlock(&gPlugIn_StateMutex);
+                    break;
+                    
+                default:
+                    theAnswer = kAudioHardwareUnknownPropertyError;
+                    break;
+            };
+            break;
 				
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
