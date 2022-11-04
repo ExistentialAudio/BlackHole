@@ -3406,6 +3406,27 @@ static OSStatus	BlackHole_IsControlPropertySettable(AudioServerPlugInDriverRef i
 					break;
 			};
 			break;
+        case kObjectID_ClockSource:
+            switch(inAddress->mSelector)
+            {
+                case kAudioObjectPropertyBaseClass:
+                case kAudioObjectPropertyClass:
+                case kAudioObjectPropertyOwner:
+                case kAudioObjectPropertyOwnedObjects:
+                case kAudioControlPropertyScope:
+                case kAudioControlPropertyElement:
+                    *outIsSettable = false;
+                    break;
+
+                case kAudioSelectorControlPropertyCurrentItem:
+                    *outIsSettable = true;
+                    break;
+
+                default:
+                    theAnswer = kAudioHardwareUnknownPropertyError;
+                    break;
+            };
+            break;
 
 		default:
 			theAnswer = kAudioHardwareBadObjectError;
@@ -4122,30 +4143,16 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 						theNewPitch = 1.0;
 					}
 					pthread_mutex_lock(&gPlugIn_StateMutex);
-					if(inObjectID == kObjectID_Pitch_Adjust)
-					{
-						if(gPitch_Adjust != theNewPitch)
-						{
-							gPitch_Adjust = theNewPitch;
-							gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
-							*outNumberPropertiesChanged = 1;
-							outChangedAddresses[0].mSelector = kAudioStereoPanControlPropertyValue;
-							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
-						}
-					}
-					else
-					{
-						if(gPitch_Adjust != theNewPitch)
-						{
-							gPitch_Adjust = theNewPitch;
-							gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
-							*outNumberPropertiesChanged = 1;
-							outChangedAddresses[0].mSelector = kAudioStereoPanControlPropertyValue;
-							outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-							outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
-						}
-					}
+
+                    if(gPitch_Adjust != theNewPitch)
+                    {
+                        gPitch_Adjust = theNewPitch;
+                        gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
+                        *outNumberPropertiesChanged = 1;
+                        outChangedAddresses[0].mSelector = kAudioStereoPanControlPropertyValue;
+                        outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
+                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+                    }
 					pthread_mutex_unlock(&gPlugIn_StateMutex);
 					break;
 					
@@ -4166,16 +4173,13 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
                         theNewSource = kClockSource_NumberItems - 1;
                     }
                     pthread_mutex_lock(&gPlugIn_StateMutex);
-                    if(inObjectID == kObjectID_ClockSource)
+                    if(gClockSource_Value != theNewSource)
                     {
-                        if(gClockSource_Value != theNewSource)
-                        {
-                            gClockSource_Value = theNewSource;
-                            *outNumberPropertiesChanged = 1;
-                            outChangedAddresses[0].mSelector = kAudioSelectorControlPropertyCurrentItem;
-                            outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
-                            outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
-                        }
+                        gClockSource_Value = theNewSource;
+                        *outNumberPropertiesChanged = 1;
+                        outChangedAddresses[0].mSelector = kAudioSelectorControlPropertyCurrentItem;
+                        outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
+                        outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
                     }
                     pthread_mutex_unlock(&gPlugIn_StateMutex);
                     break;
