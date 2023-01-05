@@ -2413,13 +2413,28 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
             theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_object_list_size(inAddress->mScope, inObjectID));
 
             //    fill out the list with the right objects
-            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
-            {
-                if (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal)
-                {
-                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
-                }
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal)
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                        }
+                    }
+                    break;
+
+                case kObjectID_Device2:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if (kDevice2_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal)
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice2_ObjectList[i].id;
+                        }
+                    }
+                    break;
             }
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
@@ -2569,13 +2584,28 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
             theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_stream_list_size(inAddress->mScope, inObjectID));
 
             //    fill out the list with as many objects as requested
-            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
-            {
-                if ((kDevice_ObjectList[i].type == kObjectType_Stream) &&
-                    (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal))
-                {
-                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
-                }
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if ((kDevice_ObjectList[i].type == kObjectType_Stream) &&
+                            (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal))
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                        }
+                    }
+                    break;
+
+                case kObjectID_Device2:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if ((kDevice2_ObjectList[i].type == kObjectType_Stream) &&
+                            (kDevice2_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal))
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice2_ObjectList[i].id;
+                        }
+                    }
+                    break;
             }
 
 			//	report how much we wrote
@@ -2590,13 +2620,28 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
             theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_control_list_size(inAddress->mScope, inObjectID));
 
             //    fill out the list with as many objects as requested
-            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
-            {
-                if (kDevice_ObjectList[i].type == kObjectType_Control)
-                {
-                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
-                }
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if (kDevice_ObjectList[i].type == kObjectType_Control)
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                        }
+                    }
+                    break;
+
+                case kObjectID_Device2:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if (kDevice2_ObjectList[i].type == kObjectType_Control)
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice2_ObjectList[i].id;
+                        }
+                    }
+                    break;
             }
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
