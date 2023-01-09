@@ -257,7 +257,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n#read vesion number from VERSION in project root\nVERSION=$(head -n 1 VERSION)\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
+			shellScript = "#!/bin/bash\n\n#read version number from VERSION in project root\nVERSION=$(head -n 1 VERSION)\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
