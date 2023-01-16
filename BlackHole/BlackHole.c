@@ -599,11 +599,11 @@ void*	BlackHole_Create(CFAllocatorRef inAllocator, CFUUIDRef inRequestedTypeUUID
 {
 	//	This is the CFPlugIn factory function. Its job is to create the implementation for the given
 	//	type provided that the type is supported. Because this driver is simple and all its
-	//	initialization is handled via static iniitalization when the bundle is loaded, all that
+	//	initialization is handled via static initialization when the bundle is loaded, all that
 	//	needs to be done is to return the AudioServerPlugInDriverRef that points to the driver's
 	//	interface. A more complicated driver would create any base line objects it needs to satisfy
 	//	the IUnknown methods that are used to discover that actual interface to talk to the driver.
-	//	The majority of the driver's initilization should be handled in the Initialize() method of
+	//	The majority of the driver's initialization should be handled in the Initialize() method of
 	//	the driver's AudioServerPlugInDriverInterface.
 	
 	#pragma unused(inAllocator)
@@ -615,7 +615,7 @@ void*	BlackHole_Create(CFAllocatorRef inAllocator, CFUUIDRef inRequestedTypeUUID
     return theAnswer;
 }
 
-#pragma mark Inheritence
+#pragma mark Inheritance
 
 static HRESULT	BlackHole_QueryInterface(void* inDriver, REFIID inUUID, LPVOID* outInterface)
 {
@@ -715,8 +715,8 @@ static OSStatus	BlackHole_Initialize(AudioServerPlugInDriverRef inDriver, AudioS
 	//	The job of this method is, as the name implies, to get the driver initialized. One specific
 	//	thing that needs to be done is to store the AudioServerPlugInHostRef so that it can be used
 	//	later. Note that when this call returns, the HAL will scan the various lists the driver
-	//	maintains (such as the device list) to get the inital set of objects the driver is
-	//	publishing. So, there is no need to notifiy the HAL about any objects created as part of the
+	//	maintains (such as the device list) to get the initial set of objects the driver is
+	//	publishing. So, there is no need to notify the HAL about any objects created as part of the
 	//	execution of this method.
 
 	//	declare the local variables
@@ -856,7 +856,7 @@ Done:
 
 static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriverRef inDriver, AudioObjectID inDeviceObjectID, UInt64 inChangeAction, void* inChangeInfo)
 {
-	//	This method is called to tell the device that it can perform the configuation change that it
+	//	This method is called to tell the device that it can perform the configuration change that it
 	//	had requested via a call to the host method, RequestDeviceConfigurationChange(). The
 	//	arguments, inChangeAction and inChangeInfo are the same as what was passed to
 	//	RequestDeviceConfigurationChange().
@@ -2060,9 +2060,9 @@ static OSStatus	BlackHole_SetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 			break;
 			
 		case kAudioObjectPropertyIdentify:
-			//	since we don't have any actual hardware to flash, we will schedule a notificaiton for
+			//	since we don't have any actual hardware to flash, we will schedule a notification for
 			//	this property off into the future as a testing thing. Note that a real implementation
-			//	of this property should only send the notificaiton if the hardware wants the app to
+			//	of this property should only send the notification if the hardware wants the app to
 			//	flash it's UI for the device.
 			{
 				syslog(LOG_NOTICE, "The identify property has been set on the Box implemented by the BlackHole driver.");
@@ -2443,13 +2443,28 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
             theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_object_list_size(inAddress->mScope, inObjectID));
 
             //    fill out the list with the right objects
-            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
-            {
-                if (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal)
-                {
-                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
-                }
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal)
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                        }
+                    }
+                    break;
+
+                case kObjectID_Device2:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if (kDevice2_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal)
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice2_ObjectList[i].id;
+                        }
+                    }
+                    break;
             }
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
@@ -2547,7 +2562,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 
 		case kAudioDevicePropertyDeviceIsAlive:
 			//	This property returns whether or not the device is alive. Note that it is
-			//	not uncommon for a device to be dead but still momentarily availble in the
+			//	not uncommon for a device to be dead but still momentarily available in the
 			//	device list. In the case of this device, it will always be alive.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyDeviceIsAlive for the device");
 			*((UInt32*)outData) = 1;
@@ -2599,13 +2614,28 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
             theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_stream_list_size(inAddress->mScope, inObjectID));
 
             //    fill out the list with as many objects as requested
-            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
-            {
-                if ((kDevice_ObjectList[i].type == kObjectType_Stream) &&
-                    (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal))
-                {
-                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
-                }
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if ((kDevice_ObjectList[i].type == kObjectType_Stream) &&
+                            (kDevice_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal))
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                        }
+                    }
+                    break;
+
+                case kObjectID_Device2:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if ((kDevice2_ObjectList[i].type == kObjectType_Stream) &&
+                            (kDevice2_ObjectList[i].scope == inAddress->mScope || inAddress->mScope == kAudioObjectPropertyScopeGlobal))
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice2_ObjectList[i].id;
+                        }
+                    }
+                    break;
             }
 
 			//	report how much we wrote
@@ -2620,13 +2650,28 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
             theNumberItemsToFetch = minimum(inDataSize / sizeof(AudioObjectID), device_control_list_size(inAddress->mScope, inObjectID));
 
             //    fill out the list with as many objects as requested
-            for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
-            {
-                if (kDevice_ObjectList[i].type == kObjectType_Control)
-                {
-                    ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
-                }
+            switch (inObjectID) {
+                case kObjectID_Device:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if (kDevice_ObjectList[i].type == kObjectType_Control)
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
+                        }
+                    }
+                    break;
+
+                case kObjectID_Device2:
+                    for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
+                    {
+                        if (kDevice2_ObjectList[i].type == kObjectType_Control)
+                        {
+                            ((AudioObjectID*)outData)[k++] = kDevice2_ObjectList[i].id;
+                        }
+                    }
+                    break;
             }
+
 			//	report how much we wrote
 			*outDataSize = theNumberItemsToFetch * sizeof(AudioObjectID);
 			break;
@@ -2693,7 +2738,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			break;
 
 		case kAudioDevicePropertyPreferredChannelsForStereo:
-			//	This property returns which two channesl to use as left/right for stereo
+			//	This property returns which two channels to use as left/right for stereo
 			//	data by default. Note that the channel numbers are 1-based.xz
 			FailWithAction(inDataSize < (2 * sizeof(UInt32)), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyPreferredChannelsForStereo for the device");
 			((UInt32*)outData)[0] = 1;
@@ -2705,7 +2750,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	This property returns the default AudioChannelLayout to use for the device
 			//	by default. For this device, we return a stereo ACL.
 			{
-				//	calcualte how big the
+				//	calculate how big the
 				UInt32 theACLSize = offsetof(AudioChannelLayout, mChannelDescriptions) + (kNumber_Of_Channels * sizeof(AudioChannelDescription));
 				FailWithAction(inDataSize < theACLSize, theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyPreferredChannelLayout for the device");
 				((AudioChannelLayout*)outData)->mChannelLayoutTag = kAudioChannelLayoutTag_UseChannelDescriptions;
@@ -3050,16 +3095,16 @@ static OSStatus	BlackHole_GetStreamPropertyData(AudioServerPlugInDriverRef inDri
 
 		case kAudioStreamPropertyStartingChannel:
 			//	This property returns the absolute channel number for the first channel in
-			//	the stream. For exmaple, if a device has two output streams with two
+			//	the stream. For example, if a device has two output streams with two
 			//	channels each, then the starting channel number for the first stream is 1
-			//	and ths starting channel number fo the second stream is 3.
+			//	and the starting channel number fo the second stream is 3.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetStreamPropertyData: not enough space for the return value of kAudioStreamPropertyStartingChannel for the stream");
 			*((UInt32*)outData) = 1;
 			*outDataSize = sizeof(UInt32);
 			break;
 
 		case kAudioStreamPropertyLatency:
-			//	This property returns any additonal presentation latency the stream has.
+			//	This property returns any additional presentation latency the stream has.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetStreamPropertyData: not enough space for the return value of kAudioStreamPropertyStartingChannel for the stream");
 			*((UInt32*)outData) = kLatency_Frame_Size;
 			*outDataSize = sizeof(UInt32);
@@ -4460,7 +4505,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     // From BlackHole to Application
     if(inOperationID == kAudioServerPlugInIOOperationReadInput)
     {
-        // If mute is one let's just fill the buffer with zeros or if there's no apps outputing audio
+        // If mute is one let's just fill the buffer with zeros or if there's no apps outputting audio
         if (gMute_Master_Value || lastOutputSampleTime - inIOBufferFrameSize < inIOCycleInfo->mInputTime.mSampleTime)
         {
             // Clear the ioMainBuffer
@@ -4495,7 +4540,7 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         // Overload error.
         if (inIOCycleInfo->mCurrentTime.mSampleTime > inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize + kLatency_Frame_Size)
         {
-            DebugMsg("BlackHole overload error. kAudioServerPlugInIOOperationWriteMix was unable to complete opperation before the deadline. Try increasing the buffer frame size.");
+            DebugMsg("BlackHole overload error. kAudioServerPlugInIOOperationWriteMix was unable to complete operation before the deadline. Try increasing the buffer frame size.");
             return kAudioHardwareUnspecifiedError;
         }
         

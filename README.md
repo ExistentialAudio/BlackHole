@@ -12,6 +12,8 @@ BlackHole is a modern macOS virtual audio loopback driver that allows applicatio
 
 ### [Download Installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme) 
 
+### [Join Discord](https://discord.gg/y8BWfnWRnn)
+
 ## Funding
 Sponsor: https://github.com/sponsors/ExistentialAudio
 
@@ -31,7 +33,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - Customizable mirror device to allow for a hidden input or output
 - Supports 8kHz, 16kHz, 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, 192kHz, 352.8kHz, 384kHz, 705.6kHz and 768kHz sample rates
 - Zero driver latency
-- Compatible with macOS Mavericks (10.9) and newer.
+- Compatible with macOS Yosemite (10.10) and newer.
 - Builds for Intel and Apple Silicon
 
 ![Audio MIDI Setup](Images/audio-midi-setup.png)
@@ -249,7 +251,7 @@ Unfortunately macOS does not support changing the volume of a Multi-Output devic
 - If you are using a multi-output device, due to issues with macOS the Built-in Output must be enabled and listed as the top device in the Multi-Output. [See here for details](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices).
 
 ### Why is audio glitching after X minutes when using a multi-output or an aggregate?
-- You need to enable drift correction for all devices except the clock source device. 
+- You need to enable drift correction for all devices except the Clock Source also known as Master Device or Primary Device.
 
 ### What Apps Don't Work with Multi-Outputs?
 Unfortunately multi-outputs are pretty buggy and some apps just won't work with them at all. Here is a list of known ones. If you have more to add please let me know.
