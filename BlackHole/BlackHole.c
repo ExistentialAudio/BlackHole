@@ -4176,7 +4176,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 			switch(inAddress->mSelector)
 			{
 				case kAudioStereoPanControlPropertyValue:
-					//    For the scalar pitch, we clamp the new value to [-1, 1].
+					//    For the scalar pitch, we clamp the new value to [0, 1].
 					FailWithAction(inDataSize != sizeof(Float32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetControlPropertyData: wrong size for the data for kAudioLevelControlPropertyScalarValue");
 					theNewPitch = *((const Float32*)inData);
 					if(theNewPitch < 0.0)
