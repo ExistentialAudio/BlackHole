@@ -878,6 +878,10 @@ static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriv
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad driver reference");
     FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad device ID");
+    // TODO remove hack! Don't use samplerate=0 to tell when it's not a sample rate change!
+    if (inChangeAction == 0) {
+        return theAnswer;
+    }
     FailWithAction(!is_valid_sample_rate(inChangeAction), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad sample rate");
                    
 	
@@ -2652,13 +2656,16 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
             //    fill out the list with as many objects as requested
             switch (inObjectID) {
                 case kObjectID_Device:
+                    pthread_mutex_lock(&gPlugIn_StateMutex);
                     for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
                     {
-                        if (kDevice_ObjectList[i].type == kObjectType_Control)
+                        // TODO remove hack! There must be a better way than looking for a fixed i
+                        if ((kDevice_ObjectList[i].type == kObjectType_Control) && !(gClockSource_Value == 0 && i==6))
                         {
                             ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
                         }
                     }
+                    pthread_mutex_unlock(&gPlugIn_StateMutex);
                     break;
 
                 case kObjectID_Device2:
@@ -4225,6 +4232,11 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
                         outChangedAddresses[0].mSelector = kAudioSelectorControlPropertyCurrentItem;
                         outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
                         outChangedAddresses[0].mElement = kAudioObjectPropertyElementMain;
+
+                        // Notify HAL about device configuration change
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                            gPlugIn_Host->RequestDeviceConfigurationChange(gPlugIn_Host, kObjectID_Device, 0, NULL);
+                        });
                     }
                     pthread_mutex_unlock(&gPlugIn_StateMutex);
                     break;
