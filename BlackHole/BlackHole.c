@@ -123,6 +123,13 @@ enum
     kObjectID_Device2                   = 12,
 };
 
+enum
+{
+    ChangeAction_SetSampleRate          = 1,
+    ChangeAction_EnablePitchControl     = 2,
+    ChangeAction_DisablePitchControl    = 3,
+};
+
 enum ObjectType
 {
     kObjectType_Stream,
@@ -249,6 +256,7 @@ static Boolean                      gBox_Acquired                       = kBox_A
 
 static pthread_mutex_t              gDevice_IOMutex                     = PTHREAD_MUTEX_INITIALIZER;
 static Float64                      gDevice_SampleRate                  = 48000.0;
+static Float64                      gDevice_RequestedSampleRate         = 0.0;
 static UInt64                       gDevice_IOIsRunning                 = 0;
 static const UInt32                 kDevice_RingBufferSize              = 16384;
 static Float64                      gDevice_HostTicksPerFrame           = 0.0;
@@ -270,6 +278,7 @@ static UInt32                       kClockSource_NumberItems            = 2;
 #define                             kClockSource_InternalFixed         "Internal Fixed"
 #define                             kClockSource_InternalAdjustable    "Internal Adjustable"
 static UInt32                       gClockSource_Value                  = 0;
+static bool                         gPitch_Adjust_Enabled               = false;
 
 static struct ObjectInfo            kDevice_ObjectList[]                = {
 #if kDevice_HasInput
@@ -874,35 +883,49 @@ static OSStatus	BlackHole_PerformDeviceConfigurationChange(AudioServerPlugInDriv
 
 	//	declare the local variables
 	OSStatus theAnswer = 0;
+    Float64 newSampleRate = 0.0;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad driver reference");
     FailWithAction(inDeviceObjectID != kObjectID_Device && inDeviceObjectID != kObjectID_Device2, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad device ID");
-    // TODO remove hack! Don't use samplerate=0 to tell when it's not a sample rate change!
-    if (inChangeAction == 0) {
-        return theAnswer;
-    }
-    FailWithAction(!is_valid_sample_rate(inChangeAction), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad sample rate");
-                   
-	
-	//	lock the state mutex
-	pthread_mutex_lock(&gPlugIn_StateMutex);
-	
-	//	change the sample rate
-	gDevice_SampleRate = inChangeAction;
-	
-	//	recalculate the state that depends on the sample rate
-	struct mach_timebase_info theTimeBaseInfo;
-	mach_timebase_info(&theTimeBaseInfo);
-    Float64 theHostClockFrequency = (Float64)theTimeBaseInfo.denom / (Float64)theTimeBaseInfo.numer;
-	theHostClockFrequency *= 1000000000.0;
-	gDevice_HostTicksPerFrame = theHostClockFrequency / gDevice_SampleRate;
-    gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
-
-	//	unlock the state mutex
-	pthread_mutex_unlock(&gPlugIn_StateMutex);
-    
-    // DebugMsg("BlackHole theTimeBaseInfo.numer: %u \t theTimeBaseInfo.denom: %u", theTimeBaseInfo.numer, theTimeBaseInfo.denom);
+    switch(inChangeAction)
+    {
+        case ChangeAction_EnablePitchControl:
+            pthread_mutex_lock(&gPlugIn_StateMutex);
+            gPitch_Adjust_Enabled = true;
+            pthread_mutex_unlock(&gPlugIn_StateMutex);
+            break;
+        case ChangeAction_DisablePitchControl:
+            pthread_mutex_lock(&gPlugIn_StateMutex);
+            gPitch_Adjust_Enabled = false;
+            pthread_mutex_unlock(&gPlugIn_StateMutex);
+            break;
+        case ChangeAction_SetSampleRate:
+            pthread_mutex_lock(&gPlugIn_StateMutex);
+            newSampleRate = gDevice_RequestedSampleRate;
+            pthread_mutex_unlock(&gPlugIn_StateMutex);
+            FailWithAction(!is_valid_sample_rate(newSampleRate), theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_PerformDeviceConfigurationChange: bad sample rate");
+            
+            //	lock the state mutex
+            pthread_mutex_lock(&gPlugIn_StateMutex);
+            
+            //	change the sample rate
+            gDevice_SampleRate = newSampleRate;
+            
+            //	recalculate the state that depends on the sample rate
+            struct mach_timebase_info theTimeBaseInfo;
+            mach_timebase_info(&theTimeBaseInfo);
+            Float64 theHostClockFrequency = (Float64)theTimeBaseInfo.denom / (Float64)theTimeBaseInfo.numer;
+            theHostClockFrequency *= 1000000000.0;
+            gDevice_HostTicksPerFrame = theHostClockFrequency / gDevice_SampleRate;
+            gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
+            
+            //	unlock the state mutex
+            pthread_mutex_unlock(&gPlugIn_StateMutex);
+            
+            // DebugMsg("BlackHole theTimeBaseInfo.numer: %u \t theTimeBaseInfo.denom: %u", theTimeBaseInfo.numer, theTimeBaseInfo.denom);
+            break;
+    };
 	
 Done:
 	return theAnswer;
@@ -2660,7 +2683,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
                     for (UInt32 i = 0, k = 0; k < theNumberItemsToFetch; i++)
                     {
                         // TODO remove hack! There must be a better way than looking for a fixed i
-                        if ((kDevice_ObjectList[i].type == kObjectType_Control) && !(gClockSource_Value == 0 && i==6))
+                        if ((kDevice_ObjectList[i].type == kObjectType_Control) && !(!gPitch_Adjust_Enabled && kDevice_ObjectList[i].id==kObjectID_Pitch_Adjust))
                         {
                             ((AudioObjectID*)outData)[k++] = kDevice_ObjectList[i].id;
                         }
@@ -2812,7 +2835,6 @@ static OSStatus	BlackHole_SetDevicePropertyData(AudioServerPlugInDriverRef inDri
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	Float64 theOldSampleRate;
-	UInt64 theNewSampleRate;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_SetDevicePropertyData: bad driver reference");
@@ -2840,13 +2862,12 @@ static OSStatus	BlackHole_SetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	make sure that the new value is different than the old value
 			pthread_mutex_lock(&gPlugIn_StateMutex);
 			theOldSampleRate = gDevice_SampleRate;
+            gDevice_RequestedSampleRate = *((const Float64*)inData);
 			pthread_mutex_unlock(&gPlugIn_StateMutex);
 			if(*((const Float64*)inData) != theOldSampleRate)
 			{
 				//	we dispatch this so that the change can happen asynchronously
-				theOldSampleRate = *((const Float64*)inData);
-				theNewSampleRate = (UInt64)theOldSampleRate;
-				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ gPlugIn_Host->RequestDeviceConfigurationChange(gPlugIn_Host, kObjectID_Device, theNewSampleRate, NULL); });
+				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ gPlugIn_Host->RequestDeviceConfigurationChange(gPlugIn_Host, kObjectID_Device, ChangeAction_SetSampleRate, NULL); });
 			}
 			break;
 		
@@ -3189,7 +3210,6 @@ static OSStatus	BlackHole_SetStreamPropertyData(AudioServerPlugInDriverRef inDri
 	//	declare the local variables
 	OSStatus theAnswer = 0;
 	Float64 theOldSampleRate;
-	UInt64 theNewSampleRate;
 	
 	//	check the arguments
 	FailWithAction(inDriver != gAudioServerPlugInDriverRef, theAnswer = kAudioHardwareBadObjectError, Done, "BlackHole_SetStreamPropertyData: bad driver reference");
@@ -3255,13 +3275,12 @@ static OSStatus	BlackHole_SetStreamPropertyData(AudioServerPlugInDriverRef inDri
 			//	If we made it this far, the requested format is something we support, so make sure the sample rate is actually different
 			pthread_mutex_lock(&gPlugIn_StateMutex);
 			theOldSampleRate = gDevice_SampleRate;
+            gDevice_RequestedSampleRate = ((const AudioStreamBasicDescription*)inData)->mSampleRate;
 			pthread_mutex_unlock(&gPlugIn_StateMutex);
 			if(((const AudioStreamBasicDescription*)inData)->mSampleRate != theOldSampleRate)
 			{
 				//	we dispatch this so that the change can happen asynchronously
-				theOldSampleRate = ((const AudioStreamBasicDescription*)inData)->mSampleRate;
-				theNewSampleRate = (UInt64)theOldSampleRate;
-				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ gPlugIn_Host->RequestDeviceConfigurationChange(gPlugIn_Host, kObjectID_Device, theNewSampleRate, NULL); });
+				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ gPlugIn_Host->RequestDeviceConfigurationChange(gPlugIn_Host, kObjectID_Device, ChangeAction_SetSampleRate, NULL); });
 			}
 			break;
 		
@@ -4228,6 +4247,11 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
                     if(gClockSource_Value != theNewSource)
                     {
                         gClockSource_Value = theNewSource;
+                        UInt64 changeAction = ChangeAction_DisablePitchControl;
+                        if (theNewSource > 0) {
+                            changeAction = ChangeAction_EnablePitchControl;
+                        }
+                        
                         *outNumberPropertiesChanged = 1;
                         outChangedAddresses[0].mSelector = kAudioSelectorControlPropertyCurrentItem;
                         outChangedAddresses[0].mScope = kAudioObjectPropertyScopeGlobal;
@@ -4235,7 +4259,7 @@ static OSStatus	BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDr
 
                         // Notify HAL about device configuration change
                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                            gPlugIn_Host->RequestDeviceConfigurationChange(gPlugIn_Host, kObjectID_Device, 0, NULL);
+                            gPlugIn_Host->RequestDeviceConfigurationChange(gPlugIn_Host, kObjectID_Device, changeAction, NULL);
                         });
                     }
                     pthread_mutex_unlock(&gPlugIn_StateMutex);
