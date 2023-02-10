@@ -1,6 +1,6 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
-
+# run for BlackHole directory.
 
 # create installer for different channel versions
 
@@ -18,7 +18,15 @@ xcodebuild \
 -configuration Release \
 -target BlackHole CONFIGURATION_BUILD_DIR=build \
 PRODUCT_BUNDLE_IDENTIFIER=$bundleID \
-GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS kNumber_Of_Channels='$channels' kPlugIn_BundleID=\"'$bundleID'\" kDriver_Name=\"'$driverName'\"'
+GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS 
+kNumber_Of_Channels='$channels' 
+kPlugIn_BundleID=\"'$bundleID'\" 
+kDriver_Name=\"'$driverName'\"'
+
+# Generate a new UUID
+uuid=$(uuidgen)
+awk '{sub(/e395c745-4eea-4d94-bb92-46224221047c/,"'$uuid'")}1' build/BlackHole.driver/Contents/Info.plist > Temp.plist
+mv Temp.plist build/BlackHole.driver/Contents/Info.plist
 
 mkdir installer/root
 mv build/BlackHole.driver installer/root/$driverName$ch.driver
@@ -66,7 +74,7 @@ rm distribution.xml
 rm -f BlackHole.pkg
 
 # Notarize
-xcrun notarytool submit $driverName$ch.$version.pkg --team-id Q5C99V536K --progress --wait --keychain-profile "Notarize"
+xcrun notarytool submit $driverName$ch.$version.pkg --team-id Q5C99V536K --progress --wait --keychain-profile "notarize"
 
 xcrun stapler staple $driverName$ch.$version.pkg
 
