@@ -9,7 +9,7 @@ do
 
 ch=$channels"ch"
 driverName="BlackHole"
-version=v$(head -n 1 VERSION)
+version=`git describe --tags --abbrev=0`
 bundleID="audio.existential.$driverName$ch"
 
 # Build

@@ -257,7 +257,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n#read version number from VERSION in project root\nVERSION=$(head -n 1 VERSION)\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
+			shellScript = "#!/bin/bash\n\n#read version number from VERSION in project root\nVERSION=`git describe --tags --abbrev=0`\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -551,6 +551,7 @@
 				INFOPLIST_FILE = BlackHole/BlackHole.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = driver;
@@ -570,6 +571,7 @@
 				INFOPLIST_FILE = BlackHole/BlackHole.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = driver;
@@ -589,6 +591,7 @@
 				INFOPLIST_FILE = BlackHole/BlackHole.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = audio.existential.BlackHole;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = driver;
