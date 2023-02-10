@@ -13,7 +13,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Create multi-output / aggregate device with installer.
 - Keep track of which apps are connected to the driver.
 
-## [0.4.1] - Unreleased
+## [0.5.0]
+### Changed
+- Various typo fixes
+### Added
+- kObjectID_Pitch_Adjust and kObjectID_ClockSource to adjust clock speed.
+
+## [0.4.1]
 ### Changed
 - Merged BlackHole.h into BlackHole.c for easier testing.
 - Fixed control size bugs. 
