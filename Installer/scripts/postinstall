@@ -8,6 +8,3 @@ if [[ $(sw_vers -productVersion) == "10.9" ]]
 	else 
 		sudo launchctl kickstart -k system/com.apple.audio.coreaudiod
 fi
-
-
-	
