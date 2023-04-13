@@ -2,6 +2,9 @@
 
 # Creates installer for different channel versions.
 # Run this script from the local BlackHole repo's root directory.
+# If this script is not executable from the Terminal, 
+# it may need execute permissions first by running this command:
+#   chmod +x create_installer.sh
 
 devTeamID="Q5C99V536K" # ⚠️ Replace this with your own developer team ID
 notarize=true # To skip notarization, set this to false
