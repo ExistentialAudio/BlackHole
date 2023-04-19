@@ -253,6 +253,9 @@ Unfortunately macOS does not support changing the volume of a Multi-Output devic
 ### Why is audio glitching after X minutes when using a multi-output or an aggregate?
 - You need to enable drift correction for all devices except the Clock Source also known as Master Device or Primary Device.
 
+### Why is the Installer failing?
+- Check to make sure "Installer" has File and Folder permission and Full Disk Access in System Settings->Privacy and Security. 
+
 ### What Apps Don't Work with Multi-Outputs?
 Unfortunately multi-outputs are pretty buggy and some apps just won't work with them at all. Here is a list of known ones. If you have more to add please let me know.
 - Apple Podcasts
