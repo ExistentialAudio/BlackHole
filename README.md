@@ -91,7 +91,7 @@ For more specific details [visit the Wiki.](https://github.com/ExistentialAudio/
 
 ### Record System Audio
 1. [Setup Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device)
-2. In `Audio Midi Setup` → `Audio Devices` right-click on the newly created Multi-Output and select "Use This Device For Sound Output"
+2. In `Audio MIDI Setup` → `Audio Devices` right-click on the newly created Multi-Output and select "Use This Device For Sound Output"
 3. Open digital audio workstation (DAW) such as GarageBand and set input device to "BlackHole" 
 4. Set track to input from channel 1-2
 5. Play audio from another application and monitor or record in your DAW
@@ -240,13 +240,20 @@ BlackHole is a virtual audio loopback driver. It only shows up in `Audio MIDI Se
 ### How can I listen to the audio and use BlackHole at the same time?
 [Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device).
 
+### What bit depth does BlackHole use, and can I change it?
+
+BlackHole uses 32-bit float bit depth since macOS Core Audio natively uses 32-bit at the system level. This provides the broadest compatibility and greatest audio headroom.
+
+This format is lossless for up to 24-bit integer. All applications should be able to playback and record audio, and do not require adjusting bit depth at the BlackHole driver level.
+
 ### How can I change the volume of a Multi-Output device?
+
 Unfortunately macOS does not support changing the volume of a Multi-Output device but you can set the volume of individual devices in Audio MIDI Setup. 
 
 ### Why is nothing playing through BlackHole? 
-- Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your digital audio workstation (DAW) has microphone access. 
+- Check `System Preferences` -> `Security & Privacy` -> `Privacy` -> `Microphone` to make sure your digital audio workstation (DAW) application has microphone access. 
 
-- Check that the volume is all the way up on BlackHole input and output in ``Audio Midi Setup``.
+- Check that the volume is all the way up on BlackHole input and output in ``Audio MIDI Setup``.
 
 - If you are using a multi-output device, due to issues with macOS the Built-in Output must be enabled and listed as the top device in the Multi-Output. [See here for details](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device#4-select-output-devices).
 
