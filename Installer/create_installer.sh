@@ -75,7 +75,7 @@ for channels in 2 16 64 128 256; do
     
     echo "<?xml version=\"1.0\" encoding='utf-8'?>
     <installer-gui-script minSpecVersion='2'>
-        <title>$driverName: Virtual Audio Driver $ch $version</title>
+        <title>$driverName: Audio Loopback Driver $ch $version</title>
         <welcome file='welcome.html'/>
         <license file='../LICENSE'/>
         <conclusion file='conclusion.html'/>
