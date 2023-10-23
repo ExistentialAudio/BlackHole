@@ -177,7 +177,6 @@
 			buildPhases = (
 				3D89663E2849C318002AB3F0 /* Sources */,
 				3D8966402849C318002AB3F0 /* Frameworks */,
-				3D8966442849C318002AB3F0 /* ShellScript */,
 				3D8966452849C318002AB3F0 /* Resources */,
 			);
 			buildRules = (
@@ -240,26 +239,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3D8966442849C318002AB3F0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n#read version number from VERSION in project root\nVERSION=`git describe --tags --abbrev=0`\nBUILD=`git rev-list $(git rev-parse --abbrev-ref HEAD) | wc -l | awk '{ print $1 }'`\n\necho \"${VERSION} (${BUILD})\"\n\nagvtool new-marketing-version ${VERSION}\nagvtool new-version -all ${BUILD}\n\nexit 0\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3D88D488285BBA5800629399 /* Sources */ = {
