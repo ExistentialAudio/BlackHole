@@ -117,11 +117,14 @@ For more specific details [visit the Wiki](https://github.com/ExistentialAudio/B
 
 ## Developer Guides
 
-### A license is required for all non GPL-3.0 projects
+### A license is required for all non-GPLv3 projects
 Please support our hard work and continued development. To request a license [contact Existential Audio](mailto:devinroth@existential.audio).
 
-### Installation
-To install BlackHole copy the `BlackHoleXch.driver` folder to `/Library/Audio/Plug-Ins/HAL` and restart CoreAudio using `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`.
+### Build & Install
+After building, to install BlackHole:
+
+1. Copy or move the built `BlackHoleXch.driver` bundle to `/Library/Audio/Plug-Ins/HAL`
+2. Restart CoreAudio using `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
 
 ### Customizing BlackHole
 
@@ -149,7 +152,7 @@ kSampleRates
 
 They can be specified at build time with `xcodebuild` using `GCC_PREPROCESSOR_DEFINITIONS`. 
 
-Example. 
+Example:
 
 ```bash
 xcodebuild \
@@ -189,7 +192,7 @@ xcodebuild \
 
 `kLatency_Frame_Size` is how much time in frames that the driver has to process incoming and outgoing audio. It can be used to delay the audio inside of BlackHole up to a maximum of 65536 frames. This may be helpful if using BlackHole with a high channel count. 
 
-`kSampleRates` set the sample rate or sample rates of the audio device. If using multiple sample rates separate each with a  `,`. Example: `44100, 48000`.
+`kSampleRates` set the sample rate or sample rates of the audio device. If using multiple sample rates separate each with a comma (`,`). For example: `kSampleRates='44100,48000'`.
 
 ### Mirror Device
 
@@ -255,7 +258,7 @@ BlackHole is a virtual audio loopback driver. It only shows up in `Audio MIDI Se
 
 ### How can I listen to the audio and use BlackHole at the same time?
 
-[Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device).
+See [Setup a Multi-Output Device](https://github.com/ExistentialAudio/BlackHole/wiki/Multi-Output-Device).
 
 ### What bit depth does BlackHole use, and can I change it?
 
