@@ -36,7 +36,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 - Customizable mirror device to allow for a hidden input or output
 - Supports 8kHz, 16kHz, 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, 192kHz, 352.8kHz, 384kHz, 705.6kHz and 768kHz sample rates
 - Zero additional driver latency
-- Compatible with macOS 10.9 Mavericks and newer
+- Compatible with macOS 10.10 Yosemite and newer
 - Builds for Intel and Apple Silicon
 - No kernel extensions or modifications to system security necessary
 

@@ -91,7 +91,7 @@ for channels in 2; do #16 64 128 256; do
         <options customize='never' require-scripts='false' hostArchitectures='x86_64,arm64'/>
         <volume-check>
             <allowed-os-versions>
-                <os-version min='10.9'/>
+                <os-version min='10.10'/>
             </allowed-os-versions>
         </volume-check>
         <choices-outline>

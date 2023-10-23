@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Improved installer build script.
+- Bumped minimum required operating system to macOS 10.10 Yosemite.
 
 ## [0.5.0] - 2023-02-10
 
@@ -88,7 +89,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- Set deployment target to 10.9. 
+- Set deployment target to macOS 10.9. 
 - Fixed bug where there is a loud pop when audio starts.
 - Fix bug that caused crashes in certain situations. (Issue #206)
 - Disable Volume and Mute controls on input. They are only needed on the output. 
