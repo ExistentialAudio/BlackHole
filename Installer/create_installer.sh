@@ -6,6 +6,7 @@
 # it may need execute permissions first by running this command:
 #   chmod +x create_installer.sh
 
+driverName="BlackHole"
 devTeamID="Q5C99V536K" # ⚠️ Replace this with your own developer team ID
 notarize=true # To skip notarization, set this to false
 notarizeProfile="notarize" # ⚠️ Replace this with your own notarytool keychain profile name
@@ -21,11 +22,17 @@ if [ ! -d BlackHole.xcodeproj ]; then
     exit 1
 fi
 
-for channels in 2 16 64 128 256; do
+version=`cat VERSION`
+
+#Version Validation
+if [ -z "$version" ]; then
+    echo "Could not find version number. VERSION file is missing from repo root or is empty."
+    exit 1
+fi
+
+for channels in 2; do #16 64 128 256; do
     # Env
     ch=$channels"ch"
-    driverName="BlackHole"
-    version=`git describe --tags --abbrev=0`
     driverVartiantName=$driverName$ch
     bundleID="audio.existential.$driverVartiantName"
     
@@ -67,7 +74,7 @@ for channels in 2 16 64 128 256; do
       --root Installer/root \
       --scripts Installer/Scripts \
       --install-location /Library/Audio/Plug-Ins/HAL \
-      Installer/BlackHole.pkg
+      "Installer/$driverName.pkg"
     rm -r Installer/root
     
     # Create installer with productbuild
@@ -75,7 +82,7 @@ for channels in 2 16 64 128 256; do
     
     echo "<?xml version=\"1.0\" encoding='utf-8'?>
     <installer-gui-script minSpecVersion='2'>
-        <title>$driverName: Audio Loopback Driver $ch $version</title>
+        <title>$driverName: Audio Loopback Driver ($ch) $version</title>
         <welcome file='welcome.html'/>
         <license file='../LICENSE'/>
         <conclusion file='conclusion.html'/>
@@ -93,18 +100,18 @@ for channels in 2 16 64 128 256; do
         <choice id=\"$bundleID\" visible='true' title=\"$driverName $ch\" start_selected='true'>
             <pkg-ref id=\"$bundleID\"/>
         </choice>
-        <pkg-ref id=\"$bundleID\" version=\"$version\" onConclusion='none'>BlackHole.pkg</pkg-ref>
+        <pkg-ref id=\"$bundleID\" version=\"$version\" onConclusion='none'>$driverName.pkg</pkg-ref>
     </installer-gui-script>" >> distribution.xml
     
     # Build
-    installerPkgName="$driverVartiantName.$version.pkg"
+    installerPkgName="$driverVartiantName-$version.pkg"
     productbuild \
       --sign $devTeamID \
       --distribution distribution.xml \
       --resources . \
-      --package-path BlackHole.pkg $installerPkgName
+      --package-path $driverName.pkg $installerPkgName
     rm distribution.xml
-    rm -f BlackHole.pkg
+    rm -f $driverName.pkg
     
     # Notarize and Staple
     if [ "$notarize" = true ]; then
