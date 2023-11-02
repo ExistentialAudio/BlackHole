@@ -433,12 +433,12 @@ else                                                                  \
 	return CFStringCreateWithCString(NULL, _string_fmt, kCFStringEncodingUTF8); \
 }
 
-static CFStringRef get_box_uid()          { RETURN_FORMATTED_STRING(kBox_UID) }
-static CFStringRef get_device_uid()       { RETURN_FORMATTED_STRING(kDevice_UID) }
-static CFStringRef get_device_name()      { RETURN_FORMATTED_STRING(kDevice_Name) }
-static CFStringRef get_device2_uid()       { RETURN_FORMATTED_STRING(kDevice2_UID) }
-static CFStringRef get_device2_name()      { RETURN_FORMATTED_STRING(kDevice2_Name) }
-static CFStringRef get_device_model_uid() { RETURN_FORMATTED_STRING(kDevice_ModelUID) }
+static CFStringRef get_box_uid(void)          { RETURN_FORMATTED_STRING(kBox_UID) }
+static CFStringRef get_device_uid(void)       { RETURN_FORMATTED_STRING(kDevice_UID) }
+static CFStringRef get_device_name(void)      { RETURN_FORMATTED_STRING(kDevice_Name) }
+static CFStringRef get_device2_uid(void)      { RETURN_FORMATTED_STRING(kDevice2_UID) }
+static CFStringRef get_device2_name(void)     { RETURN_FORMATTED_STRING(kDevice2_Name) }
+static CFStringRef get_device_model_uid(void) { RETURN_FORMATTED_STRING(kDevice_ModelUID) }
 
 // Volume conversions
 
