@@ -1901,14 +1901,14 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 		case kAudioObjectPropertyModelName:
 			//	This is the human readable name of the maker of the box.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioObjectPropertyManufacturer for the box");
-			*((CFStringRef*)outData) = CFSTR("Null Model");
+			*((CFStringRef*)outData) = CFSTR("BlackHole");
 			*outDataSize = sizeof(CFStringRef);
 			break;
 			
 		case kAudioObjectPropertyManufacturer:
 			//	This is the human readable name of the maker of the box.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioObjectPropertyManufacturer for the box");
-			*((CFStringRef*)outData) = CFSTR("Apple Inc.");
+			*((CFStringRef*)outData) = CFSTR("Existential Audio Inc.");
 			*outDataSize = sizeof(CFStringRef);
 			break;
 			
@@ -1927,14 +1927,14 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 		case kAudioObjectPropertySerialNumber:
 			//	This is the human readable serial number of the box.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioObjectPropertySerialNumber for the box");
-			*((CFStringRef*)outData) = CFSTR("00000001");
+			*((CFStringRef*)outData) = CFSTR("dd658747-4b9a-4de8-a001-c6a2ef1bb235");
 			*outDataSize = sizeof(CFStringRef);
 			break;
 			
 		case kAudioObjectPropertyFirmwareVersion:
 			//	This is the human readable firmware version of the box.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioObjectPropertyFirmwareVersion for the box");
-			*((CFStringRef*)outData) = CFSTR("1.0");
+			*((CFStringRef*)outData) = CFSTR("0.5.1");
 			*outDataSize = sizeof(CFStringRef);
 			break;
 			
