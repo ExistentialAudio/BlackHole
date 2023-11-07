@@ -12,12 +12,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Create multi-output / aggregate device with installer.
 - Keep track of which apps are connected to the driver.
 
+
 ## [Unreleased]
+
+### Changed
+
+## [0.5.1] - 2023-11-06
 
 ### Changed
 
 - Improved installer build script.
 - Bumped minimum required operating system to macOS 10.10 Yosemite.
+- Update kAudioDevicePropertyDeviceIsRunning separately for device1 and device2
 
 ## [0.5.0] - 2023-02-10
 
