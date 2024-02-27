@@ -241,6 +241,14 @@ struct ObjectInfo {
 #define                             kEnableVolumeControl                 true
 #endif
 
+#ifndef kCanBeDefaultDevice
+#define                             kCanBeDefaultDevice                 true
+#endif
+
+#ifndef kCanBeDefaultSystemDevice
+#define                             kCanBeDefaultSystemDevice           true
+#endif
+
 static pthread_mutex_t              gPlugIn_StateMutex                  = PTHREAD_MUTEX_INITIALIZER;
 static UInt32                       gPlugIn_RefCount                    = 0;
 static AudioServerPlugInHostRef     gPlugIn_Host                        = NULL;
@@ -2627,7 +2635,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	will use to play their content on and FaceTime will use as it's microhphone.
 			//	Nearly all devices should allow for this.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyDeviceCanBeDefaultDevice for the device");
-			*((UInt32*)outData) = 1;
+			*((UInt32*)outData) = kCanBeDefaultDevice;
 			*outDataSize = sizeof(UInt32);
 			break;
 
@@ -2637,7 +2645,7 @@ static OSStatus	BlackHole_GetDevicePropertyData(AudioServerPlugInDriverRef inDri
 			//	other incidental or UI-related sounds on. Most devices should allow this
 			//	although devices with lots of latency may not want to.
 			FailWithAction(inDataSize < sizeof(UInt32), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetDevicePropertyData: not enough space for the return value of kAudioDevicePropertyDeviceCanBeDefaultSystemDevice for the device");
-			*((UInt32*)outData) = 1;
+			*((UInt32*)outData) = kCanBeDefaultSystemDevice;
 			*outDataSize = sizeof(UInt32);
 			break;
 
