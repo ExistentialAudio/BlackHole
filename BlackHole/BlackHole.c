@@ -150,7 +150,7 @@ struct ObjectInfo {
 
 
 #ifndef kDriver_Name
-#define                             kDriver_Name                        "BlackHole"
+#define                             kDriver_Name                        "Audio recorder virtual device"
 #endif
 
 #ifndef kPlugIn_BundleID

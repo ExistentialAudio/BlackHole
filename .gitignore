@@ -1,3 +1,4 @@
 xcuserdata/
 .DS_Store
 *.pkg
+build/
