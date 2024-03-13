@@ -1,10 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 sudo chown -R root:wheel /Library/Audio/Plug-Ins/HAL
-
-if [[ $(sw_vers -productVersion) == "10.9" ]] 
-	then
-		sudo sudo killall coreaudiod
-	else 
-		sudo launchctl kickstart -k system/com.apple.audio.coreaudiod
-fi
+sudo killall -9 coreaudiod
