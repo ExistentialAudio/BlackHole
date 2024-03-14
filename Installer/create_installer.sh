@@ -6,9 +6,10 @@
 # it may need execute permissions first by running this command:
 #   chmod +x create_installer.sh
 
-driverName="BlackHole"
-devTeamID="Q5C99V536K" # ⚠️ Replace this with your own developer team ID
-notarize=true # To skip notarization, set this to false
+driverName="VirtualAudioCable" # ⚠️ Replace this with your own driver name
+devTeamID="N6WYG66FJ5" # ⚠️ Replace this with your own developer team ID
+notarize=false # To skip notarization, set this to false
+channels="2" # 16 64 128 256
 notarizeProfile="notarize" # ⚠️ Replace this with your own notarytool keychain profile name
 
 ############################################################################
@@ -54,7 +55,7 @@ for channels in 2; do #16 64 128 256; do
     
     mkdir Installer/root
     driverBundleName=$driverVartiantName.driver
-    mv build/BlackHole.driver Installer/root/$driverBundleName
+    cp -r build/BlackHole.driver Installer/root/$driverBundleName
     rm -r build
     
     # Sign
@@ -70,7 +71,6 @@ for channels in 2; do #16 64 128 256; do
     chmod 755 Installer/Scripts/postinstall
     
     pkgbuild \
-      --sign $devTeamID \
       --root Installer/root \
       --scripts Installer/Scripts \
       --install-location /Library/Audio/Plug-Ins/HAL \
@@ -106,7 +106,6 @@ for channels in 2; do #16 64 128 256; do
     # Build
     installerPkgName="$driverVartiantName-$version.pkg"
     productbuild \
-      --sign $devTeamID \
       --distribution distribution.xml \
       --resources . \
       --package-path $driverName.pkg $installerPkgName
