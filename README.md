@@ -10,7 +10,7 @@
 
 BlackHole is a modern macOS virtual audio loopback driver that allows applications to pass audio to other applications with zero additional latency.
 
-### [Download Installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme) 
+### [Download Installer](https://existential.audio/blackhole) 
 
 ### [Join the Discord Server](https://discord.gg/y8BWfnWRnn)
 
@@ -46,7 +46,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ### Option 1: Download Installer
 
-1. [Download the latest installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme)
+1. [Download the latest installer](https://existential.audio/blackhole)
 2. Close all running audio applications
 3. Open and install package
 
