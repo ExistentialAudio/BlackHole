@@ -76,7 +76,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 2. Restart CoreAudio with the terminal command:
 
-    `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
+    `sudo killall -9 coreaudiod`
 
 For more specific details [visit the Wiki](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation).
 
