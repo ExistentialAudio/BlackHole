@@ -303,3 +303,10 @@ Read [this discussion](https://github.com/ExistentialAudio/BlackHole/issues/146)
 ### Can I integrate BlackHole into my app?
 
 BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications please [contact Existential Audio directly](mailto:devinroth@existential.audio).
+
+## Links and Resources
+### [MultiSoundChanger](https://github.com/rlxone/MultiSoundChanger)
+A small tool for changing sound volume even for aggregate devices cause native sound volume controller can't change volume of aggregate devices
+### [BackgroundMusic](https://github.com/kyleneideck/BackgroundMusic)
+Background Music, a macOS audio utility: automatically pause your music, set individual apps' volumes and record system audio.
+
