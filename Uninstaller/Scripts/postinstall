@@ -1,0 +1,8 @@
+#!/bin/bash
+
+file="/Library/Audio/Plug-Ins/HAL/BlackHole256ch.driver"
+
+if [ -d "$file" ] ; then
+    sudo rm -R "$file"
+    sudo killall coreaudiod
+fi
