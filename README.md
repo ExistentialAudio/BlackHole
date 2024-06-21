@@ -76,7 +76,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 2. Restart CoreAudio with the terminal command:
 
-    `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
+    `sudo killall -9 coreaudiod`
 
 For more specific details [visit the Wiki](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation).
 
@@ -124,7 +124,7 @@ Please support our hard work and continued development. To request a license [co
 After building, to install BlackHole:
 
 1. Copy or move the built `BlackHoleXch.driver` bundle to `/Library/Audio/Plug-Ins/HAL`
-2. Restart CoreAudio using `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
+2. Restart CoreAudio using `sudo killall -9 coreaudiod`
 
 ### Customizing BlackHole
 
