@@ -10,7 +10,7 @@
 
 BlackHole is a modern macOS virtual audio loopback driver that allows applications to pass audio to other applications with zero additional latency.
 
-### [Download Installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme) 
+### [Download Installer](https://existential.audio/blackhole) 
 
 ### [Join the Discord Server](https://discord.gg/y8BWfnWRnn)
 
@@ -46,7 +46,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ### Option 1: Download Installer
 
-1. [Download the latest installer](https://existential.audio/blackhole/?pk_campaign=github&pk_kwd=readme)
+1. [Download the latest installer](https://existential.audio/blackhole)
 2. Close all running audio applications
 3. Open and install package
 
@@ -76,7 +76,7 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 2. Restart CoreAudio with the terminal command:
 
-    `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
+    `sudo killall -9 coreaudiod`
 
 For more specific details [visit the Wiki](https://github.com/ExistentialAudio/BlackHole/wiki/Uninstallation).
 
@@ -124,7 +124,7 @@ Please support our hard work and continued development. To request a license [co
 After building, to install BlackHole:
 
 1. Copy or move the built `BlackHoleXch.driver` bundle to `/Library/Audio/Plug-Ins/HAL`
-2. Restart CoreAudio using `sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod`
+2. Restart CoreAudio using `sudo killall -9 coreaudiod`
 
 ### Customizing BlackHole
 
@@ -303,3 +303,10 @@ Read [this discussion](https://github.com/ExistentialAudio/BlackHole/issues/146)
 ### Can I integrate BlackHole into my app?
 
 BlackHole is licensed under GPL-3.0. You can use BlackHole as long as your app is also licensed as GPL-3.0. For all other applications please [contact Existential Audio directly](mailto:devinroth@existential.audio).
+
+## Links and Resources
+### [MultiSoundChanger](https://github.com/rlxone/MultiSoundChanger)
+A small tool for changing sound volume even for aggregate devices cause native sound volume controller can't change volume of aggregate devices
+### [BackgroundMusic](https://github.com/kyleneideck/BackgroundMusic)
+Background Music, a macOS audio utility: automatically pause your music, set individual apps' volumes and record system audio.
+
