@@ -1,4 +1,3 @@
-#!/bin/zsh
+#!/bin/sh
 
-sudo chown -R root:wheel /Library/Audio/Plug-Ins/HAL
-sudo killall -9 coreaudiod
+sudo chown -R root:wheel /Library/Audio/Plug-Ins/HAL/BlackHole*ch.driver

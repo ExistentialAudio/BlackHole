@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+set -euo pipefail
 
 # Creates installer for different channel versions.
 # Run this script from the local BlackHole repo's root directory.
@@ -24,13 +25,13 @@ fi
 
 version=`cat VERSION`
 
-#Version Validation
+#Version Validation6
 if [ -z "$version" ]; then
     echo "Could not find version number. VERSION file is missing from repo root or is empty."
     exit 1
 fi
 
-for channels in 2; do #16 64 128 256; do
+for channels in 2 16 64 128 256; do
     # Env
     ch=$channels"ch"
     driverVartiantName=$driverName$ch
@@ -100,7 +101,7 @@ for channels in 2; do #16 64 128 256; do
         <choice id=\"$bundleID\" visible='true' title=\"$driverName $ch\" start_selected='true'>
             <pkg-ref id=\"$bundleID\"/>
         </choice>
-        <pkg-ref id=\"$bundleID\" version=\"$version\" onConclusion='none'>$driverName.pkg</pkg-ref>
+        <pkg-ref id=\"$bundleID\" version=\"$version\" onConclusion='RequireRestart'>$driverName.pkg</pkg-ref>
     </installer-gui-script>" >> distribution.xml
     
     # Build

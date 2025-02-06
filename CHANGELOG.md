@@ -17,14 +17,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-## [0.6.0] -  Mar 22, 2024
+## [0.6.1] - 2025-02-06
+- Updated installer to force a computer reboot as recommended by Apple.
+- Updated create_installer.sh script.
+
+### Changed 
+
+
+## [0.6.0] - 2024-03-22
 
 ## Added
-Added precompiler constant for kCanBeDefaultDevice and kCanBeDefaultSystemDevice.
+- Added precompiler constant for kCanBeDefaultDevice and kCanBeDefaultSystemDevice.
 
 ## Changed
-Updated postinstall script to use 'kill' instead of 'kickstart'.
-Updated strings for model name, 
+- Updated postinstall script to use 'kill' instead of 'kickstart'.
+- Updated strings for model name, 
 
 
 ## [0.5.1] - 2023-11-06

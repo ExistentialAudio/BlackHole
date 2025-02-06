@@ -1,5 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 sudo mkdir -p /Library/Audio/Plug-Ins/HAL
 sudo chown root:wheel /Library/Audio/Plug-Ins/HAL
-sudo chown -R root:wheel /Library/Audio/Plug-Ins/HAL/BlackHole*ch.driver
