@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28B7C7582B314A2C00586BF6 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 28B7C7572B314A2C00586BF6 /* main.c */; };
+		28B7C7652B314ADB00586BF6 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 28B7C7572B314A2C00586BF6 /* main.c */; };
 		3D083818284A7F1200C69403 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = 3D89662F2849BF1A002AB3F0 /* VERSION */; };
 		3D083819284A7F1500C69403 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2DA8FA1515FEAAB000F04B50 /* README.md */; };
 		3D88D48F285BBA5800629399 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D88D48E285BBA5800629399 /* main.c */; };
@@ -20,6 +22,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		28B7C75B2B314A6300586BF6 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		3D88D48A285BBA5800629399 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -35,6 +46,8 @@
 		039FF2572341B6E800400D7A /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		03FDCAD9233F235500101681 /* BlackHole.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BlackHole.icns; sourceTree = "<group>"; };
 		03FDCADB233FAE0500101681 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		28B7C7572B314A2C00586BF6 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		28B7C75D2B314A6300586BF6 /* bh-client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "bh-client"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D616EF215B8C82500D598BD /* BlackHole.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BlackHole.c; sourceTree = "<group>"; };
 		2D7477AC1578168D00412279 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		2D7477EC157823CF00412279 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -56,6 +69,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		28B7C75A2B314A6300586BF6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3D88D489285BBA5800629399 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -76,6 +96,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		28B7C7562B314A0000586BF6 /* BlackHoleClient */ = {
+			isa = PBXGroup;
+			children = (
+				28B7C7572B314A2C00586BF6 /* main.c */,
+			);
+			path = BlackHoleClient;
+			sourceTree = "<group>";
+		};
 		2D616EF015B8C82500D598BD /* BlackHole */ = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +117,7 @@
 		2D74779B1578162B00412279 = {
 			isa = PBXGroup;
 			children = (
+				28B7C7562B314A0000586BF6 /* BlackHoleClient */,
 				3D083805284A7BB000C69403 /* Installer */,
 				3D89662F2849BF1A002AB3F0 /* VERSION */,
 				2DA8FA1515FEAAB000F04B50 /* README.md */,
@@ -106,6 +135,7 @@
 			children = (
 				3D89664D2849C318002AB3F0 /* BlackHole.driver */,
 				3D88D48C285BBA5800629399 /* BlackHoleTests */,
+				28B7C75D2B314A6300586BF6 /* bh-client */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,6 +184,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		28B7C75C2B314A6300586BF6 /* bh-client */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28B7C7612B314A6300586BF6 /* Build configuration list for PBXNativeTarget "bh-client" */;
+			buildPhases = (
+				28B7C7592B314A6300586BF6 /* Sources */,
+				28B7C75A2B314A6300586BF6 /* Frameworks */,
+				28B7C75B2B314A6300586BF6 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "bh-client";
+			productName = "bh-client";
+			productReference = 28B7C75D2B314A6300586BF6 /* bh-client */;
+			productType = "com.apple.product-type.tool";
+		};
 		3D88D48B285BBA5800629399 /* BlackHoleTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3D88D493285BBA5800629399 /* Build configuration list for PBXNativeTarget "BlackHoleTests" */;
@@ -196,6 +243,10 @@
 			attributes = {
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
+					28B7C75C2B314A6300586BF6 = {
+						CreatedOnToolsVersion = 15.0.1;
+						ProvisioningStyle = Manual;
+					};
 					3D88D48B285BBA5800629399 = {
 						CreatedOnToolsVersion = 13.4;
 						DevelopmentTeam = Q5C99V536K;
@@ -221,6 +272,7 @@
 			targets = (
 				3D89663D2849C318002AB3F0 /* BlackHole */,
 				3D88D48B285BBA5800629399 /* BlackHoleTests */,
+				28B7C75C2B314A6300586BF6 /* bh-client */,
 			);
 		};
 /* End PBXProject section */
@@ -241,10 +293,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		28B7C7592B314A6300586BF6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28B7C7652B314ADB00586BF6 /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3D88D488285BBA5800629399 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28B7C7582B314A2C00586BF6 /* main.c in Sources */,
 				3D88D48F285BBA5800629399 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,6 +321,112 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		28B7C7622B314A6300586BF6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Release;
+		};
+		28B7C7632B314A6300586BF6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Debug;
+		};
+		28B7C7642B314A6300586BF6 /* Debug-Opt */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = "Debug-Opt";
+		};
 		2D7477A21578162B00412279 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -580,6 +747,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		28B7C7612B314A6300586BF6 /* Build configuration list for PBXNativeTarget "bh-client" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28B7C7622B314A6300586BF6 /* Release */,
+				28B7C7632B314A6300586BF6 /* Debug */,
+				28B7C7642B314A6300586BF6 /* Debug-Opt */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2D7477A01578162B00412279 /* Build configuration list for PBXProject "BlackHole" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
