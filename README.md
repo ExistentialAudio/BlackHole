@@ -96,6 +96,10 @@ For more specific details [visit the Wiki](https://github.com/ExistentialAudio/B
 - [GarageBand to Skype](https://existential.audio/howto/StreamFromGarageBandToSkype.php)
 - [GarageBand to Zoom](https://existential.audio/howto/StreamFromGarageBandToZoom.php)
 
+### Audacity
+
+- [Audacity Setup](https://github.com/ExistentialAudio/BlackHole/wiki/Audacity)
+
 ### Reaper
 
 - [Reaper to Zoom](https://noahliebman.net/2020/12/telephone-colophon-or-how-i-overengineered-my-call-audio/) by Noah Liebman
