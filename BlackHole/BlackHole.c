@@ -321,7 +321,7 @@ static const UInt32                 kDevice_ObjectListSize              = sizeof
 static const UInt32                 kDevice2_ObjectListSize              = sizeof(kDevice2_ObjectList) / sizeof(struct ObjectInfo);
 
 #ifndef kSampleRates
-#define                             kSampleRates       8000, 16000, 44100, 48000, 88200, 96000, 176400, 192000, 352800, 384000, 705600, 768000
+#define                             kSampleRates       8000, 16000, 24000, 44100, 48000, 88200, 96000, 176400, 192000, 352800, 384000, 705600, 768000
 #endif
 
 static Float64                      kDevice_SampleRates[]               = { kSampleRates };
