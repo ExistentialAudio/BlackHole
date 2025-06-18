@@ -13,13 +13,18 @@
 //==================================================================================================
 
 #include <CoreAudio/AudioServerPlugIn.h>
+#include <arpa/inet.h>
 #include <dispatch/dispatch.h>
 #include <mach/mach_time.h>
 #include <pthread.h>
 #include <stdint.h>
+#include <sys/socket.h>
 #include <sys/syslog.h>
+#include <sys/types.h>
+#include <sys/un.h>
 #include <Accelerate/Accelerate.h>
 #include <Availability.h>
+
 
 //==================================================================================================
 #pragma mark -
@@ -225,7 +230,13 @@ struct ObjectInfo {
 #define                             kDevice2_HasOutput                  true
 #endif
 
+#ifndef kEventSeverEnabled
+#define                             kEventSeverEnabled                  false
+#endif
 
+#ifndef kEventSeverPort
+#define                             kEventSeverPort                     25192
+#endif
 
 #ifndef kManufacturer_Name
 #define                             kManufacturer_Name                  "Existential Audio Inc."
@@ -399,6 +410,10 @@ static OSStatus        BlackHole_IsControlPropertySettable(AudioServerPlugInDriv
 static OSStatus        BlackHole_GetControlPropertyDataSize(AudioServerPlugInDriverRef inDriver, AudioObjectID inObjectID, pid_t inClientProcessID, const AudioObjectPropertyAddress* inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32* outDataSize);
 static OSStatus        BlackHole_GetControlPropertyData(AudioServerPlugInDriverRef inDriver, AudioObjectID inObjectID, pid_t inClientProcessID, const AudioObjectPropertyAddress* inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, UInt32* outDataSize, void* outData);
 static OSStatus        BlackHole_SetControlPropertyData(AudioServerPlugInDriverRef inDriver, AudioObjectID inObjectID, pid_t inClientProcessID, const AudioObjectPropertyAddress* inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, const void* inData, UInt32* outNumberPropertiesChanged, AudioObjectPropertyAddress outChangedAddresses[2]);
+
+// BlackHole Event Server prototypes
+static void BlackHole_onDeviceStateUpdated(void);
+static void BlackHole_Server_Start(void);
 
 #pragma mark The Interface
 
@@ -789,7 +804,8 @@ static OSStatus	BlackHole_Initialize(AudioServerPlugInDriverRef inDriver, AudioS
     gDevice_AdjustedTicksPerFrame = gDevice_HostTicksPerFrame - gDevice_HostTicksPerFrame/100.0 * 2.0*(gPitch_Adjust - 0.5);
     
     // DebugMsg("BlackHole theTimeBaseInfo.numer: %u \t theTimeBaseInfo.denom: %u", theTimeBaseInfo.numer, theTimeBaseInfo.denom);
-	
+
+    BlackHole_Server_Start();
 Done:
 	return theAnswer;
 }
@@ -4339,6 +4355,7 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
         gRingBuffer = calloc(kRing_Buffer_Frame_Size * kNumber_Of_Channels, sizeof(Float32));
     }
     
+    BlackHole_onDeviceStateUpdated();
     
 	//	unlock the state lock
 	pthread_mutex_unlock(&gPlugIn_StateMutex);
@@ -4376,6 +4393,8 @@ static OSStatus	BlackHole_StopIO(AudioServerPlugInDriverRef inDriver, AudioObjec
         free(gRingBuffer);
         gRingBuffer = NULL;
     }
+    
+    BlackHole_onDeviceStateUpdated();
 	
 	//	unlock the state lock
 	pthread_mutex_unlock(&gPlugIn_StateMutex);
@@ -4617,4 +4636,192 @@ static OSStatus	BlackHole_EndIOOperation(AudioServerPlugInDriverRef inDriver, Au
 
 Done:
 	return theAnswer;
+}
+
+//==================================================================================================
+#pragma mark -
+#pragma mark Black Hole Event Server
+//==================================================================================================
+/*
+ * Event server communicates device related events to all conected clients.
+ * Can be used, for example, to autimatically start some application when microphone is used.
+ * 
+ * Event message is exactly 1 byte long and consists of device id (2 bits) and event id (6 bits).
+ *
+ * |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+ * | Device ID |            Device Event           |
+ */
+
+#pragma mark Interface
+
+enum DeviceEvent
+{
+    DeviceEventNone    = 0,  // No event. Can be used for pings, etc.
+    DeviceEventStarted = 1,
+    DeviceEventStopped = 62,
+    DeviceEventMax     = 63, // Maximum possible value of device event
+};
+
+#pragma mark State
+
+static pthread_t                    gServerThread                       = 0;
+static UInt64                       gServer_Device1IsRunning            = 0;
+static UInt64                       gServer_Device2IsRunning            = 0;
+static pthread_mutex_t              gClients_Mutex                      = PTHREAD_MUTEX_INITIALIZER;
+static CFMutableArrayRef            gClients                            = NULL;
+
+#pragma mark Event Server Implementationt
+
+static size_t BlackHole_WriteEvent(int socket, uint8_t deviceId, uint8_t event)
+{
+    uint8_t message = (deviceId << 6) | event;
+    return send(socket, &message, sizeof(message), MSG_NOSIGNAL);
+}
+
+static size_t BlackHole_WriteCurrentDevicesState(int socket)
+{
+    size_t result = 0;
+    result = BlackHole_WriteEvent(socket, 1, gServer_Device1IsRunning > 0 ? DeviceEventStarted : DeviceEventStopped);
+    if (result < 0) {
+        return result;
+    }
+    
+    result = BlackHole_WriteEvent(socket, 2, gServer_Device2IsRunning > 0 ? DeviceEventStarted : DeviceEventStopped);
+    if (result < 0) {
+        return result;
+    }
+    
+    return 2; // Two bytes written
+}
+
+static void BlackHole_BroadcastDeviceEvent(uint8_t deviceId, uint8_t event)
+{
+    pthread_mutex_lock(&gClients_Mutex);
+    
+    CFIndex count = CFArrayGetCount(gClients);
+    
+    // Traverse all clients in backwards order
+    // so we can remove the from array if client's socket is closed
+    for (CFIndex i = count - 1; i >= 0; i--) {
+        CFNumberRef socketNumber = CFArrayGetValueAtIndex(gClients, i);
+        DebugMsg("BlackHole: serving client %li", (long)i);
+        
+        int clientSocket;
+        if (!CFNumberGetValue(socketNumber, kCFNumberIntType, &clientSocket)) {
+            DebugMsg("BlackHole: Couldn't get soket fd from CFNumber");
+            continue;
+        }
+        DebugMsg("BlackHole: writing to %i", clientSocket);
+
+        // If write failed socket is probably closed.
+        // Remove it from the array of clients
+        if (BlackHole_WriteEvent(clientSocket, deviceId, event) < 0) {
+            DebugMsg("BlackHole: Write failed. Socket is closed (%i)", clientSocket);
+            CFArrayRemoveValueAtIndex(gClients, i);
+        }
+    }
+    
+    pthread_mutex_unlock(&gClients_Mutex);
+}
+
+static void BlackHole_onDeviceStateUpdated(void)
+{
+    bool device1StateHasChanged = gServer_Device1IsRunning != gDevice_IOIsRunning;
+    bool device2StateHasChanged = gServer_Device2IsRunning != gDevice2_IOIsRunning;
+    
+    gServer_Device1IsRunning = gDevice_IOIsRunning;
+    gServer_Device2IsRunning = gDevice2_IOIsRunning;
+    
+    if (device1StateHasChanged) {
+        uint8_t event = gServer_Device1IsRunning > 0 ? DeviceEventStarted : DeviceEventStopped;
+        BlackHole_BroadcastDeviceEvent(1, event);
+    }
+    
+    if (device2StateHasChanged) {
+        uint8_t event = gServer_Device2IsRunning > 0 ? DeviceEventStarted : DeviceEventStopped;
+        BlackHole_BroadcastDeviceEvent(2, event);
+    }
+}
+
+static void BlackHole_Server_Main(void)
+{
+    syslog(LOG_NOTICE, "Server: Server thread started");
+    int server_socket;
+    int client_socket;
+    int result = 0;
+    
+    server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in servaddr, client_addr;
+    bzero(&servaddr, sizeof(servaddr));
+   
+    // assign IP, PORT
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    servaddr.sin_port = htons(kEventSeverPort);
+    
+    int bindAttempts = 10;
+    while (bindAttempts > 0) {
+        result = bind(server_socket, (struct sockaddr*)&servaddr, sizeof(servaddr));
+        if (result == 0) {
+            break;
+        }
+        bindAttempts--;
+        if (bindAttempts > 0) {
+            DebugMsg("Server: Failed to bind socket (%i) retrying", result);
+        }
+        sleep(1);
+    }
+    
+    if (result != 0) {
+        DebugMsg("Server: Failed to bind socket (%i) stopping", result);
+        return;
+    }
+
+    result = listen(server_socket, 5);
+    if (result != 0) {
+        DebugMsg("Server: Failed to start listening socket (%i)", result);
+        return;
+    }
+
+    while(1){
+        unsigned int clen = sizeof(client_addr);
+        client_socket = accept(server_socket, (struct sockaddr *) &client_addr, &clen);
+        
+        // Update newly connected client with the device statuses
+        BlackHole_WriteCurrentDevicesState(client_socket);
+        
+        // lock the clients lock
+        pthread_mutex_lock(&gClients_Mutex);
+        CFNumberRef socketNumber = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &client_socket);
+        CFArrayAppendValue(gClients, socketNumber);
+        CFRelease(socketNumber);
+        // unlock the clients lock
+        pthread_mutex_unlock(&gClients_Mutex);
+    }
+}
+
+static void BlackHole_Server_Start(void)
+{
+    if (!kEventSeverEnabled) {
+        return;
+    }
+    
+    int result;
+    // lock the clients lock
+    pthread_mutex_lock(&gClients_Mutex);
+    if (gClients == NULL) {
+        gClients = CFArrayCreateMutable(kCFAllocatorDefault, 10, &kCFTypeArrayCallBacks);
+    }
+    // unlock the clients lock
+    pthread_mutex_unlock(&gClients_Mutex);
+    
+    if (gServerThread != 0) {
+        DebugMsg("Server: Server's already running");
+        return;
+    }
+    
+    result = pthread_create(&gServerThread, NULL, (void*)&BlackHole_Server_Main, NULL) ;
+    if(result != 0) {
+        DebugMsg("Server: Failed to start server thread (%i)", result);
+    }
 }
