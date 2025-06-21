@@ -31,7 +31,7 @@ if [ -z "$version" ]; then
     exit 1
 fi
 
-for channels in 0 2 16 64 128 256; do
+for channels in 2 16 64 128 256; do
     # Env
     ch=$channels"ch"
     driverVartiantName=$driverName$ch

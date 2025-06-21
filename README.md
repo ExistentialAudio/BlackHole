@@ -77,18 +77,37 @@ BlackHole 0ch is a special variant that acts as an **audio termination device** 
 
 ## Installation Instructions
 
-### Option 1: Download Installer
+### Option 1: Download Installer (Standard Variants)
 
 1. [Download the latest installer](https://existential.audio/blackhole)
 2. Close all running audio applications
 3. Open and install package
 
-### Option 2: Install via Homebrew
+*Available variants: 2ch, 16ch, 64ch, 128ch, 256ch*
 
-- 0ch: `brew install blackhole-0ch` *(Audio termination device)*
+### Option 2: Install via Homebrew (Standard Variants)
+
 - 2ch: `brew install blackhole-2ch`
 - 16ch: `brew install blackhole-16ch`
 - 64ch: `brew install blackhole-64ch`
+
+### Option 3: Manual Build (Zero-Channel Variant)
+
+The zero-channel audio termination device must be built manually:
+
+```bash
+# Build the driver
+xcodebuild -project BlackHole.xcodeproj -configuration Release -target BlackHole \
+  CONFIGURATION_BUILD_DIR=build PRODUCT_BUNDLE_IDENTIFIER=audio.existential.BlackHole0ch \
+  CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
+  'GCC_PREPROCESSOR_DEFINITIONS=$GCC_PREPROCESSOR_DEFINITIONS kNumber_Of_Channels=0 kPlugIn_BundleID="audio.existential.BlackHole0ch" kDriver_Name="BlackHole"'
+
+# Install the driver  
+sudo cp -R build/BlackHole.driver /Library/Audio/Plug-Ins/HAL/BlackHole0ch.driver
+sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod
+```
+
+See [Developer Guides](#developer-guides) for complete build instructions.
 
 ## Uninstallation Instructions
 
