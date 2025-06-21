@@ -31,7 +31,8 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ## Features
 
-- Builds 2, 16, 64, 128, and 256 audio channels versions
+- Builds 0, 2, 16, 64, 128, and 256 audio channels versions
+- **Zero-channel variant** for audio termination (acts as `/dev/null` for audio)
 - Customizable channel count, latency, hidden devices
 - Customizable mirror device to allow for a hidden input or output
 - Supports 8kHz, 16kHz, 44.1kHz, 48kHz, 88.2kHz, 96kHz, 176.4kHz, 192kHz, 352.8kHz, 384kHz, 705.6kHz and 768kHz sample rates
@@ -42,19 +43,71 @@ Sponsor: https://github.com/sponsors/ExistentialAudio
 
 ![Audio MIDI Setup](Images/audio-midi-setup.png)
 
+## Zero-Channel Audio Termination (BlackHole 0ch)
+
+BlackHole 0ch is a special variant that acts as an **audio termination device** - essentially `/dev/null` for audio. This device accepts audio output from applications but silently discards all audio data instead of playing it or routing it elsewhere.
+
+### Use Cases
+
+- **Audio Software Development**: Applications that require an audio output device but don't need actual audio playback
+- **Automated Testing**: Testing audio applications without producing sound output
+- **Audio Routing**: Terminating specific audio streams in complex routing setups
+- **Broadcast/Streaming**: Discarding unwanted audio channels while keeping others
+- **System Administration**: Preventing certain applications from producing audio output
+
+### How It Works
+
+- Appears as "BlackHole 0ch" in Audio MIDI Setup and application audio device lists
+- Applications can select it as a normal audio output device
+- All audio sent to this device is silently discarded with zero latency
+- Uses minimal system resources (no actual audio processing or buffering)
+- Maintains proper timing and synchronization for applications that depend on audio device timing
+
+### Example Usage
+
+```bash
+# Route audio from an application to null device (no sound output)
+# Select "BlackHole 0ch" as output in the application's audio settings
+
+# Useful for applications that require audio output but you want silence:
+# - Screen recording software (record video without audio)
+# - Audio testing tools (test without hearing output)
+# - Background music apps (disable audio while keeping app running)
+```
+
 ## Installation Instructions
 
-### Option 1: Download Installer
+### Option 1: Download Installer (Standard Variants)
 
 1. [Download the latest installer](https://existential.audio/blackhole)
 2. Close all running audio applications
 3. Open and install package
 
-### Option 2: Install via Homebrew
+*Available variants: 2ch, 16ch, 64ch, 128ch, 256ch*
+
+### Option 2: Install via Homebrew (Standard Variants)
 
 - 2ch: `brew install blackhole-2ch`
 - 16ch: `brew install blackhole-16ch`
 - 64ch: `brew install blackhole-64ch`
+
+### Option 3: Manual Build (Zero-Channel Variant)
+
+The zero-channel audio termination device must be built manually:
+
+```bash
+# Build the driver
+xcodebuild -project BlackHole.xcodeproj -configuration Release -target BlackHole \
+  CONFIGURATION_BUILD_DIR=build PRODUCT_BUNDLE_IDENTIFIER=audio.existential.BlackHole0ch \
+  CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \
+  'GCC_PREPROCESSOR_DEFINITIONS=$GCC_PREPROCESSOR_DEFINITIONS kNumber_Of_Channels=0 kPlugIn_BundleID="audio.existential.BlackHole0ch" kDriver_Name="BlackHole"'
+
+# Install the driver  
+sudo cp -R build/BlackHole.driver /Library/Audio/Plug-Ins/HAL/BlackHole0ch.driver
+sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod
+```
+
+See [Developer Guides](#developer-guides) for complete build instructions.
 
 ## Uninstallation Instructions
 
@@ -125,10 +178,38 @@ For more specific details [visit the Wiki](https://github.com/ExistentialAudio/B
 Please support our hard work and continued development. To request a license [contact Existential Audio](mailto:devinroth@existential.audio).
 
 ### Build & Install
+
+#### Standard Build
 After building, to install BlackHole:
 
 1. Copy or move the built `BlackHoleXch.driver` bundle to `/Library/Audio/Plug-Ins/HAL`
 2. Restart CoreAudio using `sudo killall -9 coreaudiod`
+
+#### Building Zero-Channel Variant
+
+To build the zero-channel audio termination device (BlackHole 0ch):
+
+```bash
+xcodebuild \
+  -project BlackHole.xcodeproj \
+  -configuration Release \
+  -target BlackHole \
+  CONFIGURATION_BUILD_DIR=build \
+  PRODUCT_BUNDLE_IDENTIFIER=audio.existential.BlackHole0ch \
+  CODE_SIGN_IDENTITY="" \
+  CODE_SIGNING_REQUIRED=NO \
+  'GCC_PREPROCESSOR_DEFINITIONS=$GCC_PREPROCESSOR_DEFINITIONS kNumber_Of_Channels=0 kPlugIn_BundleID="audio.existential.BlackHole0ch" kDriver_Name="BlackHole"'
+```
+
+Then install:
+```bash
+sudo cp -R build/BlackHole.driver /Library/Audio/Plug-Ins/HAL/BlackHole0ch.driver
+sudo chown -R root:wheel /Library/Audio/Plug-Ins/HAL/BlackHole0ch.driver
+sudo chmod -R 755 /Library/Audio/Plug-Ins/HAL/BlackHole0ch.driver
+sudo launchctl kickstart -kp system/com.apple.audio.coreaudiod
+```
+
+The zero-channel device will appear as "BlackHole 0ch" in Audio MIDI Setup and can be used to terminate audio streams.
 
 ### Customizing BlackHole
 
@@ -150,11 +231,13 @@ kDevice2_HasInput
 kDevice2_HasOutput
 
 kLatency_Frame_Size
-kNumber_Of_Channels
+kNumber_Of_Channels  // Set to 0 for audio termination device
 kSampleRates
 ```
 
 They can be specified at build time with `xcodebuild` using `GCC_PREPROCESSOR_DEFINITIONS`. 
+
+**Note**: Setting `kNumber_Of_Channels=0` creates a special audio termination device that discards all audio data, useful for applications that require an audio output but don't need actual sound output. 
 
 Example:
 

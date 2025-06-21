@@ -237,6 +237,11 @@ struct ObjectInfo {
 #define                             kNumber_Of_Channels                 2
 #endif
 
+// Null device support for audio termination (/dev/null equivalent)
+// When kNumber_Of_Channels is 1 and kNull_Device_Mode is true, device discards all data
+#define                             kNull_Device_Mode                   (kNumber_Of_Channels == 1 && defined(kCreate_Null_Device))
+#define                             kSupports_Null_Device               true
+
 #ifndef kEnableVolumeControl
 #define                             kEnableVolumeControl                 true
 #endif
@@ -334,6 +339,8 @@ static const UInt32                 kDevice_SampleRatesSize             = sizeof
 #define                             kBytes_Per_Channel                  (kBits_Per_Channel/ 8)
 #define                             kBytes_Per_Frame                    (kNumber_Of_Channels * kBytes_Per_Channel)
 #define                             kRing_Buffer_Frame_Size             ((65536 + kLatency_Frame_Size))
+
+// For null devices, we still use normal buffer allocation but data gets discarded
 static Float32*                     gRingBuffer = NULL;
 
 
@@ -3283,7 +3290,7 @@ static OSStatus	BlackHole_SetStreamPropertyData(AudioServerPlugInDriverRef inDri
 		case kAudioStreamPropertyPhysicalFormat:
 			//	Changing the stream format needs to be handled via the
 			//	RequestConfigChange/PerformConfigChange machinery. Note that because this
-			//	device only supports 2 channel 32 bit float data, the only thing that can
+			//	device supports fixed channel count 32 bit float data, the only thing that can
 			//	change is the sample rate.
 			FailWithAction(inDataSize != sizeof(AudioStreamBasicDescription), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_SetStreamPropertyData: wrong size for the data for kAudioStreamPropertyPhysicalFormat");
 			FailWithAction(((const AudioStreamBasicDescription*)inData)->mFormatID != kAudioFormatLinearPCM, theAnswer = kAudioDeviceUnsupportedFormatError, Done, "BlackHole_SetStreamPropertyData: unsupported format ID for kAudioStreamPropertyPhysicalFormat");
@@ -4568,11 +4575,10 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             memcpy((Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
             
             // Finally we'll apply the output volume to the buffer.
-	    if(kEnableVolumeControl)
-	    {
-	 	vDSP_vsmul(ioMainBuffer, 1, &gVolume_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
-	    }
-
+            if(kEnableVolumeControl)
+            {
+                vDSP_vsmul(ioMainBuffer, 1, &gVolume_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
+            }
         }
     }
     
