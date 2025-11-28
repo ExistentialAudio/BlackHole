@@ -14,9 +14,13 @@ BlackHole is a modern macOS virtual audio loopback driver that allows applicatio
 
 ### [Join the Discord Server](https://discord.gg/y8BWfnWRnn)
 
-## Funding
+## Sponsors
 
-Sponsor: https://github.com/sponsors/ExistentialAudio
+### Recall.ai - API for desktop recording
+
+If you’re looking for a desktop recording API, consider checking out [Recall.ai](https://www.recall.ai/product/desktop-recording-sdk?utm_source=github&utm_medium=sponsorship&utm_campaign=existentialaudio-blackhole), an API that records video, audio, and transcripts from Zoom, Google Meet, Microsoft Teams, in-person meetings, and more.
+
+To sponsor this project visit https://github.com/sponsors/ExistentialAudio
 
 ## Table of Contents
 
