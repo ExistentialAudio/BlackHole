@@ -4586,7 +4586,8 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
             DebugMsg("BlackHole overload error. kAudioServerPlugInIOOperationWriteMix was unable to complete operation before the deadline. Try increasing the buffer frame size.");
             return kAudioHardwareUnspecifiedError;
         }
-        
+        // TODO: Mix into the buffers but we will need to clear the buffers at some point.
+        // Issue with outputting from mirrored device and main device at the same time. Not currently mixing. 
         
         // Copy the buffers.
         memcpy(gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, ioMainBuffer, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
