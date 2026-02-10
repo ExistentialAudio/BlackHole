@@ -2,3 +2,4 @@
 
 sudo mkdir -p /Library/Audio/Plug-Ins/HAL
 sudo chown root:wheel /Library/Audio/Plug-Ins/HAL
+# TODO also add correct read write permissions.

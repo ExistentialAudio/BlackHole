@@ -1,3 +1,4 @@
 #!/bin/sh
 
 sudo chown -R root:wheel /Library/Audio/Plug-Ins/HAL/BlackHole*ch.driver
+# TODO also add correct read write permissions.

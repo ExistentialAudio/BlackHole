@@ -217,6 +217,7 @@ struct ObjectInfo {
 #define                             kDevice_HasOutput                   true
 #endif
 
+// TODO: These need to be the opposite of kDevice_HasOutput and kDevice_HasInput
 #ifndef kDevice2_HasInput
 #define                             kDevice2_HasInput                   true
 #endif
