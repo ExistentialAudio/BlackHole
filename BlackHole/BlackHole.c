@@ -16,6 +16,7 @@
 #include <dispatch/dispatch.h>
 #include <mach/mach_time.h>
 #include <pthread.h>
+#include <stdatomic.h>
 #include <stdint.h>
 #include <sys/syslog.h>
 #include <Accelerate/Accelerate.h>
@@ -335,6 +336,14 @@ static const UInt32                 kDevice_SampleRatesSize             = sizeof
 #define                             kBytes_Per_Frame                    (kNumber_Of_Channels * kBytes_Per_Channel)
 #define                             kRing_Buffer_Frame_Size             ((65536 + kLatency_Frame_Size))
 static Float32*                     gRingBuffer = NULL;
+
+//  Lock-free SPSC synchronization for the ring buffer.
+//  The writer stores the end position (sample time) after completing its memcpy,
+//  using memory_order_release. The reader loads this value with memory_order_acquire
+//  before reading, ensuring it sees the fully written buffer contents. If the write
+//  head hasn't reached the reader's range, the reader returns silence instead of
+//  partially-written data.
+static _Atomic(UInt64)              gRingBuffer_WriteHead = 0;
 
 
 //==================================================================================================
@@ -4337,6 +4346,7 @@ static OSStatus	BlackHole_StartIO(AudioServerPlugInDriverRef inDriver, AudioObje
         gDevice_AnchorHostTime = mach_absolute_time();
         gDevice_PreviousTicks = 0;
         gRingBuffer = calloc(kRing_Buffer_Frame_Size * kNumber_Of_Channels, sizeof(Float32));
+        atomic_store_explicit(&gRingBuffer_WriteHead, 0, memory_order_release);
     }
     
     
@@ -4542,59 +4552,88 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
     }
     
     // Keep track of last outputSampleTime and the cleared buffer status.
-    static Float64 lastOutputSampleTime = 0;
-    static Boolean isBufferClear = true;
-    
-    // From BlackHole to Application
+    // These are accessed from both read and write IO paths which may execute
+    // concurrently on different threads, so they must be atomic to avoid UB.
+    static _Atomic(Float64) lastOutputSampleTime = 0;
+    static _Atomic(Boolean) isBufferClear = true;
+
+    // From BlackHole to Application (read path)
     if(inOperationID == kAudioServerPlugInIOOperationReadInput)
     {
-        // If mute is one let's just fill the buffer with zeros or if there's no apps outputting audio
-        if (gMute_Master_Value || lastOutputSampleTime - inIOBufferFrameSize < inIOCycleInfo->mInputTime.mSampleTime)
+        Float64 lastOutput = atomic_load_explicit(&lastOutputSampleTime, memory_order_acquire);
+
+        // If mute is on or no apps are outputting audio, return silence.
+        if (gMute_Master_Value || lastOutput - inIOBufferFrameSize < inIOCycleInfo->mInputTime.mSampleTime)
         {
             // Clear the ioMainBuffer
             vDSP_vclr(ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
-            
+
             // Clear the ring buffer.
-            if (!isBufferClear)
+            if (!atomic_load_explicit(&isBufferClear, memory_order_acquire))
             {
                 vDSP_vclr(gRingBuffer, 1, kRing_Buffer_Frame_Size * kNumber_Of_Channels);
-                isBufferClear = true;
+                atomic_store_explicit(&isBufferClear, true, memory_order_release);
             }
         }
         else
         {
-            // Copy the buffers.
-            memcpy(ioMainBuffer, gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
-            memcpy((Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
-            
-            // Finally we'll apply the output volume to the buffer.
+            // Check the write head to ensure the writer has finished copying
+            // the region we're about to read. The acquire fence pairs with the
+            // release store in the write path, guaranteeing all memcpy writes
+            // are visible before we read them. Without this, the reader can
+            // start a memcpy while the writer is still mid-copy, producing a
+            // mix of current and stale data (observed as +512 sample offsets
+            // with high channel counts).
+            UInt64 writeHead = atomic_load_explicit(&gRingBuffer_WriteHead, memory_order_acquire);
+            if (writeHead < mSampleTime + inIOBufferFrameSize)
+            {
+                // Writer hasn't finished this region yet — return silence
+                // rather than reading partially-written data.
+                vDSP_vclr(ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
+            }
+            else
+            {
+                // Copy the buffers.
+                memcpy(ioMainBuffer, gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+                memcpy((Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, gRingBuffer, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
+
+                // Finally we'll apply the output volume to the buffer.
 	    if(kEnableVolumeControl)
 	    {
 	 	vDSP_vsmul(ioMainBuffer, 1, &gVolume_Master_Value, ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
 	    }
-
+            }
         }
     }
-    
-    // From Application to BlackHole
+
+    // From Application to BlackHole (write path)
     if(inOperationID == kAudioServerPlugInIOOperationWriteMix)
     {
-        
+
         // Overload error.
         if (inIOCycleInfo->mCurrentTime.mSampleTime > inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize + kLatency_Frame_Size)
         {
             DebugMsg("BlackHole overload error. kAudioServerPlugInIOOperationWriteMix was unable to complete operation before the deadline. Try increasing the buffer frame size.");
             return kAudioHardwareUnspecifiedError;
         }
-        
-        
+
+
         // Copy the buffers.
         memcpy(gRingBuffer + ringBufferFrameLocationStart * kNumber_Of_Channels, ioMainBuffer, firstPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
         memcpy(gRingBuffer, (Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
-        
-        // Save the last output time.
-        lastOutputSampleTime = inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize;
-        isBufferClear = false;
+
+        // Publish the write head with release semantics. Any reader that
+        // subsequently acquires this value is guaranteed to see the completed
+        // memcpy writes above. This is the core of the SPSC synchronization.
+        atomic_store_explicit(&gRingBuffer_WriteHead,
+            mSampleTime + inIOBufferFrameSize,
+            memory_order_release);
+
+        // Save the last output time (atomic to avoid data race with reader).
+        atomic_store_explicit(&lastOutputSampleTime,
+            inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize,
+            memory_order_release);
+        atomic_store_explicit(&isBufferClear, false, memory_order_release);
     }
 
 Done:
