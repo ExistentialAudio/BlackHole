@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Zero-channel audio termination device (BlackHole 0ch)
+  - Acts as `/dev/null` for audio - accepts and discards all audio data
+  - Useful for applications requiring audio output without actual sound playback
+  - Supports audio software development, testing, and advanced routing workflows
+  - Included in build system and installer script
+
 ### Changed
 
 ## [0.6.1] - 2025-02-06
