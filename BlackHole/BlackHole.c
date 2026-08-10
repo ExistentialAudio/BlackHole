@@ -232,7 +232,9 @@ struct ObjectInfo {
 #define                             kManufacturer_Name                  "Existential Audio Inc."
 #endif
 
+#ifndef kLatency_Frame_Size
 #define                             kLatency_Frame_Size                 0
+#endif
 
 #ifndef kNumber_Of_Channels
 #define                             kNumber_Of_Channels                 2
