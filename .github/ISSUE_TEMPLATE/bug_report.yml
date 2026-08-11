@@ -7,11 +7,11 @@ body:
   attributes:
     label: Please Confirm
     options:
-      - label: I have read the **[FAQ](https://github.com/ExistentialAudio/BlackHole#faq) and [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)** where most common issues can be resolved
+      - label: I have read the **[FAQ](https://github.com/ExistentialAudio/BlackHole#faq) and [Wiki](https://github.com/ExistentialAudio/BlackHole/wiki)** where most common issues can be resolved.
         required: true
-      - label: I have searched **[Discussions](https://github.com/ExistentialAudio/BlackHole/discussions)** to see if the same question has already been asked
+      - label: I have searched **[Discussions](https://github.com/ExistentialAudio/BlackHole/discussions)** to see if the same question has already been asked.
         required: true
-      - label: This is a **bug** and not a question about audio routing or configuration, which should be posted in [Discussions](https://github.com/ExistentialAudio/BlackHole/discussions)
+      - label: This is a **bug** and not a question about audio routing or configuration, which should be posted in [Discussions](https://github.com/ExistentialAudio/BlackHole/discussions) or asked in our [Discord server](https://discord.gg/y8BWfnWRnn).
         required: true
 - type: dropdown
   id: operating-system
