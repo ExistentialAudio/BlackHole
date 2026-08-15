@@ -1956,6 +1956,7 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioObjectPropertyManufacturer for the box");
 
 			*((CFStringRef*)outData) = get_box_uid();
+			*outDataSize = sizeof(CFStringRef);
 			break;
 			
 		case kAudioBoxPropertyTransportType:
