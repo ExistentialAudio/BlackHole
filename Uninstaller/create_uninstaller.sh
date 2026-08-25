@@ -38,7 +38,7 @@ fi' > Uninstaller/Scripts/postinstall
     if [ "$notarize" = true ]; then
 
         # Submit the package for notarization and capture output, also displaying it simultaneously
-        output=$(xcrun notarytool submit "$packageName" --progress --wait --keychain-profile "notarize" 2>&1 | tee /dev/tty)
+        output=$(xcrun notarytool submit "$packageName" --progress --wait --keychain-profile "$notarizeProfile" 2>&1 | tee /dev/tty)
 
         # Extract the submission ID
         submission_id=$(echo "$output" | grep -o -E 'id: [a-f0-9-]+' | awk '{print $2}' | head -n1)
@@ -54,7 +54,7 @@ fi' > Uninstaller/Scripts/postinstall
 
           # Fetch and display notarization logs
           echo -e "\nFetching logs for submission ID: $submission_id"
-          xcrun notarytool log --keychain-profile "notarize" "$submission_id"
+          xcrun notarytool log --keychain-profile "$notarizeProfile" "$submission_id"
           exit 1
         else
           echo "Notarization submitted successfully ✅"
