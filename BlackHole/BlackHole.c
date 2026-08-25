@@ -1945,8 +1945,11 @@ static OSStatus	BlackHole_GetBoxPropertyData(AudioServerPlugInDriverRef inDriver
 		case kAudioObjectPropertyFirmwareVersion:
 			//	This is the human readable firmware version of the box.
 			FailWithAction(inDataSize < sizeof(CFStringRef), theAnswer = kAudioHardwareBadPropertySizeError, Done, "BlackHole_GetBoxPropertyData: not enough space for the return value of kAudioObjectPropertyFirmwareVersion for the box");
-            CFStringRef version = (CFStringRef)CFBundleGetValueForInfoDictionaryKey(CFBundleGetBundleWithIdentifier(CFSTR(kPlugIn_BundleID)), CFSTR("CFBundleShortVersionString"));
-            CFRetain(version);
+			CFBundleRef theVersionBundle = CFBundleGetBundleWithIdentifier(CFSTR(kPlugIn_BundleID));
+			FailWithAction(theVersionBundle == NULL, theAnswer = kAudioHardwareUnspecifiedError, Done, "BlackHole_GetBoxPropertyData: could not get the plug-in bundle for kAudioObjectPropertyFirmwareVersion");
+			CFStringRef version = (CFStringRef)CFBundleGetValueForInfoDictionaryKey(theVersionBundle, CFSTR("CFBundleShortVersionString"));
+			FailWithAction(version == NULL, theAnswer = kAudioHardwareUnspecifiedError, Done, "BlackHole_GetBoxPropertyData: could not get CFBundleShortVersionString for kAudioObjectPropertyFirmwareVersion");
+			CFRetain(version);
 			*((CFStringRef*)outData) = version;
 			*outDataSize = sizeof(CFStringRef);
 			break;
