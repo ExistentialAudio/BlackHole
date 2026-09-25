@@ -16,6 +16,7 @@
 #include <dispatch/dispatch.h>
 #include <mach/mach_time.h>
 #include <pthread.h>
+#include <stdatomic.h>
 #include <stdint.h>
 #include <sys/syslog.h>
 #include <Accelerate/Accelerate.h>
@@ -4546,24 +4547,28 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         secondPartFrameSize = inIOBufferFrameSize - firstPartFrameSize;
     }
     
-    // Keep track of last outputSampleTime and the cleared buffer status.
-    static Float64 lastOutputSampleTime = 0;
-    static Boolean isBufferClear = true;
+    //	Keep track of last outputSampleTime and the cleared buffer status. These are
+    //	shared by every IO thread: the output side writes them and the input side
+    //	reads them, and kObjectID_Device and kObjectID_Device2 each get their own IO
+    //	thread. Use relaxed atomics so the accesses are well defined without adding
+    //	any ordering cost on the realtime path.
+    static _Atomic Float64 lastOutputSampleTime = 0;
+    static _Atomic Boolean isBufferClear = true;
     
     // From BlackHole to Application
     if(inOperationID == kAudioServerPlugInIOOperationReadInput)
     {
         // If mute is one let's just fill the buffer with zeros or if there's no apps outputting audio
-        if (gMute_Master_Value || lastOutputSampleTime - inIOBufferFrameSize < inIOCycleInfo->mInputTime.mSampleTime)
+        if (gMute_Master_Value || atomic_load_explicit(&lastOutputSampleTime, memory_order_relaxed) - inIOBufferFrameSize < inIOCycleInfo->mInputTime.mSampleTime)
         {
             // Clear the ioMainBuffer
             vDSP_vclr(ioMainBuffer, 1, inIOBufferFrameSize * kNumber_Of_Channels);
             
             // Clear the ring buffer.
-            if (!isBufferClear)
+            if (!atomic_load_explicit(&isBufferClear, memory_order_relaxed))
             {
                 vDSP_vclr(gRingBuffer, 1, kRing_Buffer_Frame_Size * kNumber_Of_Channels);
-                isBufferClear = true;
+                atomic_store_explicit(&isBufferClear, true, memory_order_relaxed);
             }
         }
         else
@@ -4599,8 +4604,8 @@ static OSStatus	BlackHole_DoIOOperation(AudioServerPlugInDriverRef inDriver, Aud
         memcpy(gRingBuffer, (Float32*)ioMainBuffer + firstPartFrameSize * kNumber_Of_Channels, secondPartFrameSize * kNumber_Of_Channels * sizeof(Float32));
         
         // Save the last output time.
-        lastOutputSampleTime = inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize;
-        isBufferClear = false;
+        atomic_store_explicit(&lastOutputSampleTime, inIOCycleInfo->mOutputTime.mSampleTime + inIOBufferFrameSize, memory_order_relaxed);
+        atomic_store_explicit(&isBufferClear, false, memory_order_relaxed);
     }
 
 Done:
