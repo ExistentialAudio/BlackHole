@@ -247,6 +247,17 @@ Hidden audio devices can be accessed using `kAudioHardwarePropertyTranslateUIDTo
 
 BlackHole can be integrated into your CI/CD. Take a look at the [create_installer.sh](https://github.com/ExistentialAudio/BlackHole/blob/master/Installer/create_installer.sh) shell script to see how the installer is built, signed and notarized.
 
+### Installer Regression Tests
+
+Run these from the repository root on macOS with Python 3 and the Xcode command line tools installed:
+
+```sh
+python3 -B BlackHoleTests/test_installer_permissions.py
+bash BlackHoleTests/test_package_permissions.sh
+```
+
+The tests repair permissions in temporary target volumes and inspect unsigned component packages created under a restrictive umask. They mock ownership changes, driver compilation, signing, and notarization, and do not install a driver or restart Core Audio.
+
 ## Feature Requests
 
 If you are interested in any of the following features please leave a comment in the linked issue. To request a features not listed please create a new issue.
@@ -264,6 +275,25 @@ If you are interested in any of the following features please leave a comment in
 ### Why isn't BlackHole showing up in the Applications folder?
 
 BlackHole is a virtual audio loopback driver. It only shows up in `Audio MIDI Setup`, `Sound Preferences`, or other audio applications.
+
+### Why isn't BlackHole appearing in Audio MIDI Setup after installation?
+
+If the driver is present in `/Library/Audio/Plug-Ins/HAL` but is still missing after restarting, check the HAL folder's permissions:
+
+```sh
+ls -ld /Library/Audio/Plug-Ins/HAL
+```
+
+Core Audio needs to read and traverse this folder. It should be owned by `root:wheel` with permissions `drwxr-xr-x` (`755`). A folder with permissions such as `drwx------` (`700`) can prevent the driver from loading, as reported in [issue #793](https://github.com/ExistentialAudio/BlackHole/issues/793).
+
+To repair the HAL folder's ownership and permissions:
+
+```sh
+sudo chown root:wheel /Library/Audio/Plug-Ins/HAL
+sudo chmod 755 /Library/Audio/Plug-Ins/HAL
+```
+
+Restart your Mac, then reopen Audio MIDI Setup. These commands change only the HAL folder itself; the installer also sets the permissions inside the BlackHole driver bundle. If the bundle is missing or damaged, reinstall BlackHole. For a Homebrew installation, use `brew reinstall blackhole-2ch` (replace `2ch` with your installed channel version).
 
 ### How can I listen to the audio and use BlackHole at the same time?
 

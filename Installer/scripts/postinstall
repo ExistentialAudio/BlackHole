@@ -1,6 +1,16 @@
 #!/bin/sh
 
-chown -R root:wheel /Library/Audio/Plug-Ins/HAL/BlackHole*ch.driver
-find /Library/Audio/Plug-Ins/HAL/BlackHole*ch.driver -type d -exec chmod 755 {} \;
-find /Library/Audio/Plug-Ins/HAL/BlackHole*ch.driver -type f -exec chmod 644 {} \;
-find /Library/Audio/Plug-Ins/HAL/BlackHole*ch.driver/Contents/MacOS -type f -exec chmod 755 {} \;
+set -eu
+
+target_volume="${3:-/}"
+hal_directory="${target_volume%/}/Library/Audio/Plug-Ins/HAL"
+
+# Payload extraction can replace the mode set by preinstall with the staging
+# root's mode. Core Audio must be able to traverse HAL after extraction too.
+chown root:wheel "$hal_directory"
+chmod 755 "$hal_directory"
+
+chown -R root:wheel "$hal_directory"/BlackHole*ch.driver
+find "$hal_directory"/BlackHole*ch.driver -type d -exec chmod 755 {} +
+find "$hal_directory"/BlackHole*ch.driver -type f -exec chmod 644 {} +
+find "$hal_directory"/BlackHole*ch.driver/Contents/MacOS -type f -exec chmod 755 {} +

@@ -53,7 +53,9 @@ for channels in 2 16 64 128 256; do
     awk '{sub(/e395c745-4eea-4d94-bb92-46224221047c/,"'$uuid'")}1' build/BlackHole.driver/Contents/Info.plist > Temp.plist
     mv Temp.plist build/BlackHole.driver/Contents/Info.plist
     
-    mkdir Installer/root
+    # pkgbuild records this directory's mode for the HAL install location.
+    # Do not let a restrictive build umask make HAL inaccessible to Core Audio.
+    mkdir -m 755 Installer/root
     driverBundleName=$driverVartiantName.driver
     mv build/BlackHole.driver Installer/root/$driverBundleName
     rm -r build
@@ -67,13 +69,13 @@ for channels in 2 16 64 128 256; do
       Installer/root/$driverBundleName
     
     # Create package with pkgbuild
-    chmod 755 Installer/Scripts/preinstall
-    chmod 755 Installer/Scripts/postinstall
+    chmod 755 Installer/scripts/preinstall
+    chmod 755 Installer/scripts/postinstall
     
     pkgbuild \
       --sign $devTeamID \
       --root Installer/root \
-      --scripts Installer/Scripts \
+      --scripts Installer/scripts \
       --install-location /Library/Audio/Plug-Ins/HAL \
       "Installer/$driverName.pkg"
     rm -r Installer/root

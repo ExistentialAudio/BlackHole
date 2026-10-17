@@ -1,5 +1,11 @@
 #!/bin/sh
 
-mkdir -p /Library/Audio/Plug-Ins/HAL
-chown root:wheel /Library/Audio/Plug-Ins/HAL
-chmod 755 /Library/Audio/Plug-Ins/HAL
+set -eu
+
+# Installer passes the target volume as its third argument.
+target_volume="${3:-/}"
+hal_directory="${target_volume%/}/Library/Audio/Plug-Ins/HAL"
+
+mkdir -p "$hal_directory"
+chown root:wheel "$hal_directory"
+chmod 755 "$hal_directory"
